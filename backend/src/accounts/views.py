@@ -1,0 +1,76 @@
+"""Accounts views — Auth endpoints."""
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from core.errors import ApplicationError
+
+from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from .services.auth import LoginUserInput, LoginUserUseCase, RegisterUserInput, RegisterUserUseCase
+
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        try:
+            result = RegisterUserUseCase().execute(
+                input=RegisterUserInput(
+                    email=data["email"],
+                    username=data["username"],
+                    password=data["password"],
+                    first_name=data.get("first_name", ""),
+                    last_name=data.get("last_name", ""),
+                )
+            )
+        except ApplicationError as e:
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(result.user)
+        return Response(
+            {
+                "user": UserSerializer(result.user).data,
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        try:
+            result = LoginUserUseCase().execute(
+                input=LoginUserInput(
+                    email=data["email"],
+                    password=data["password"],
+                )
+            )
+        except ApplicationError as e:
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(result.user)
+        return Response(
+            {
+                "user": UserSerializer(result.user).data,
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+            }
+        )
+
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(UserSerializer(request.user).data)

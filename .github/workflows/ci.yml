@@ -1,0 +1,168 @@
+# CI Pipeline — ingenia Template
+#
+# Roda em push/PR na main e develop.
+# Etapas: lint → test-backend → test-frontend → build
+#
+# Para usar: copie este arquivo e ajuste conforme necessário.
+# Os serviços (DB, Redis) são gerenciados pelo GitHub Actions.
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  DJANGO_SETTINGS_MODULE: config.settings.test
+  DJANGO_SECRET_KEY: ci-secret-key
+  DATABASE_URL: postgres://ingenia_user:ingenia_pass@localhost:5432/hub_test_db
+  POSTGRES_DB: hub_test_db
+  POSTGRES_USER: ingenia_user
+  POSTGRES_PASSWORD: ingenia_pass
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: 5432
+  REDIS_URL: redis://localhost:6379/1
+  MODULE_AI_ENABLED: "true"
+  VITE_API_BASE_URL: http://localhost:8000
+
+jobs:
+  # ─── Lint ───────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Backend lint
+        working-directory: backend
+        run: |
+          uv sync
+          uv run ruff check src/
+          uv run ruff format --check src/
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Frontend lint
+        working-directory: frontend
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm lint
+          pnpm tsc --noEmit
+
+  # ─── Backend Tests ──────────────────────────────────────────────────────────
+  test-backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: hub_test_db
+          POSTGRES_USER: ingenia_user
+          POSTGRES_PASSWORD: ingenia_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ingenia_user -d hub_test_db"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Run tests
+        working-directory: backend
+        run: |
+          uv sync
+          uv run pytest -v --cov=src --cov-report=term-missing
+
+  # ─── Frontend Tests ─────────────────────────────────────────────────────────
+  test-frontend:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install deps
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
+        working-directory: frontend
+        run: pnpm test
+
+  # ─── Build ──────────────────────────────────────────────────────────────────
+  build:
+    name: Build Check
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build

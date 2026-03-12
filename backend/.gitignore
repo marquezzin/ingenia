@@ -1,0 +1,66 @@
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-log.txt
+.tox/
+cover/
+coverage.xml
+nosetests.xml
+
+# Celery
+# The directory for the Celery Beat schedule file
+celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
+celerybeat.pid
+*.pid
+*.dat
+*.dir
+*.bak
+erl_crash.dump # for RabbitMQ if used as a broker
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media/ # Usually generated and should not be version controlled
+staticfiles/ # If your build process generates these files, you can uncomment this
+# staticfiles/
+
+# Virtual Environment
+venv/
+ENV/
+env.bak/
+bin/
+include/
+lib/
+# Windows
+Scripts/
+# PyCharm project files
+.idea/
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
