@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from core.errors import ApplicationError
 
+from .schemas import login_schema, me_schema, register_schema
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
 from .services.auth import (
     LoginUserInput,
@@ -19,7 +20,9 @@ from .services.auth import (
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
 
+    @register_schema
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -50,7 +53,9 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
 
+    @login_schema
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -77,6 +82,8 @@ class LoginView(APIView):
 
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
 
+    @me_schema
     def get(self, request):
         return Response(UserSerializer(request.user).data)

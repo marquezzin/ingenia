@@ -31,6 +31,9 @@ coverage.xml
 .mypy_cache/
 .ruff_cache/
 
+# Celery
+celerybeat-schedule*
+
 # Node
 node_modules/
 .pnpm-store/

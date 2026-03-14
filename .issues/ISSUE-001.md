@@ -39,15 +39,15 @@ Estender o `User` model existente no app `accounts` e criar os models de perfil 
 
 ## Critérios de Aceite
 
-- [ ] Enums `UserRole`, `AccountStatus` e `LearningStatus` implementados
-- [ ] `User` model estendido com `role`, `account_status`, `last_login_at`
-- [ ] `StudentProfile`, `TeacherProfile` e `AdminProfile` criados com relação 1:1
-- [ ] Constraints de unicidade aplicados conforme domain model
-- [ ] Índices criados conforme seção de indexes do domain model
-- [ ] Migrations geradas e executando sem erro
-- [ ] BR-001: Usuário possui exatamente um papel principal (validação)
-- [ ] BR-002: Perfil especializado existe apenas para role correspondente (validação)
-- [ ] BR-003: Email do usuário é único (constraint)
+- [x] Enums `UserRole`, `AccountStatus` e `LearningStatus` implementados
+- [x] `User` model estendido com `role`, `account_status`, `last_login_at`
+- [x] `StudentProfile`, `TeacherProfile` e `AdminProfile` criados com relação 1:1
+- [x] Constraints de unicidade aplicados conforme domain model
+- [x] Índices criados conforme seção de indexes do domain model
+- [x] Migrations geradas e executando sem erro
+- [x] BR-001: Usuário possui exatamente um papel principal (validação)
+- [x] BR-002: Perfil especializado existe apenas para role correspondente (validação)
+- [x] BR-003: Email do usuário é único (constraint)
 
 ## Arquivos Afetados
 
@@ -83,5 +83,6 @@ Estender o `User` model existente no app `accounts` e criar os models de perfil 
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: ✅ Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-14
