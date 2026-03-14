@@ -7,6 +7,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { RequireAuth, RequireGuest } from "@/shared/auth/guards";
 
 // Lazy imports por domínio
+const LandingPage = lazy(() => import("@/domains/landing/pages/LandingPage"));
 const LoginPage = lazy(() => import("@/domains/auth/pages/LoginPage"));
 
 // Dev tools (removível em produção)
@@ -22,6 +23,16 @@ const Spinner = () => (
 );
 
 export const router = createBrowserRouter([
+    // ─── Landing page (pública) ─────────────────────────────────────────────
+    {
+        path: "/",
+        element: (
+            <Suspense fallback={<Spinner />}>
+                <LandingPage />
+            </Suspense>
+        ),
+    },
+
     // ─── Rotas públicas ─────────────────────────────────────────────────────
     {
         path: "/login",
@@ -36,7 +47,7 @@ export const router = createBrowserRouter([
 
     // ─── Rotas protegidas ───────────────────────────────────────────────────
     {
-        path: "/",
+        path: "/dashboard",
         element: (
             <RequireAuth>
                 <Suspense fallback={<Spinner />}>

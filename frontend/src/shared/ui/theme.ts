@@ -2,32 +2,48 @@
  * Mantine Theme — ingenia
  *
  * Sincronizado com os CSS design tokens de shared/ui/tokens.css.
- * Para mudar cores/fontes, edite tokens.css — o theme herda automaticamente.
+ * Paleta unificada com a Landing Page Ingenia (primary #3A86FF).
  */
 import { createTheme, MantineColorsTuple } from "@mantine/core";
 
 /**
- * Paleta de cores brand gerada a partir do token --brand-primary.
+ * Paleta de cores brand gerada a partir de #3A86FF.
  * Índices 0-9: do mais claro ao mais escuro.
- * Editar aqui para mudar a cor primária do Mantine.
  */
 const brandPrimary: MantineColorsTuple = [
-    "#eef2ff",  // 0 - lightest
-    "#dbe4ff",  // 1
-    "#bac8ff",  // 2
-    "#91a7ff",  // 3
-    "#748ffc",  // 4
-    "#5c7cfa",  // 5
-    "#4c6ef5",  // 6 - base
-    "#4263eb",  // 7 - primary (matches --brand-primary)
-    "#3b5bdb",  // 8
-    "#364fc7",  // 9 - darkest
+    "#e7f1ff",  // 0 - lightest
+    "#d0e3ff",  // 1
+    "#a3c8ff",  // 2
+    "#6ea6ff",  // 3
+    "#4d93ff",  // 4
+    "#3A86FF",  // 5 - base / primary
+    "#3378e8",  // 6
+    "#2E6FE8",  // 7
+    "#2560cc",  // 8
+    "#1a4fad",  // 9 - darkest
+];
+
+/**
+ * Paleta accent cyan (#4CC9F0).
+ */
+const brandAccent: MantineColorsTuple = [
+    "#e6f9fd",  // 0
+    "#ccf3fb",  // 1
+    "#99e7f7",  // 2
+    "#66dbf3",  // 3
+    "#4CC9F0",  // 4 - base
+    "#3bb8df",  // 5
+    "#2fa7ce",  // 6
+    "#2496bd",  // 7
+    "#1985ac",  // 8
+    "#0e749b",  // 9
 ];
 
 export const theme = createTheme({
     primaryColor: "brand",
     colors: {
         brand: brandPrimary,
+        accent: brandAccent,
     },
 
     fontFamily: "var(--font-sans)",

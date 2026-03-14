@@ -7,32 +7,34 @@
  *   - Mantine theme (shared/ui/theme.ts)
  *   - Componentes custom (shared/ui/components/)
  *   - CSS modules em todo o projeto
+ *
+ * Paleta unificada com a Landing Page Ingenia.
  */
 
 :root {
-  /* ─── Brand Colors ──────────────────────────────────────────────────── */
-  --brand-primary: 224, 80%, 59%;         /* hsl(224, 80%, 59%) → #4263eb */
-  --brand-primary-light: 224, 100%, 73%;  /* hsl(224, 100%, 73%) → #748ffc */
-  --brand-primary-dark: 224, 74%, 54%;    /* hsl(224, 74%, 54%) → #3b5bdb */
+  /* ─── Brand Colors (unificado com landing page) ─────────────────────── */
+  --brand-primary: 217, 100%, 61%;        /* hsl(217, 100%, 61%) → #3A86FF */
+  --brand-primary-light: 207, 100%, 68%;  /* hsl(207, 100%, 68%) → light variant */
+  --brand-primary-dark: 221, 79%, 55%;    /* hsl(221, 79%, 55%) → #2E6FE8 */
 
+  --brand-accent: 191, 86%, 62%;          /* hsl(191, 86%, 62%) → #4CC9F0 (cyan) */
   --brand-secondary: 162, 73%, 46%;       /* #20c997 */
-  --brand-accent: 39, 100%, 48%;          /* #f59f00 */
   --brand-danger: 0, 84%, 60%;            /* #e03131 */
   --brand-warning: 39, 100%, 48%;         /* #f59f00 */
   --brand-success: 152, 69%, 41%;         /* #2f9e44 */
   --brand-info: 207, 90%, 54%;            /* #1c7ed6 */
 
-  /* ─── Neutral Palette ───────────────────────────────────────────────── */
-  --color-bg: #ffffff;
-  --color-bg-subtle: #f8f9fa;
-  --color-bg-muted: #f1f3f5;
+  /* ─── Neutral Palette (landing page aligned) ────────────────────────── */
+  --color-bg: #F5F7FB;
+  --color-bg-subtle: #EAEEF5;
+  --color-bg-muted: #E8EEF7;
   --color-bg-elevated: #ffffff;
-  --color-text: #212529;
-  --color-text-secondary: #495057;
-  --color-text-muted: #868e96;
+  --color-text: #0B132B;
+  --color-text-secondary: #1B263B;
+  --color-text-muted: #415A77;
   --color-text-inverse: #ffffff;
-  --color-border: #dee2e6;
-  --color-border-light: #e9ecef;
+  --color-border: #E0E7F1;
+  --color-border-light: #E8EEF7;
 
   /* ─── Spacing Scale ─────────────────────────────────────────────────── */
   --space-2xs: 2px;
@@ -53,16 +55,16 @@
   --radius-full: 9999px;
 
   /* ─── Shadows ───────────────────────────────────────────────────────── */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.10), 0 8px 10px rgba(0, 0, 0, 0.04);
+  --shadow-xs: 0 1px 2px rgba(11, 19, 43, 0.04);
+  --shadow-sm: 0 2px 8px rgba(11, 19, 43, 0.05);
+  --shadow-md: 0 4px 16px rgba(11, 19, 43, 0.07);
+  --shadow-lg: 0 8px 25px rgba(11, 19, 43, 0.08);
+  --shadow-xl: 0 16px 40px rgba(11, 19, 43, 0.10);
 
   /* ─── Typography ────────────────────────────────────────────────────── */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-heading: var(--font-sans);
+  --font-heading: 'Poppins', var(--font-sans);
 
   --text-xs: 0.75rem;    /* 12px */
   --text-sm: 0.875rem;   /* 14px */
@@ -91,20 +93,20 @@
 
 /* ─── Dark Mode ───────────────────────────────────────────────────────── */
 [data-mantine-color-scheme="dark"] {
-  --color-bg: #1a1b1e;
-  --color-bg-subtle: #25262b;
-  --color-bg-muted: #2c2e33;
-  --color-bg-elevated: #2c2e33;
-  --color-text: #c1c2c5;
-  --color-text-secondary: #909296;
-  --color-text-muted: #5c5f66;
-  --color-text-inverse: #1a1b1e;
-  --color-border: #373a40;
-  --color-border-light: #2c2e33;
+  --color-bg: #0B132B;
+  --color-bg-subtle: #1B263B;
+  --color-bg-muted: #1B263B;
+  --color-bg-elevated: #1B263B;
+  --color-text: #E8EEF7;
+  --color-text-secondary: #D4DDE9;
+  --color-text-muted: #415A77;
+  --color-text-inverse: #0B132B;
+  --color-border: #1B263B;
+  --color-border-light: #1B263B;
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.35);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
 }
