@@ -110,9 +110,16 @@ class CreateMyModelUseCase:
 - Nunca coloque lógica de negócio no `validate_*` ou `create/update` do serializer
 
 ### 5. Views (`views.py`)
-- Use `ModelViewSet` ou `APIView` do DRF
+- **CRUD de entidade** → use `ModelViewSet` (gera list/create/retrieve/update/destroy automaticamente)
+- **Ação customizada ou não-CRUD** (ex: login, register, ações pontuais) → use `APIView`
 - A view **extrai dados** do request e **chama o UseCase**
 - Trate exceções de `core.errors` e retorne respostas padronizadas
+- Defina `serializer_class` na view para que o DRF Browsable API renderize formulários
+
+### 6. Schemas OpenAPI (`schemas.py`)
+- Defina os decoradores `@extend_schema` como variáveis em `schemas.py`
+- Importe e aplique nas views como decoradores
+- Isso mantém as views limpas e a documentação centralizada
 
 ```python
 from rest_framework import viewsets, status
