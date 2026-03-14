@@ -5,6 +5,7 @@
  *   <StatusBadge status="active" />
  *   <StatusBadge status="pending" statusMap={customMap} />
  */
+/* eslint-disable react-refresh/only-export-components */
 import { Badge } from "@mantine/core";
 
 export interface StatusConfig {

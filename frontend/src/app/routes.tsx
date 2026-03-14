@@ -2,6 +2,7 @@
  * App Routes — Definição centralizada de todas as rotas.
  * Use lazy loading para cada domínio.
  */
+/* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { RequireAuth, RequireGuest } from "@/shared/auth/guards";
