@@ -1,7 +1,9 @@
 """
 Core Testing — Helpers e classes base para testes.
 """
-from rest_framework.test import APIClient, APITestCase as DRFAPITestCase
+
+from rest_framework.test import APIClient
+from rest_framework.test import APITestCase as DRFAPITestCase
 
 
 class APITestCase(DRFAPITestCase):

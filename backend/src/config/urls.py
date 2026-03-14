@@ -1,4 +1,5 @@
 """Config URLs"""
+
 from django.apps import apps
 from django.contrib import admin
 from django.urls import include, path
@@ -10,7 +11,11 @@ urlpatterns = [
     path("api/auth/", include("src.accounts.urls")),
     # API Schema
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
 ]
 
 # ─── URLs de módulos opcionais ────────────────────────────────────────────────

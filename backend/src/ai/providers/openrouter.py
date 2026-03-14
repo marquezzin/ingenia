@@ -12,7 +12,9 @@ from .base import AIRequest, AIResponse, BaseAIProvider
 class OpenRouterProvider(BaseAIProvider):
     def __init__(self):
         self.api_key = config("OPENROUTER_API_KEY")
-        self.base_url = config("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1")
+        self.base_url = config(
+            "OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1"
+        )
         self.timeout = config("AI_REQUEST_TIMEOUT", default=60, cast=int)
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -20,7 +22,9 @@ class OpenRouterProvider(BaseAIProvider):
             "X-Title": "ingenia",
         }
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+    @retry(
+        stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10)
+    )
     def complete(self, request: AIRequest) -> AIResponse:
         payload = self._build_payload(request)
 

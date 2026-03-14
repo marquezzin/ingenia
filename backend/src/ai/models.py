@@ -17,7 +17,7 @@ class AIJob(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     provider = models.CharField(max_length=50, default="openrouter")
     model = models.CharField(max_length=100)
-    
+
     # Input
     messages = models.JSONField()
     json_schema = models.JSONField(null=True, blank=True)
@@ -34,12 +34,12 @@ class AIJob(models.Model):
     duration_ms = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        related_name="ai_jobs"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="ai_jobs",
     )
 
     class Meta:

@@ -14,7 +14,9 @@ class OpenAIProvider(BaseAIProvider):
         self.api_key = config("OPENAI_API_KEY", default="")
         self.client = OpenAI(api_key=self.api_key)
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+    @retry(
+        stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10)
+    )
     def complete(self, request: AIRequest) -> AIResponse:
         kwargs = {
             "model": request.model,

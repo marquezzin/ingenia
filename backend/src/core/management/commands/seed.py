@@ -1,4 +1,5 @@
 """Seed management command — popula o banco com dados iniciais."""
+
 from django.core.management.base import BaseCommand
 
 
@@ -26,6 +27,7 @@ class Command(BaseCommand):
     def _clear_data(self):
         """Limpa dados de desenvolvimento (preserva superusuários)."""
         from src.accounts.models import User
+
         User.objects.filter(is_superuser=False).delete()
         self.stdout.write("  Dados limpos.")
 

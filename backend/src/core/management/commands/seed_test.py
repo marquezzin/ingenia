@@ -12,6 +12,7 @@ Uso:
     docker compose -f docker/compose.yml -f docker/compose.test.yml exec backend \
         uv run python manage.py seed_test
 """
+
 from django.core.management.base import BaseCommand
 
 
@@ -29,6 +30,7 @@ class Command(BaseCommand):
     def _clear_all(self):
         """Limpa TODOS os dados do banco de teste para garantir idempotência."""
         from src.accounts.models import User
+
         User.objects.all().delete()
         # Adicione deletes de outros models aqui (na ordem inversa de dependências):
         # MyModel.objects.all().delete()

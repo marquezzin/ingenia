@@ -1,6 +1,7 @@
 """
 Core Serializers — Serializers base do projeto.
 """
+
 from rest_framework import serializers
 
 

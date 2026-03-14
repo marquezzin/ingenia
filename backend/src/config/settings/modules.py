@@ -12,8 +12,8 @@ Uso:
 
     # A lista de apps é gerada automaticamente em base.py
 """
-from decouple import config
 
+from decouple import config
 
 # ─── Registro de módulos opcionais ────────────────────────────────────────────
 # Cada módulo define:
@@ -53,17 +53,9 @@ OPTIONAL_MODULES = {
 
 def get_enabled_apps() -> list[str]:
     """Retorna lista de apps Django dos módulos habilitados."""
-    return [
-        module["app"]
-        for module in OPTIONAL_MODULES.values()
-        if module["enabled"]
-    ]
+    return [module["app"] for module in OPTIONAL_MODULES.values() if module["enabled"]]
 
 
 def get_enabled_module_names() -> list[str]:
     """Retorna nomes dos módulos habilitados (para logging/debug)."""
-    return [
-        name
-        for name, module in OPTIONAL_MODULES.items()
-        if module["enabled"]
-    ]
+    return [name for name, module in OPTIONAL_MODULES.items() if module["enabled"]]

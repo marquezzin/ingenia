@@ -1,12 +1,13 @@
 from django.test import TestCase
-from src.accounts.tests.factories import UserFactory
-from src.accounts.services.auth import (
-    RegisterUserUseCase,
-    RegisterUserInput,
-    LoginUserUseCase,
-    LoginUserInput,
-)
+
 from core.errors import ApplicationError
+from src.accounts.services.auth import (
+    LoginUserInput,
+    LoginUserUseCase,
+    RegisterUserInput,
+    RegisterUserUseCase,
+)
+from src.accounts.tests.factories import UserFactory
 
 
 class RegisterUserUseCaseTest(TestCase):
@@ -19,7 +20,7 @@ class RegisterUserUseCaseTest(TestCase):
             last_name="User",
         )
         result = RegisterUserUseCase().execute(input=input_data)
-        
+
         self.assertEqual(result.user.email, "test@example.com")
         self.assertEqual(result.user.username, "testuser")
         self.assertTrue(result.user.check_password("securepassword123"))
@@ -31,10 +32,10 @@ class RegisterUserUseCaseTest(TestCase):
             username="newuser",
             password="securepassword123",
         )
-        
+
         with self.assertRaises(ApplicationError) as context:
             RegisterUserUseCase().execute(input=input_data)
-        
+
         self.assertEqual(str(context.exception), "Este e-mail já está em uso.")
 
     def test_register_raises_error_for_duplicate_username(self):
@@ -44,10 +45,10 @@ class RegisterUserUseCaseTest(TestCase):
             username="existinguser",
             password="securepassword123",
         )
-        
+
         with self.assertRaises(ApplicationError) as context:
             RegisterUserUseCase().execute(input=input_data)
-        
+
         self.assertEqual(str(context.exception), "Este nome de usuário já está em uso.")
 
 
@@ -64,7 +65,7 @@ class LoginUserUseCaseTest(TestCase):
             password=self.password,
         )
         result = LoginUserUseCase().execute(input=input_data)
-        
+
         self.assertEqual(result.user, self.user)
 
     def test_login_raises_error_with_invalid_credentials(self):
@@ -72,22 +73,22 @@ class LoginUserUseCaseTest(TestCase):
             email="login@example.com",
             password="wrongpassword",
         )
-        
+
         with self.assertRaises(ApplicationError) as context:
             LoginUserUseCase().execute(input=input_data)
-        
+
         self.assertEqual(str(context.exception), "E-mail ou senha inválidos.")
 
     def test_login_raises_error_for_inactive_user(self):
         self.user.is_active = False
         self.user.save()
-        
+
         input_data = LoginUserInput(
             email="login@example.com",
             password=self.password,
         )
-        
+
         with self.assertRaises(ApplicationError) as context:
             LoginUserUseCase().execute(input=input_data)
-        
+
         self.assertEqual(str(context.exception), "Conta desativada.")

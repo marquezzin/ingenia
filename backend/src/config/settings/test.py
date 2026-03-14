@@ -2,6 +2,7 @@
 Django settings — Test
 Configurações otimizadas para execução de testes.
 """
+
 from decouple import config
 
 from .base import *  # noqa: F401, F403
@@ -36,4 +37,3 @@ SECRET_KEY = "test-secret-key-not-for-production"
 # Desabilita Celery em testes (executa tasks sincronamente)
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
-

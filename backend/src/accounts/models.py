@@ -1,4 +1,5 @@
 """Accounts app — User model customizado."""
+
 import uuid
 
 from django.contrib.auth.models import AbstractUser

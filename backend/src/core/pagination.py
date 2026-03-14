@@ -1,6 +1,7 @@
 """
 Core Pagination — Paginação padrão do projeto.
 """
+
 from rest_framework.pagination import PageNumberPagination
 
 

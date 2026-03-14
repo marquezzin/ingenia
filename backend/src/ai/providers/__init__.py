@@ -1,4 +1,6 @@
-from .base import AIRequest, AIResponse, BaseAIProvider
+from .base import AIRequest as AIRequest
+from .base import AIResponse as AIResponse
+from .base import BaseAIProvider
 from .openai import OpenAIProvider
 from .openrouter import OpenRouterProvider
 

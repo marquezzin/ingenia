@@ -1,6 +1,7 @@
 """
 Core Permissions — Permissões base do projeto.
 """
+
 from rest_framework.permissions import BasePermission
 
 

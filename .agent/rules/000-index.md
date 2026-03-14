@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Índice de Regras para Agentes — ingenia
 
 Este arquivo é o **ponto de entrada** para qualquer agente de IA trabalhando neste repositório.

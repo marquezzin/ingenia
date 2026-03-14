@@ -10,7 +10,7 @@ FRONTEND = $(COMPOSE) exec frontend
         migrate makemigrations seed shell \
         test-up test-down test-seed test-reset \
         test-backend test-backend-cov test-frontend test-e2e test-e2e-ui test \
-        lint-backend lint-frontend lint \
+        lint-backend lint-frontend lint setup-hooks \
         install-backend install-frontend
 
 # ─── Help ─────────────────────────────────────────────────────────────────────
@@ -153,6 +153,11 @@ lint-frontend: ## Lint + type-check do frontend
 	$(FRONTEND) pnpm tsc --noEmit
 
 lint: lint-backend lint-frontend ## Roda todos os lints
+
+setup-hooks: ## Instala pre-commit hooks (ruff auto-fix no commit)
+	uv tool install pre-commit
+	pre-commit install
+	@echo "✓ Pre-commit hooks instalados."
 
 # ─── Celery ───────────────────────────────────────────────────────────────────
 celery-worker: ## Sobe o worker do Celery manualmente

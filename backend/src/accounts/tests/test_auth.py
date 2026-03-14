@@ -1,4 +1,5 @@
 """Accounts tests — Auth endpoints."""
+
 from rest_framework import status
 
 from core.testing import APITestCase

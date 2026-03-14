@@ -1,4 +1,5 @@
 """Accounts views — Auth endpoints."""
+
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -8,7 +9,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from core.errors import ApplicationError
 
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
-from .services.auth import LoginUserInput, LoginUserUseCase, RegisterUserInput, RegisterUserUseCase
+from .services.auth import (
+    LoginUserInput,
+    LoginUserUseCase,
+    RegisterUserInput,
+    RegisterUserUseCase,
+)
 
 
 class RegisterView(APIView):

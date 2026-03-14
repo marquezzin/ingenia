@@ -5,7 +5,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from src.ai.models import AIJob
-from src.ai.serializers import AIJobSerializer, CreateAIBatchSerializer, CreateAIJobSerializer
+from src.ai.serializers import (
+    AIJobSerializer,
+    CreateAIBatchSerializer,
+    CreateAIJobSerializer,
+)
 from src.ai.services.ai_job import (
     CreateAIJobInput,
     CreateAIJobUseCase,
@@ -43,15 +47,14 @@ class AIJobViewSet(ReadOnlyModelViewSet):
         )
 
         return Response(
-            AIJobSerializer(result.job).data,
-            status=status.HTTP_202_ACCEPTED
+            AIJobSerializer(result.job).data, status=status.HTTP_202_ACCEPTED
         )
 
     @action(detail=False, methods=["post"], url_path="batch")
     def create_batch(self, request):
         serializer = CreateAIBatchSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         jobs_input = []
         for job_data in serializer.validated_data["jobs"]:
             jobs_input.append(
@@ -71,5 +74,5 @@ class AIJobViewSet(ReadOnlyModelViewSet):
 
         return Response(
             AIJobSerializer(result.jobs, many=True).data,
-            status=status.HTTP_202_ACCEPTED
+            status=status.HTTP_202_ACCEPTED,
         )

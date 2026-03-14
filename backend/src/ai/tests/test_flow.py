@@ -45,6 +45,7 @@ class AIJobFlowTest(APITestCase):
 
         # 3. Executa a task sincronicamente (simulando Celery)
         from src.ai.tasks import run_ai_job
+
         run_ai_job(job_id)
 
         # 4. Verifica se o job foi atualizado
@@ -56,18 +57,12 @@ class AIJobFlowTest(APITestCase):
     def test_list_jobs_filters_by_user(self):
         # Cria jobs para este usuário
         AIJob.objects.create(
-            model="gpt-4", 
-            messages=[], 
-            created_by=self.user, 
-            status="pending"
+            model="gpt-4", messages=[], created_by=self.user, status="pending"
         )
         # Cria job para outro usuário
         other_user = UserFactory()
         AIJob.objects.create(
-            model="gpt-4", 
-            messages=[], 
-            created_by=other_user, 
-            status="pending"
+            model="gpt-4", messages=[], created_by=other_user, status="pending"
         )
 
         response = self.client.get(self.url)

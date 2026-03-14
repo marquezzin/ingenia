@@ -1,4 +1,5 @@
 """Accounts services — Auth UseCases."""
+
 from dataclasses import dataclass
 
 from django.contrib.auth import authenticate
@@ -56,9 +57,13 @@ class LoginUserUseCase:
         if user is None:
             # Verifica se falhou pois o usuário está inativo
             existing_user = User.objects.filter(email=input.email).first()
-            if existing_user and existing_user.check_password(input.password) and not existing_user.is_active:
+            if (
+                existing_user
+                and existing_user.check_password(input.password)
+                and not existing_user.is_active
+            ):
                 raise ApplicationError("Conta desativada.")
 
             raise ApplicationError("E-mail ou senha inválidos.")
-        
+
         return LoginUserResult(user=user)

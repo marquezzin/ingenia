@@ -2,6 +2,8 @@
 Django settings — Base
 Configurações compartilhadas entre todos os ambientes.
 """
+
+from datetime import timedelta
 from pathlib import Path
 
 from decouple import Csv, config
@@ -38,6 +40,7 @@ LOCAL_APPS = [
 
 # Módulos opcionais — controlados via variáveis de ambiente (veja modules.py)
 from .modules import get_enabled_apps  # noqa: E402
+
 LOCAL_APPS += get_enabled_apps()
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -92,7 +95,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -123,7 +128,6 @@ REST_FRAMEWORK = {
 }
 
 # ─── JWT ──────────────────────────────────────────────────────────────────────
-from datetime import timedelta
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
@@ -165,6 +169,8 @@ CELERY_TASK_SOFT_TIME_LIMIT = 240  # 4 min soft limit
 
 # ─── AI Settings ──────────────────────────────────────────────────────────────
 OPENROUTER_API_KEY = config("OPENROUTER_API_KEY", default="")
-OPENROUTER_BASE_URL = config("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1")
+OPENROUTER_BASE_URL = config(
+    "OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1"
+)
 AI_DEFAULT_MODEL = config("AI_DEFAULT_MODEL", default="openai/gpt-4o-mini")
 AI_REQUEST_TIMEOUT = config("AI_REQUEST_TIMEOUT", default=60, cast=int)

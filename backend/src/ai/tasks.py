@@ -1,7 +1,6 @@
 import time
 
 from celery import shared_task
-from django.conf import settings
 
 from src.ai.models import AIJob
 from src.ai.providers import get_provider
@@ -25,7 +24,7 @@ def run_ai_job(self, job_id: str):
     start_time = time.time()
     try:
         provider = get_provider(job.provider)
-        
+
         request = AIRequest(
             model=job.model,
             messages=job.messages,
@@ -57,14 +56,14 @@ def run_ai_job(self, job_id: str):
 @shared_task
 def run_ai_jobs_batch(job_ids: list[str]):
     """
-    Executa múltiplos jobs. 
+    Executa múltiplos jobs.
     Nota: Para paralelismo real, ideal seria disparar N tasks `run_ai_job`.
     Este task pode servir para orquestração ou para providers que suportam batch nativo (futuro).
-    
+
     Por enquanto, vamos disparar sub-tasks para garantir paralelismo.
     """
     from celery import group
-    
+
     job_group = group(run_ai_job.s(job_id) for job_id in job_ids)
     result = job_group.apply_async()
     return {"group_id": result.id, "count": len(job_ids)}

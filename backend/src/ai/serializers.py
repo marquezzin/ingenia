@@ -35,7 +35,9 @@ class CreateAIJobSerializer(serializers.ModelSerializer):
     def validate_provider(self, value):
         valid_providers = ["openrouter", "openai"]
         if value not in valid_providers:
-            raise serializers.ValidationError(f"Provider inválido. Opções: {valid_providers}")
+            raise serializers.ValidationError(
+                f"Provider inválido. Opções: {valid_providers}"
+            )
         return value
 
 
