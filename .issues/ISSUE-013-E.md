@@ -1,0 +1,42 @@
+# [ISSUE-013-E] Painel de Resultado + Histórico de Tentativas
+
+## Contexto
+
+Sub-issue de [ISSUE-013](./ISSUE-013.md) — Frontend Aluno (Fase 3).
+
+## Descrição
+
+Implementar o painel de resultado de submissão e histórico de tentativas no contexto do exercício.
+
+> **Dependência**: 011-D (API histórico), 012-D (resultado), 013-D (exibido no exercício).
+
+### Tarefas
+
+1. **Painel de resultado**: states loading/running/passed/failed/error com feedback pedagógico
+2. **Histórico de tentativas**: últimas submissões com score e status, expandir para ver código submetido
+
+## Critérios de Aceite
+
+- [ ] Painel de resultado com todos os states
+- [ ] Feedback pedagógico exibido
+- [ ] Histórico de tentativas recentes
+- [ ] Score exibido por tentativa
+
+## Arquivos Afetados
+
+- `frontend/src/domains/student/components/ResultPanel.tsx`
+- `frontend/src/domains/student/components/SubmissionHistory.tsx`
+
+## Notas Técnicas
+
+| Documento | Caminho | O que consultar |
+|---|---|---|
+| **ISSUE-013** | `.issues/ISSUE-013.md` | Contexto completo |
+| **UX Flows** | `docs/requirements/ingenia-documents/design/ux_flows.md` | Tela Exercício — states |
+
+## Status
+
+- **Prioridade**: alta
+- **Tipo**: feature
+- **Criado em**: 2026-03-12
+- **Atualizado em**: 2026-03-12

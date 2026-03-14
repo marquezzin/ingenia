@@ -65,11 +65,13 @@ backend/staticfiles/
 backend/media/
 
 # Agents / AI
-.agent/
-*.context.md
+# .agent/
+# *.context.md
 
-# Docs
-docs/
+# # Docs
+# docs/
 
-# Issues
-.issues/
+# # Issues
+# .issues/
+
+ingenia-landing-page
