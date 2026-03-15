@@ -62,17 +62,17 @@ Criar um novo app Django `curriculum` contendo os models que representam a trilh
 
 ## Critérios de Aceite
 
-- [ ] App `curriculum` criado seguindo padrão do projeto
-- [ ] Enum `ContentStatus` implementado
-- [ ] Models `Module`, `Lesson`, `VideoLesson`, `Exercise`, `ExerciseTestCase` criados
-- [ ] Todos os campos conforme domain model
-- [ ] BR-006: Ordenação única de módulos por `sequence_order` (unique)
-- [ ] BR-007: Ordem das aulas única dentro de cada módulo (unique constraint)
-- [ ] BR-008: Estrutura para validar que aula tenha vídeo + conteúdo ao publicar
-- [ ] BR-009: Exercício vinculado a uma aula (FK)
-- [ ] BR-010: Estrutura preparada para validar ao menos um test case ao publicar exercício
-- [ ] `VideoLesson` é 1:1 com `Lesson` (OneToOneField)
-- [ ] Migrations geradas e executando sem erro
+- [x] App `curriculum` criado seguindo padrão do projeto
+- [x] Enum `ContentStatus` implementado
+- [x] Models `Module`, `Lesson`, `VideoLesson`, `Exercise`, `ExerciseTestCase` criados
+- [x] Todos os campos conforme domain model
+- [x] BR-006: Ordenação única de módulos por `sequence_order` (unique)
+- [x] BR-007: Ordem das aulas única dentro de cada módulo (unique constraint)
+- [x] BR-008: Estrutura para validar que aula tenha vídeo + conteúdo ao publicar
+- [x] BR-009: Exercício vinculado a uma aula (FK)
+- [x] BR-010: Estrutura preparada para validar ao menos um test case ao publicar exercício
+- [x] `VideoLesson` é 1:1 com `Lesson` (OneToOneField)
+- [x] Migrations geradas e executando sem erro
 
 ## Arquivos Afetados
 
@@ -105,5 +105,6 @@ Criar um novo app Django `curriculum` contendo os models que representam a trilh
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-14

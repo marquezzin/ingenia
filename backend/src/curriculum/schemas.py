@@ -1,0 +1,1 @@
+"""Curriculum app — OpenAPI schemas."""

@@ -1,0 +1,1 @@
+"""Curriculum app — URL configuration."""

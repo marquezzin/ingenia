@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "src.accounts",
     "src.core",
+    "src.curriculum",
 ]
 
 # Módulos opcionais — controlados via variáveis de ambiente (veja modules.py)
