@@ -31,11 +31,11 @@ Criar componentes wrapper de rota que verificam autenticação e role, redirecio
 
 ## Critérios de Aceite
 
-- [ ] Rotas protegidas redirecionam para login se não autenticado
-- [ ] Rotas por role redirecionam para unauthorized se role incorreto
-- [ ] URL original preservada para redirect pós-login
-- [ ] Guards composíveis (ProtectedRoute + StudentRoute)
-- [ ] Rotas públicas acessíveis sem autenticação
+- [x] Rotas protegidas redirecionam para login se não autenticado
+- [x] Rotas por role redirecionam para unauthorized se role incorreto
+- [x] URL original preservada para redirect pós-login
+- [x] Guards composíveis (ProtectedRoute + StudentRoute)
+- [x] Rotas públicas acessíveis sem autenticação
 
 ## Arquivos Afetados
 
@@ -58,4 +58,5 @@ Criar componentes wrapper de rota que verificam autenticação e role, redirecio
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16
+- **Status**: Concluída

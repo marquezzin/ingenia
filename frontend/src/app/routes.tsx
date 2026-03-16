@@ -5,7 +5,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { RequireAuth, RequireGuest } from "@/shared/auth/guards";
+import { RequireGuest } from "@/shared/auth/guards";
+import { ProtectedRoute } from "@/shared/components/ProtectedRoute";
+import { StudentRoute, TeacherRoute, AdminRoute } from "@/shared/components/RoleRoute";
 
 // Lazy imports por domínio
 const LandingPage = lazy(() => import("@/domains/landing/pages/LandingPage"));
@@ -85,14 +87,42 @@ export const router = createBrowserRouter([
 
     // ─── Rotas protegidas ───────────────────────────────────────────────────
     {
-        path: "/dashboard",
+        path: "/student",
         element: (
-            <RequireAuth>
-                <Suspense fallback={<Spinner />}>
-                    {/* Layout principal aqui */}
-                    <div>Dashboard — adicione seu layout aqui</div>
-                </Suspense>
-            </RequireAuth>
+            <ProtectedRoute>
+                <StudentRoute>
+                    <Suspense fallback={<Spinner />}>
+                        {/* Layout do Aluno aqui */}
+                        <div>Área do Aluno — Layout em construção</div>
+                    </Suspense>
+                </StudentRoute>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: "/teacher",
+        element: (
+            <ProtectedRoute>
+                <TeacherRoute>
+                    <Suspense fallback={<Spinner />}>
+                        {/* Layout do Professor aqui */}
+                        <div>Área do Professor — Layout em construção</div>
+                    </Suspense>
+                </TeacherRoute>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: "/admin",
+        element: (
+            <ProtectedRoute>
+                <AdminRoute>
+                    <Suspense fallback={<Spinner />}>
+                        {/* Layout de Admin aqui */}
+                        <div>Área de Admin — Layout em construção</div>
+                    </Suspense>
+                </AdminRoute>
+            </ProtectedRoute>
         ),
     },
 
@@ -110,13 +140,11 @@ export const router = createBrowserRouter([
     // {
     //   path: "/my-domain",
     //   element: (
-    //     <RequireAuth>
+    //     <ProtectedRoute>
     //       <Suspense fallback={<Spinner />}>
     //         <MyEntityListPage />
     //       </Suspense>
-    //     </RequireAuth>
-    //   ),
-    //     </RequireAuth>
+    //     </ProtectedRoute>
     //   ),
     // },
 

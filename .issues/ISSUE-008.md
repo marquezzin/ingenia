@@ -59,7 +59,7 @@ Criar o domain frontend `auth` e implementar as telas de autenticação, guards 
 - [ ] Tela de registro criando conta de aluno
 - [x] Tela de recuperação de senha funcional
 - [x] Telas de 401 e 404 implementadas
-- [ ] Guards de rota bloqueando acesso por role incorreto
+- [x] Guards de rota bloqueando acesso por role incorreto
 - [ ] Layout base renderizando navegação correta por perfil
 - [ ] Testes E2E cobrindo login e registro (Playwright)
 - [ ] States de loading, empty, error e success em todas telas
