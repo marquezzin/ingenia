@@ -1,13 +1,26 @@
-import { Group, Text, ThemeIcon } from "@mantine/core";
-import { Box } from "lucide-react";
+interface LogoProps {
+    size?: "sm" | "md" | "lg" | "xl";
+}
 
-export function Logo() {
+const sizeMap = {
+    sm: 32,
+    md: 44,
+    lg: 64,
+    xl: 160,
+};
+
+export function Logo({ size = "md" }: LogoProps) {
+    const px = sizeMap[size];
     return (
-        <Group gap="xs">
-            <ThemeIcon size="lg" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                <Box size={20} />
-            </ThemeIcon>
-            <Text fw={700} size="lg">ingenia</Text>
-        </Group>
+        <img
+            src="/assets/logo.png"
+            alt="Ingenia"
+            width={px}
+            height={px}
+            style={{
+                objectFit: "contain",
+                display: "block",
+            }}
+        />
     );
 }

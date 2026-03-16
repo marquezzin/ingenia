@@ -1,6 +1,10 @@
 /**
  * Auth Domain — Types
+ * Alinhado com UserMeSerializer do backend.
  */
+
+export type UserRole = "STUDENT" | "TEACHER" | "ADMIN";
+export type AccountStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED";
 
 export interface User {
     id: string;
@@ -8,7 +12,11 @@ export interface User {
     username: string;
     firstName: string;
     lastName: string;
+    fullName: string;
+    role: UserRole;
+    accountStatus: AccountStatus;
     dateJoined: string;
+    profileInfo: Record<string, unknown> | null;
 }
 
 export interface AuthTokens {
@@ -22,9 +30,8 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
+    fullName: string;
     email: string;
-    username: string;
     password: string;
-    firstName?: string;
-    lastName?: string;
+    passwordConfirm: string;
 }

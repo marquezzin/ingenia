@@ -36,20 +36,20 @@ Criar a página de login, integrar com a API de auth e implementar o redireciona
 
 ## Critérios de Aceite
 
-- [ ] Tela de login funcional com formulário
-- [ ] Login integrado com API JWT
-- [ ] Tokens armazenados de forma segura
-- [ ] Redirecionamento correto por role após login
-- [ ] Estados de loading, error exibidos corretamente
-- [ ] Links para registro e forgot password funcionais
+- [x] Tela de login funcional com formulário
+- [x] Login integrado com API JWT
+- [x] Tokens armazenados de forma segura
+- [x] Redirecionamento correto por role após login
+- [x] Estados de loading, error exibidos corretamente
+- [x] Links para registro e forgot password funcionais
 
 ## Arquivos Afetados
 
-- `frontend/src/domains/auth/` — novo domain
-- `frontend/src/domains/auth/pages/LoginPage.tsx`
-- `frontend/src/domains/auth/api.ts` — chamadas de auth
-- `frontend/src/domains/auth/types.ts` — tipos
-- `frontend/src/app/routes.tsx` — rota `/login`
+- `frontend/src/domains/auth/pages/LoginPage.tsx` — reescrita com logo, links, redirect por role
+- `frontend/src/domains/auth/types.ts` — User alinhado com backend (role, accountStatus, fullName)
+- `frontend/src/domains/auth/model.ts` — **novo**: getRedirectPathByRole, extractApiError
+- `frontend/src/domains/auth/.context.md` — atualizado
+- `frontend/src/app/routes.tsx` — rotas placeholder `/register` e `/forgot-password`
 
 ## Notas Técnicas
 
@@ -67,5 +67,6 @@ Criar a página de login, integrar com a API de auth e implementar o redireciona
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

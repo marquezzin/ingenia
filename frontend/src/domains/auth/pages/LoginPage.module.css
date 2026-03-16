@@ -1,0 +1,177 @@
+/**
+ * LoginPage — CSS Module
+ * Layout split: ilustração à esquerda, formulário à direita.
+ */
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+}
+
+/* ─── Left: Illustration Panel ────────────────────────────────────────────── */
+
+.illustrationSide {
+    display: none;
+    flex: 1;
+    position: relative;
+    background: linear-gradient(135deg,
+            hsl(var(--brand-primary) / 0.06) 0%,
+            hsl(var(--brand-accent) / 0.08) 50%,
+            hsl(var(--brand-primary) / 0.04) 100%);
+    overflow: hidden;
+}
+
+.illustrationSide::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle,
+            hsl(var(--brand-primary) / 0.08) 0%,
+            transparent 70%);
+    border-radius: 50%;
+}
+
+.illustrationSide::after {
+    content: "";
+    position: absolute;
+    bottom: -15%;
+    right: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle,
+            hsl(var(--brand-accent) / 0.1) 0%,
+            transparent 70%);
+    border-radius: 50%;
+}
+
+@media (min-width: 768px) {
+    .illustrationSide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.illustrationContent {
+    position: relative;
+    z-index: 2;
+    padding: var(--space-3xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 520px;
+}
+
+.illustration {
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(58, 134, 255, 0.12));
+    animation: floatIllustration 6s ease-in-out infinite;
+}
+
+@keyframes floatIllustration {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+/* ─── Right: Form Panel ───────────────────────────────────────────────────── */
+
+.formSide {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg);
+    background-color: var(--color-bg-elevated);
+}
+
+@media (min-width: 768px) {
+    .formSide {
+        max-width: 520px;
+        padding: var(--space-2xl);
+    }
+}
+
+.formContainer {
+    width: 100%;
+    max-width: 420px;
+}
+
+.titleBlock {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-lg);
+}
+
+.formCard {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* ─── Submit Button ──────────────────────────────────────────────────────── */
+
+.submitBtn {
+    background: linear-gradient(135deg,
+            hsl(var(--brand-primary)) 0%,
+            hsl(var(--brand-primary-dark)) 100%);
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: var(--transition-fast);
+    box-shadow: 0 4px 14px hsl(var(--brand-primary) / 0.35);
+}
+
+.submitBtn:hover {
+    box-shadow: 0 6px 20px hsl(var(--brand-primary) / 0.45);
+    transform: translateY(-1px);
+}
+
+.submitBtn:active {
+    transform: translateY(0);
+}
+
+/* ─── Dark Mode ──────────────────────────────────────────────────────────── */
+
+[data-mantine-color-scheme="dark"] .illustrationSide {
+    background: linear-gradient(135deg,
+            hsl(var(--brand-primary) / 0.1) 0%,
+            hsl(var(--brand-accent) / 0.06) 100%);
+}
+
+[data-mantine-color-scheme="dark"] .formSide {
+    background-color: var(--color-bg-elevated);
+}
+
+/* ─── Browser Autofill Override ──────────────────────────────────────────── */
+
+.formCard input:-webkit-autofill,
+.formCard input:-webkit-autofill:hover, 
+.formCard input:-webkit-autofill:focus, 
+.formCard input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: var(--color-text) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-mantine-color-scheme="dark"] .formCard input:-webkit-autofill,
+[data-mantine-color-scheme="dark"] .formCard input:-webkit-autofill:hover, 
+[data-mantine-color-scheme="dark"] .formCard input:-webkit-autofill:focus, 
+[data-mantine-color-scheme="dark"] .formCard input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--color-bg-elevated) inset !important;
+    -webkit-text-fill-color: var(--color-text) !important;
+}

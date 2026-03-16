@@ -53,7 +53,7 @@
 
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
-| ISSUE-008-A | Tela de Login + redirecionamento por role | feature | 🟡 | 007-A, 007-C |
+| ISSUE-008-A | Tela de Login + redirecionamento por role | feature | 🟢 | 007-A, 007-C |
 | ISSUE-008-B | Tela de Registro + Forgot Password | feature | 🟡 | 007-B, 007-D |
 | ISSUE-008-C | Telas de erro (Unauthorized + Not Found) | feature | 🟡 | — |
 | ISSUE-008-D | Guards de rota (ProtectedRoute, StudentRoute, etc.) | feature | 🟡 | 007-A, 007-C, 008-A |
@@ -183,8 +183,8 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 10 |
+| Concluídas | 11 |
 | Em andamento | 0 |
-| Pendentes | 54 |
+| Pendentes | 53 |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

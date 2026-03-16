@@ -46,6 +46,33 @@ export const router = createBrowserRouter([
         ),
     },
 
+    {
+        path: "/register",
+        element: (
+            <RequireGuest>
+                <Suspense fallback={<Spinner />}>
+                    {/* ISSUE-008-B — Tela de Registro */}
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <p>Registro — em breve</p>
+                    </div>
+                </Suspense>
+            </RequireGuest>
+        ),
+    },
+    {
+        path: "/forgot-password",
+        element: (
+            <RequireGuest>
+                <Suspense fallback={<Spinner />}>
+                    {/* ISSUE-008-B — Tela de Forgot Password */}
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <p>Recuperar senha — em breve</p>
+                    </div>
+                </Suspense>
+            </RequireGuest>
+        ),
+    },
+
     // ─── Rotas protegidas ───────────────────────────────────────────────────
     {
         path: "/dashboard",
