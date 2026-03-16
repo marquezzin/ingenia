@@ -10,6 +10,8 @@ import { RequireAuth, RequireGuest } from "@/shared/auth/guards";
 // Lazy imports por domínio
 const LandingPage = lazy(() => import("@/domains/landing/pages/LandingPage"));
 const LoginPage = lazy(() => import("@/domains/auth/pages/LoginPage"));
+const RegisterPage = lazy(() => import("@/domains/auth/pages/RegisterPage"));
+const ForgotPasswordPage = lazy(() => import("@/domains/auth/pages/ForgotPasswordPage"));
 
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
@@ -52,9 +54,7 @@ export const router = createBrowserRouter([
             <RequireGuest>
                 <Suspense fallback={<Spinner />}>
                     {/* ISSUE-008-B — Tela de Registro */}
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                        <p>Registro — em breve</p>
-                    </div>
+                    <RegisterPage />
                 </Suspense>
             </RequireGuest>
         ),
@@ -65,9 +65,7 @@ export const router = createBrowserRouter([
             <RequireGuest>
                 <Suspense fallback={<Spinner />}>
                     {/* ISSUE-008-B — Tela de Forgot Password */}
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                        <p>Recuperar senha — em breve</p>
-                    </div>
+                    <ForgotPasswordPage />
                 </Suspense>
             </RequireGuest>
         ),

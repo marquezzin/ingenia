@@ -35,3 +35,7 @@ export interface RegisterPayload {
     password: string;
     passwordConfirm: string;
 }
+
+export interface ForgotPasswordPayload {
+    email: string;
+}

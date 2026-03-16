@@ -2,7 +2,7 @@
  * Auth Domain — API contract
  */
 import { httpClient } from "@/shared/http/client";
-import type { AuthTokens, LoginPayload, RegisterPayload, User } from "./types";
+import type { AuthTokens, LoginPayload, RegisterPayload, ForgotPasswordPayload, User } from "./types";
 
 export const loginApi = async (payload: LoginPayload): Promise<AuthTokens & { user: User }> => {
     const { data } = await httpClient.post("/api/auth/login/", payload);
@@ -12,7 +12,12 @@ export const loginApi = async (payload: LoginPayload): Promise<AuthTokens & { us
 export const registerApi = async (
     payload: RegisterPayload
 ): Promise<AuthTokens & { user: User }> => {
-    const { data } = await httpClient.post("/api/auth/register/", payload);
+    const { data } = await httpClient.post("/api/auth/register/", {
+        full_name: payload.fullName,
+        email: payload.email,
+        password: payload.password,
+        password_confirm: payload.passwordConfirm,
+    });
     return data;
 };
 
@@ -24,4 +29,8 @@ export const refreshApi = async (refresh: string): Promise<{ access: string }> =
 export const getMeApi = async (): Promise<User> => {
     const { data } = await httpClient.get("/api/auth/me/");
     return data;
+};
+
+export const forgotPasswordApi = async (payload: ForgotPasswordPayload): Promise<void> => {
+    await httpClient.post("/api/auth/forgot-password/", payload);
 };

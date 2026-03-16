@@ -112,8 +112,8 @@
 }
 
 .titleBlock {
-    margin-top: var(--space-xl);
-    margin-bottom: var(--space-lg);
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-md);
 }
 
 .formCard {
@@ -121,6 +121,23 @@
     border: none;
     box-shadow: none;
     padding: 0;
+}
+
+/* ─── Page Transition ────────────────────────────────────────────────────── */
+
+.formContainer {
+    animation: fadeSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ─── Submit Button ──────────────────────────────────────────────────────── */

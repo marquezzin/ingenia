@@ -28,12 +28,12 @@ Criar as páginas de registro público e forgot password, integrando com as APIs
 
 ## Critérios de Aceite
 
-- [ ] Tela de registro funcional criando conta de aluno
-- [ ] Validações inline de email e senha
-- [ ] Redirecionamento para login após registro com sucesso
-- [ ] Tela de forgot password funcional
-- [ ] Mensagem genérica de confirmação (segurança)
-- [ ] Estados de loading e error
+- [x] Tela de registro funcional criando conta de aluno
+- [x] Validações inline de email e senha
+- [x] Redirecionamento para login após registro com sucesso
+- [x] Tela de forgot password funcional
+- [x] Mensagem genérica de confirmação (segurança)
+- [x] Estados de loading e error
 
 ## Arquivos Afetados
 
@@ -56,5 +56,6 @@ Criar as páginas de registro público e forgot password, integrando com as APIs
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

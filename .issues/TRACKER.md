@@ -54,7 +54,7 @@
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
 | ISSUE-008-A | Tela de Login + redirecionamento por role | feature | 🟢 | 007-A, 007-C |
-| ISSUE-008-B | Tela de Registro + Forgot Password | feature | 🟡 | 007-B, 007-D |
+| ISSUE-008-B | Tela de Registro + Forgot Password | feature | 🟢 | 007-B, 007-D |
 | ISSUE-008-C | Telas de erro (Unauthorized + Not Found) | feature | 🟡 | — |
 | ISSUE-008-D | Guards de rota (ProtectedRoute, StudentRoute, etc.) | feature | 🟡 | 007-A, 007-C, 008-A |
 | ISSUE-008-E | Layout base com navegação por perfil | feature | 🟡 | 007-A, 008-A, 008-D |
