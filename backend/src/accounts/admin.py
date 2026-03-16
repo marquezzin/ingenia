@@ -12,6 +12,7 @@ class StudentProfileInline(admin.StackedInline):
     verbose_name = "Perfil de Aluno"
     verbose_name_plural = "Perfil de Aluno"
     extra = 0
+    max_num = 1
 
 
 class TeacherProfileInline(admin.StackedInline):
@@ -20,6 +21,7 @@ class TeacherProfileInline(admin.StackedInline):
     verbose_name = "Perfil de Professor"
     verbose_name_plural = "Perfil de Professor"
     extra = 0
+    max_num = 1
 
 
 class AdminProfileInline(admin.StackedInline):
@@ -28,6 +30,7 @@ class AdminProfileInline(admin.StackedInline):
     verbose_name = "Perfil de Administrador"
     verbose_name_plural = "Perfil de Administrador"
     extra = 0
+    max_num = 1
 
 
 @admin.register(User)
@@ -53,6 +56,23 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     readonly_fields = ["last_login_at"]
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return []
+
+        from .enums import UserRole
+
+        inline_instances = []
+        for inline_class in self.inlines:
+            if inline_class == StudentProfileInline and obj.role == UserRole.STUDENT:
+                inline_instances.append(inline_class(self.model, self.admin_site))
+            elif inline_class == TeacherProfileInline and obj.role == UserRole.TEACHER:
+                inline_instances.append(inline_class(self.model, self.admin_site))
+            elif inline_class == AdminProfileInline and obj.role == UserRole.ADMIN:
+                inline_instances.append(inline_class(self.model, self.admin_site))
+
+        return inline_instances
 
 
 @admin.register(StudentProfile)
