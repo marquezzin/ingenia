@@ -50,14 +50,14 @@ Criar um novo app Django `progress` contendo os models de progresso acadêmico.
 
 ## Critérios de Aceite
 
-- [ ] App `progress` criado seguindo padrão do projeto
-- [ ] Enum `ProgressStatus` implementado
-- [ ] Models `StudentModuleProgress`, `StudentLessonProgress`, `StudentExerciseProgress` criados
-- [ ] Unique constraints conforme domain model
-- [ ] Invariant: `completed_at` preenchido → `progress_status = COMPLETED`
-- [ ] Invariant: `progress_status = NOT_STARTED` → `started_at` e `completed_at` vazios
-- [ ] Invariant: `attempts_count >= 0`
-- [ ] Migrations geradas e executando sem erro
+- [x] App `progress` criado seguindo padrão do projeto
+- [x] Enum `ProgressStatus` implementado
+- [x] Models `StudentModuleProgress`, `StudentLessonProgress`, `StudentExerciseProgress` criados
+- [x] Unique constraints conforme domain model
+- [x] Invariant: `completed_at` preenchido → `progress_status = COMPLETED`
+- [x] Invariant: `progress_status = NOT_STARTED` → `started_at` e `completed_at` vazios
+- [x] Invariant: `attempts_count >= 0`
+- [x] Migrations geradas e executando sem erro
 
 ## Arquivos Afetados
 
@@ -87,7 +87,8 @@ Criar um novo app Django `progress` contendo os models de progresso acadêmico.
 
 ## Status
 
+- **Status**: Concluída
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

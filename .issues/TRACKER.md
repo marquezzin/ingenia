@@ -32,7 +32,7 @@
 | ISSUE-003 | App `curriculum` — Módulos, Aulas, Vídeos, Exercícios | feature | M | 🟢 | — |
 | ISSUE-002 | App `classes` — Turmas e Matrículas | feature | P | 🟢 | 001 |
 | ISSUE-004 | App `submissions` — Submissão e Resultado | feature | P | 🟢 | 001, 003 |
-| ISSUE-005 | App `progress` — Progresso do Aluno | feature | P | 🟡 | 001, 003 |
+| ISSUE-005 | App `progress` — Progresso do Aluno | feature | P | 🟢 | 001, 003 |
 | ISSUE-006 | Admin Django + Seed Básico | feature | M | 🟡 | 001-005 |
 
 ---
@@ -183,8 +183,8 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 4 |
+| Concluídas | 5 |
 | Em andamento | 0 |
-| Pendentes | 60 |
+| Pendentes | 59 |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->
