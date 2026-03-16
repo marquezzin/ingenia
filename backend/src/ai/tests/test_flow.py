@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 
@@ -16,6 +17,7 @@ class AIJobFlowTest(APITestCase):
         self.url = reverse("ai-jobs-list")
 
     @patch("src.ai.tasks.get_provider")
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=False)
     def test_create_job_triggers_task(self, mock_get_provider):
         # Mock do provider para não chamar API real
         mock_provider = mock_get_provider.return_value
