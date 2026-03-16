@@ -28,7 +28,18 @@ export const refreshApi = async (refresh: string): Promise<{ access: string }> =
 
 export const getMeApi = async (): Promise<User> => {
     const { data } = await httpClient.get("/api/auth/me/");
-    return data;
+    return {
+        id: data.id,
+        email: data.email,
+        username: data.username,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        fullName: data.full_name,
+        role: data.role,
+        accountStatus: data.account_status,
+        dateJoined: data.date_joined,
+        profileInfo: data.profile_info,
+    };
 };
 
 export const forgotPasswordApi = async (payload: ForgotPasswordPayload): Promise<void> => {

@@ -8,6 +8,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { RequireGuest } from "@/shared/auth/guards";
 import { ProtectedRoute } from "@/shared/components/ProtectedRoute";
 import { StudentRoute, TeacherRoute, AdminRoute } from "@/shared/components/RoleRoute";
+import { AppLayout } from "@/shared/components/Layout";
 
 // Lazy imports por domínio
 const LandingPage = lazy(() => import("@/domains/landing/pages/LandingPage"));
@@ -57,7 +58,6 @@ export const router = createBrowserRouter([
         element: (
             <RequireGuest>
                 <Suspense fallback={<Spinner />}>
-                    {/* ISSUE-008-B — Tela de Registro */}
                     <RegisterPage />
                 </Suspense>
             </RequireGuest>
@@ -68,7 +68,6 @@ export const router = createBrowserRouter([
         element: (
             <RequireGuest>
                 <Suspense fallback={<Spinner />}>
-                    {/* ISSUE-008-B — Tela de Forgot Password */}
                     <ForgotPasswordPage />
                 </Suspense>
             </RequireGuest>
@@ -85,45 +84,70 @@ export const router = createBrowserRouter([
         ),
     },
 
-    // ─── Rotas protegidas ───────────────────────────────────────────────────
+    // ─── Rotas protegidas (Aluno) ───────────────────────────────────────────
     {
         path: "/student",
         element: (
             <ProtectedRoute>
                 <StudentRoute>
-                    <Suspense fallback={<Spinner />}>
-                        {/* Layout do Aluno aqui */}
-                        <div>Área do Aluno — Layout em construção</div>
-                    </Suspense>
+                    <AppLayout />
                 </StudentRoute>
             </ProtectedRoute>
         ),
+        children: [
+            {
+                index: true,
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <div>Dashboard do Aluno — Em construção</div>
+                    </Suspense>
+                ),
+            },
+        ],
     },
+
+    // ─── Rotas protegidas (Professor) ───────────────────────────────────────
     {
         path: "/teacher",
         element: (
             <ProtectedRoute>
                 <TeacherRoute>
-                    <Suspense fallback={<Spinner />}>
-                        {/* Layout do Professor aqui */}
-                        <div>Área do Professor — Layout em construção</div>
-                    </Suspense>
+                    <AppLayout />
                 </TeacherRoute>
             </ProtectedRoute>
         ),
+        children: [
+            {
+                index: true,
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <div>Dashboard do Professor — Em construção</div>
+                    </Suspense>
+                ),
+            },
+        ],
     },
+
+    // ─── Rotas protegidas (Admin) ───────────────────────────────────────────
     {
         path: "/admin",
         element: (
             <ProtectedRoute>
                 <AdminRoute>
-                    <Suspense fallback={<Spinner />}>
-                        {/* Layout de Admin aqui */}
-                        <div>Área de Admin — Layout em construção</div>
-                    </Suspense>
+                    <AppLayout />
                 </AdminRoute>
             </ProtectedRoute>
         ),
+        children: [
+            {
+                index: true,
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <div>Dashboard Admin — Em construção</div>
+                    </Suspense>
+                ),
+            },
+        ],
     },
 
     // ─── Dev tools (remova em produção se necessário) ────────────────────────

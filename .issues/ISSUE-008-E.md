@@ -30,18 +30,21 @@ Criar o componente de layout base que será usado como wrapper de todas as área
 
 ## Critérios de Aceite
 
-- [ ] Layout base renderizado em todas áreas autenticadas
-- [ ] Navegação diferenciada por role
-- [ ] Header com nome do usuário e logout funcional
-- [ ] Layout responsivo (sidebar colapsável em telas menores)
-- [ ] Transição suave entre páginas
+- [x] Layout base renderizado em todas áreas autenticadas
+- [x] Navegação diferenciada por role
+- [x] Header com nome do usuário e logout funcional
+- [x] Layout responsivo (sidebar colapsável em telas menores)
+- [x] Transição suave entre páginas
 
 ## Arquivos Afetados
 
 - `frontend/src/shared/components/Layout/AppLayout.tsx`
 - `frontend/src/shared/components/Layout/Sidebar.tsx`
+- `frontend/src/shared/components/Layout/Sidebar.module.css`
 - `frontend/src/shared/components/Layout/Header.tsx`
-- `frontend/src/app/routes.tsx` — usar layout como wrapper
+- `frontend/src/shared/components/Layout/Header.module.css`
+- `frontend/src/shared/components/Layout/index.ts`
+- `frontend/src/app/routes.tsx` — refatorado para nested routes com AppLayout wrapper
 
 ## Notas Técnicas
 
@@ -57,5 +60,6 @@ Criar o componente de layout base que será usado como wrapper de todas as área
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16
