@@ -54,15 +54,25 @@ class LoginUserResult:
 class LoginUserUseCase:
     def execute(self, *, input: LoginUserInput) -> LoginUserResult:
         user = authenticate(username=input.email, password=input.password)
+
+        if user is not None:
+            from ..enums import AccountStatus
+
+            if user.account_status != AccountStatus.ACTIVE:
+                raise ApplicationError("Conta inativa ou suspensa.")
+            return LoginUserResult(user=user)
+
         if user is None:
             # Verifica se falhou pois o usuário está inativo
             existing_user = User.objects.filter(email=input.email).first()
-            if (
-                existing_user
-                and existing_user.check_password(input.password)
-                and not existing_user.is_active
-            ):
-                raise ApplicationError("Conta desativada.")
+            if existing_user and existing_user.check_password(input.password):
+                from ..enums import AccountStatus
+
+                if (
+                    not existing_user.is_active
+                    or existing_user.account_status != AccountStatus.ACTIVE
+                ):
+                    raise ApplicationError("Conta inativa ou suspensa.")
 
             raise ApplicationError("E-mail ou senha inválidos.")
 

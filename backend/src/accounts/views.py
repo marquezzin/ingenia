@@ -4,12 +4,16 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from core.errors import ApplicationError
 
 from .schemas import login_schema, me_schema, register_schema
-from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    CustomTokenObtainPairSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    UserMeSerializer,
+)
 from .services.auth import (
     LoginUserInput,
     LoginUserUseCase,
@@ -40,10 +44,10 @@ class RegisterView(APIView):
         except ApplicationError as e:
             return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
-        refresh = RefreshToken.for_user(result.user)
+        refresh = CustomTokenObtainPairSerializer.get_token(result.user)
         return Response(
             {
-                "user": UserSerializer(result.user).data,
+                "user": UserMeSerializer(result.user).data,
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
             },
@@ -70,10 +74,10 @@ class LoginView(APIView):
         except ApplicationError as e:
             return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
-        refresh = RefreshToken.for_user(result.user)
+        refresh = CustomTokenObtainPairSerializer.get_token(result.user)
         return Response(
             {
-                "user": UserSerializer(result.user).data,
+                "user": UserMeSerializer(result.user).data,
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
             }
@@ -82,8 +86,8 @@ class LoginView(APIView):
 
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = UserSerializer
+    serializer_class = UserMeSerializer
 
     @me_schema
     def get(self, request):
-        return Response(UserSerializer(request.user).data)
+        return Response(UserMeSerializer(request.user).data)

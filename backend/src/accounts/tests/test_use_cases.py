@@ -91,4 +91,20 @@ class LoginUserUseCaseTest(TestCase):
         with self.assertRaises(ApplicationError) as context:
             LoginUserUseCase().execute(input=input_data)
 
-        self.assertEqual(str(context.exception), "Conta desativada.")
+        self.assertEqual(str(context.exception), "Conta inativa ou suspensa.")
+
+    def test_login_raises_error_for_suspended_account(self):
+        from src.accounts.enums import AccountStatus
+
+        self.user.account_status = AccountStatus.SUSPENDED
+        self.user.save()
+
+        input_data = LoginUserInput(
+            email="login@example.com",
+            password=self.password,
+        )
+
+        with self.assertRaises(ApplicationError) as context:
+            LoginUserUseCase().execute(input=input_data)
+
+        self.assertEqual(str(context.exception), "Conta inativa ou suspensa.")

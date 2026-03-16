@@ -33,11 +33,11 @@ Modificar o fluxo de autenticação JWT para que o token contenha o `role` do us
 
 ## Critérios de Aceite
 
-- [ ] JWT inclui `role` no payload do token
-- [ ] Login retorna `role` e profile info
-- [ ] Endpoint `/me/` retorna dados completos do usuário autenticado
-- [ ] Login bloqueado para contas com `account_status != ACTIVE`
-- [ ] Mensagem de erro não expõe se email existe ou não
+- [x] JWT inclui `role` no payload do token
+- [x] Login retorna `role` e profile info
+- [x] Endpoint `/me/` retorna dados completos do usuário autenticado
+- [x] Login bloqueado para contas com `account_status != ACTIVE`
+- [x] Mensagem de erro não expõe se email existe ou não
 
 ## Arquivos Afetados
 
@@ -59,7 +59,8 @@ Modificar o fluxo de autenticação JWT para que o token contenha o `role` do us
 
 ## Status
 
+- **Status**: Concluída
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

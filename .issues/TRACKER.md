@@ -43,7 +43,7 @@
 
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
-| ISSUE-007-A | JWT custom — role no payload + `/me/` + bloquear inativo | feature | 🟡 | 001 |
+| ISSUE-007-A | JWT custom — role no payload + `/me/` + bloquear inativo | feature | 🟢 | 001 |
 | ISSUE-007-B | Endpoint de registro público (User + StudentProfile) | feature | 🟡 | 001 |
 | ISSUE-007-C | Permissions customizadas (IsStudent, IsTeacher, IsAdmin, IsActiveAccount) | feature | 🟡 | 001, 007-A |
 | ISSUE-007-D | Recuperação de senha (forgot + reset) | feature | 🟡 | 001, 007-A |
