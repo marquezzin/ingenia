@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from core.errors import ApplicationError
+from src.accounts.models import StudentProfile
 from src.accounts.services.auth import (
     LoginUserInput,
     LoginUserUseCase,
@@ -13,43 +14,92 @@ from src.accounts.tests.factories import UserFactory
 class RegisterUserUseCaseTest(TestCase):
     def test_register_creates_user_successfully(self):
         input_data = RegisterUserInput(
+            full_name="Test User",
             email="test@example.com",
-            username="testuser",
             password="securepassword123",
-            first_name="Test",
-            last_name="User",
         )
         result = RegisterUserUseCase().execute(input=input_data)
 
         self.assertEqual(result.user.email, "test@example.com")
-        self.assertEqual(result.user.username, "testuser")
+        self.assertEqual(result.user.first_name, "Test")
+        self.assertEqual(result.user.last_name, "User")
         self.assertTrue(result.user.check_password("securepassword123"))
 
-    def test_register_raises_error_for_duplicate_email(self):
+    def test_register_sets_role_as_student(self):
+        input_data = RegisterUserInput(
+            full_name="Test User",
+            email="student@example.com",
+            password="securepassword123",
+        )
+        result = RegisterUserUseCase().execute(input=input_data)
+
+        self.assertEqual(result.user.role, "STUDENT")
+
+    def test_register_creates_student_profile(self):
+        input_data = RegisterUserInput(
+            full_name="Test User",
+            email="profile@example.com",
+            password="securepassword123",
+        )
+        result = RegisterUserUseCase().execute(input=input_data)
+
+        self.assertTrue(StudentProfile.objects.filter(user=result.user).exists())
+
+    def test_register_generates_username_from_email(self):
+        input_data = RegisterUserInput(
+            full_name="Test User",
+            email="myuser@example.com",
+            password="securepassword123",
+        )
+        result = RegisterUserUseCase().execute(input=input_data)
+
+        self.assertEqual(result.user.username, "myuser")
+
+    def test_register_generates_unique_username_on_conflict(self):
+        UserFactory(username="existing")
+        input_data = RegisterUserInput(
+            full_name="Test User",
+            email="existing@example.com",
+            password="securepassword123",
+        )
+        result = RegisterUserUseCase().execute(input=input_data)
+
+        self.assertEqual(result.user.username, "existing1")
+
+    def test_register_raises_generic_error_for_duplicate_email(self):
         UserFactory(email="existing@example.com")
         input_data = RegisterUserInput(
+            full_name="New User",
             email="existing@example.com",
-            username="newuser",
             password="securepassword123",
         )
 
         with self.assertRaises(ApplicationError) as context:
             RegisterUserUseCase().execute(input=input_data)
 
-        self.assertEqual(str(context.exception), "Este e-mail já está em uso.")
+        self.assertEqual(str(context.exception), "Não foi possível criar a conta.")
 
-    def test_register_raises_error_for_duplicate_username(self):
-        UserFactory(username="existinguser")
+    def test_register_splits_full_name_correctly(self):
         input_data = RegisterUserInput(
-            email="new@example.com",
-            username="existinguser",
+            full_name="Ana Maria Silva",
+            email="ana@example.com",
             password="securepassword123",
         )
+        result = RegisterUserUseCase().execute(input=input_data)
 
-        with self.assertRaises(ApplicationError) as context:
-            RegisterUserUseCase().execute(input=input_data)
+        self.assertEqual(result.user.first_name, "Ana")
+        self.assertEqual(result.user.last_name, "Maria Silva")
 
-        self.assertEqual(str(context.exception), "Este nome de usuário já está em uso.")
+    def test_register_handles_single_name(self):
+        input_data = RegisterUserInput(
+            full_name="Ikaro",
+            email="ikaro@example.com",
+            password="securepassword123",
+        )
+        result = RegisterUserUseCase().execute(input=input_data)
+
+        self.assertEqual(result.user.first_name, "Ikaro")
+        self.assertEqual(result.user.last_name, "")
 
 
 class LoginUserUseCaseTest(TestCase):

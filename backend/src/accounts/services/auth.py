@@ -3,19 +3,19 @@
 from dataclasses import dataclass
 
 from django.contrib.auth import authenticate
+from django.db import transaction
 
 from core.errors import ApplicationError
 
-from ..models import User
+from ..enums import UserRole
+from ..models import StudentProfile, User
 
 
 @dataclass
 class RegisterUserInput:
+    full_name: str
     email: str
-    username: str
     password: str
-    first_name: str = ""
-    last_name: str = ""
 
 
 @dataclass
@@ -26,18 +26,34 @@ class RegisterUserResult:
 class RegisterUserUseCase:
     def execute(self, *, input: RegisterUserInput) -> RegisterUserResult:
         if User.objects.filter(email=input.email).exists():
-            raise ApplicationError("Este e-mail já está em uso.")
-        if User.objects.filter(username=input.username).exists():
-            raise ApplicationError("Este nome de usuário já está em uso.")
+            raise ApplicationError("Não foi possível criar a conta.")
 
-        user = User.objects.create_user(
-            email=input.email,
-            username=input.username,
-            password=input.password,
-            first_name=input.first_name,
-            last_name=input.last_name,
-        )
+        first_name, _, last_name = input.full_name.partition(" ")
+        username = self._generate_unique_username(input.email)
+
+        with transaction.atomic():
+            user = User.objects.create_user(
+                email=input.email,
+                username=username,
+                password=input.password,
+                first_name=first_name,
+                last_name=last_name,
+                role=UserRole.STUDENT,
+            )
+            StudentProfile.objects.create(user=user)
+
         return RegisterUserResult(user=user)
+
+    @staticmethod
+    def _generate_unique_username(email: str) -> str:
+        """Gera um username único a partir do email."""
+        base_username = email.split("@")[0]
+        username = base_username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+        return username
 
 
 @dataclass

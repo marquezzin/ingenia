@@ -34,11 +34,9 @@ class RegisterView(APIView):
         try:
             result = RegisterUserUseCase().execute(
                 input=RegisterUserInput(
+                    full_name=data["full_name"],
                     email=data["email"],
-                    username=data["username"],
                     password=data["password"],
-                    first_name=data.get("first_name", ""),
-                    last_name=data.get("last_name", ""),
                 )
             )
         except ApplicationError as e:

@@ -10,9 +10,10 @@ from .factories import UserFactory
 class RegisterViewTest(APITestCase):
     def test_register_with_valid_data_returns_201(self):
         payload = {
+            "full_name": "Test User",
             "email": "new@example.com",
-            "username": "newuser",
             "password": "securepass123",
+            "password_confirm": "securepass123",
         }
         response = self.client.post("/api/auth/register/", payload)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -25,15 +26,61 @@ class RegisterViewTest(APITestCase):
         self.assertIn("full_name", user_data)
         self.assertIn("profile_info", user_data)
 
-    def test_register_with_duplicate_email_returns_400(self):
+    def test_register_creates_student_profile(self):
+        payload = {
+            "full_name": "Profile Test",
+            "email": "profile@example.com",
+            "password": "securepass123",
+            "password_confirm": "securepass123",
+        }
+        response = self.client.post("/api/auth/register/", payload)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIsNotNone(response.data["user"]["profile_info"])
+
+    def test_register_with_duplicate_email_returns_400_generic_message(self):
         UserFactory(email="existing@example.com")
         payload = {
+            "full_name": "Another User",
             "email": "existing@example.com",
-            "username": "anotheruser",
             "password": "securepass123",
+            "password_confirm": "securepass123",
         }
         response = self.client.post("/api/auth/register/", payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["detail"], "Não foi possível criar a conta.")
+
+    def test_register_with_mismatched_passwords_returns_400(self):
+        payload = {
+            "full_name": "Test User",
+            "email": "mismatch@example.com",
+            "password": "securepass123",
+            "password_confirm": "differentpass123",
+        }
+        response = self.client.post("/api/auth/register/", payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password_confirm", response.data)
+
+    def test_register_with_weak_password_returns_400(self):
+        payload = {
+            "full_name": "Test User",
+            "email": "weak@example.com",
+            "password": "nodigitshere",
+            "password_confirm": "nodigitshere",
+        }
+        response = self.client.post("/api/auth/register/", payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password", response.data)
+
+    def test_register_with_short_password_returns_400(self):
+        payload = {
+            "full_name": "Test User",
+            "email": "short@example.com",
+            "password": "abc1",
+            "password_confirm": "abc1",
+        }
+        response = self.client.post("/api/auth/register/", payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password", response.data)
 
 
 class LoginViewTest(APITestCase):

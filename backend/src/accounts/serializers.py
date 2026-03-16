@@ -80,11 +80,23 @@ class UserMeSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.Serializer):
+    full_name = serializers.CharField(max_length=300)
     email = serializers.EmailField()
-    username = serializers.CharField(max_length=150)
     password = serializers.CharField(write_only=True, min_length=8)
-    first_name = serializers.CharField(max_length=150, required=False, default="")
-    last_name = serializers.CharField(max_length=150, required=False, default="")
+    password_confirm = serializers.CharField(write_only=True)
+
+    def validate_password(self, value):
+        """Senha deve conter ao menos um número."""
+        if not any(c.isdigit() for c in value):
+            raise serializers.ValidationError("A senha deve conter ao menos um número.")
+        return value
+
+    def validate(self, data):
+        if data["password"] != data["password_confirm"]:
+            raise serializers.ValidationError(
+                {"password_confirm": "As senhas não coincidem."}
+            )
+        return data
 
 
 class LoginSerializer(serializers.Serializer):

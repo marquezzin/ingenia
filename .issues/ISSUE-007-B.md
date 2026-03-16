@@ -29,12 +29,12 @@ Criar o endpoint de registro que permite a qualquer pessoa se cadastrar como alu
 
 ## Critérios de Aceite
 
-- [ ] Endpoint de registro cria User com `role=STUDENT`
-- [ ] StudentProfile criado automaticamente junto com User
-- [ ] Validação de email único
-- [ ] Validação de senha segura
-- [ ] Validação de confirmação de senha
-- [ ] Resposta não expõe se email já existe (mensagem genérica)
+- [x] Endpoint de registro cria User com `role=STUDENT`
+- [x] StudentProfile criado automaticamente junto com User
+- [x] Validação de email único
+- [x] Validação de senha segura
+- [x] Validação de confirmação de senha
+- [x] Resposta não expõe se email já existe (mensagem genérica)
 
 ## Arquivos Afetados
 
@@ -56,7 +56,8 @@ Criar o endpoint de registro que permite a qualquer pessoa se cadastrar como alu
 
 ## Status
 
+- **Status**: Concluída
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16
