@@ -1,10 +1,12 @@
 """Accounts tests — Auth endpoints."""
 
+import jwt
 from rest_framework import status
 
 from core.testing import APITestCase
+from src.accounts.enums import AccountStatus, UserRole
 
-from .factories import UserFactory
+from .factories import AdminProfileFactory, TeacherProfileFactory, UserFactory
 
 
 class RegisterViewTest(APITestCase):
@@ -111,6 +113,35 @@ class LoginViewTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_login_returns_jwt_with_role_in_payload(self):
+        response = self.client.post(
+            "/api/auth/login/",
+            {"email": "test@example.com", "password": "testpass123"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        access_token = response.data["access"]
+        payload = jwt.decode(access_token, options={"verify_signature": False})
+        self.assertIn("role", payload)
+        self.assertEqual(payload["role"], self.user.role)
+
+    def test_login_with_inactive_account_returns_400(self):
+        self.user.is_active = False
+        self.user.save()
+        response = self.client.post(
+            "/api/auth/login/",
+            {"email": "test@example.com", "password": "testpass123"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_login_with_suspended_account_returns_400(self):
+        self.user.account_status = AccountStatus.SUSPENDED
+        self.user.save()
+        response = self.client.post(
+            "/api/auth/login/",
+            {"email": "test@example.com", "password": "testpass123"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class MeViewTest(APITestCase):
     def test_me_returns_authenticated_user(self):
@@ -126,6 +157,23 @@ class MeViewTest(APITestCase):
     def test_me_without_auth_returns_401(self):
         response = self.client.get("/api/auth/me/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_me_returns_teacher_profile_info(self):
+        teacher_profile = TeacherProfileFactory()
+        self.authenticate(teacher_profile.user)
+        response = self.client.get("/api/auth/me/")
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["role"], UserRole.TEACHER)
+        self.assertIsNotNone(response.data["profile_info"])
+
+    def test_me_returns_admin_profile_info(self):
+        admin_profile = AdminProfileFactory()
+        self.authenticate(admin_profile.user)
+        response = self.client.get("/api/auth/me/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["role"], UserRole.ADMIN)
+        self.assertIsNotNone(response.data["profile_info"])
 
 
 class ForgotPasswordViewTest(APITestCase):
@@ -246,6 +294,31 @@ class ResetPasswordViewTest(APITestCase):
                 "token": self.token,
                 "new_password": "newpass123",
                 "new_password_confirm": "differentpass123",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_reset_password_returns_400_with_used_token(self):
+        import uuid
+
+        from django.utils import timezone
+
+        from src.accounts.models import PasswordResetToken
+
+        used_token = uuid.uuid4().hex
+        PasswordResetToken.objects.create(
+            user=self.user,
+            token=used_token,
+            expires_at=timezone.now() + timezone.timedelta(hours=24),
+            used=True,
+        )
+
+        response = self.client.post(
+            "/api/auth/reset-password/",
+            {
+                "token": used_token,
+                "new_password": "newpass123",
+                "new_password_confirm": "newpass123",
             },
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

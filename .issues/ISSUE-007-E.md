@@ -41,12 +41,12 @@ Criar testes unitários cobrindo todos os cenários de auth implementados nas su
 
 ## Critérios de Aceite
 
-- [ ] Testes de login: válido, inválido, inativo, suspensa
-- [ ] Testes de `/me/`: dados corretos por role
-- [ ] Testes de registro: válido, email duplicado, senha fraca
-- [ ] Testes de permissions: aceitar/rejeitar por role
-- [ ] Testes de reset password: válido, expirado, usado
-- [ ] Todos os testes passando
+- [x] Testes de login: válido, inválido, inativo, suspensa
+- [x] Testes de `/me/`: dados corretos por role
+- [x] Testes de registro: válido, email duplicado, senha fraca
+- [x] Testes de permissions: aceitar/rejeitar por role
+- [x] Testes de reset password: válido, expirado, usado
+- [x] Todos os testes passando
 
 ## Arquivos Afetados
 
@@ -69,4 +69,5 @@ Criar testes unitários cobrindo todos os cenários de auth implementados nas su
 - **Prioridade**: alta
 - **Tipo**: chore
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16
+- **Status**: Concluída

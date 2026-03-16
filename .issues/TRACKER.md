@@ -47,7 +47,7 @@
 | ISSUE-007-B | Endpoint de registro público (User + StudentProfile) | feature | 🟢 | 001 |
 | ISSUE-007-C | Permissions customizadas (IsStudent, IsTeacher, IsAdmin, IsActiveAccount) | feature | 🟢 | 001, 007-A |
 | ISSUE-007-D | Recuperação de senha (forgot + reset) | feature | 🟢 | 001, 007-A |
-| ISSUE-007-E | Testes unitários de auth | chore | 🟡 | 007-A, 007-B, 007-C, 007-D |
+| ISSUE-007-E | Testes unitários de auth | chore | 🟢 | 007-A, 007-B, 007-C, 007-D |
 
 ### ISSUE-008 — Frontend Auth (G)
 
@@ -183,8 +183,8 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 9 |
+| Concluídas | 10 |
 | Em andamento | 0 |
-| Pendentes | 55 |
+| Pendentes | 54 |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->
