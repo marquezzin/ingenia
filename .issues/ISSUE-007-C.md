@@ -28,16 +28,18 @@ Implementar permission classes do Django REST Framework para controlar acesso po
 
 ## Critérios de Aceite
 
-- [ ] `IsStudent` permite apenas alunos
-- [ ] `IsTeacher` permite apenas professores
-- [ ] `IsAdmin` permite apenas administradores
-- [ ] `IsActiveAccount` bloqueia contas inativas/suspensas
-- [ ] Permissions são composíveis com `&` e `|`
-- [ ] Retornam status HTTP 403 com mensagem clara
+- [x] `IsStudent` permite apenas alunos
+- [x] `IsTeacher` permite apenas professores
+- [x] `IsAdmin` permite apenas administradores
+- [x] `IsActiveAccount` bloqueia contas inativas/suspensas
+- [x] Permissions são composíveis com `&` e `|`
+- [x] Retornam status HTTP 403 com mensagem clara
 
 ## Arquivos Afetados
 
 - `backend/src/core/permissions.py` — todas as permission classes
+- `backend/src/core/tests/test_permissions.py` — testes unitários
+- `backend/src/core/.context.md` — contexto atualizado
 
 ## Notas Técnicas
 
@@ -53,5 +55,6 @@ Implementar permission classes do Django REST Framework para controlar acesso po
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16
