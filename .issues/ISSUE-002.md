@@ -39,13 +39,13 @@ Criar um novo app Django `classes` contendo os models de turma e matrícula, com
 
 ## Critérios de Aceite
 
-- [ ] App `classes` criado seguindo padrão do projeto
-- [ ] Enums `ClassStatus` e `EnrollmentStatus` implementados
-- [ ] Model `ClassGroup` com todos os campos, constraints e indexes
-- [ ] Model `ClassEnrollment` com todos os campos, constraints e indexes
-- [ ] BR-004: Apenas professores podem ser responsáveis por turmas (FK → TeacherProfile)
-- [ ] BR-005: Aluno não pode ter mais de uma matrícula ativa na mesma turma (unique constraint)
-- [ ] Migrations geradas e executando sem erro
+- [x] App `classes` criado seguindo padrão do projeto
+- [x] Enums `ClassStatus` e `EnrollmentStatus` implementados
+- [x] Model `ClassGroup` com todos os campos, constraints e indexes
+- [x] Model `ClassEnrollment` com todos os campos, constraints e indexes
+- [x] BR-004: Apenas professores podem ser responsáveis por turmas (FK → TeacherProfile)
+- [x] BR-005: Aluno não pode ter mais de uma matrícula ativa na mesma turma (unique constraint)
+- [x] Migrations geradas e executando sem erro
 
 ## Arquivos Afetados
 
@@ -75,5 +75,6 @@ Criar um novo app Django `classes` contendo os models de turma e matrícula, com
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-15

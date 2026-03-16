@@ -37,6 +37,7 @@ LOCAL_APPS = [
     "src.accounts",
     "src.core",
     "src.curriculum",
+    "src.classes",
 ]
 
 # Módulos opcionais — controlados via variáveis de ambiente (veja modules.py)
