@@ -40,14 +40,14 @@ Criar um novo app Django `submissions` contendo os models de submissão e result
 
 ## Critérios de Aceite
 
-- [ ] App `submissions` criado seguindo padrão do projeto
-- [ ] Enums `SubmissionStatus` e `ResultStatus` implementados
-- [ ] Model `Submission` com todos os campos e indexes
-- [ ] Model `SubmissionResult` com relação 1:1 ao Submission
-- [ ] BR-011: Estrutura permite validar que submissão requer aluno autenticado + exercício publicado
-- [ ] BR-012: Estrutura 1:1 entre Submission e SubmissionResult
-- [ ] `score_percentage` validável entre 0 e 100 (invariant)
-- [ ] Migrations geradas e executando sem erro
+- [x] App `submissions` criado seguindo padrão do projeto
+- [x] Enums `SubmissionStatus` e `ResultStatus` implementados
+- [x] Model `Submission` com todos os campos e indexes
+- [x] Model `SubmissionResult` com relação 1:1 ao Submission
+- [x] BR-011: Estrutura permite validar que submissão requer aluno autenticado + exercício publicado
+- [x] BR-012: Estrutura 1:1 entre Submission e SubmissionResult
+- [x] `score_percentage` validável entre 0 e 100 (invariant)
+- [x] Migrations geradas e executando sem erro
 
 ## Arquivos Afetados
 
@@ -78,5 +78,6 @@ Criar um novo app Django `submissions` contendo os models de submissão e result
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-15
