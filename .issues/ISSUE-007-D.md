@@ -32,12 +32,12 @@ Criar os endpoints de solicitação e confirmação de reset de senha, com envio
 
 ## Critérios de Aceite
 
-- [ ] Endpoint forgot-password gera e "envia" token
-- [ ] Endpoint reset-password valida token e atualiza senha
-- [ ] Token expira após tempo configurável
-- [ ] Token invalidado após uso
-- [ ] Resposta de forgot-password não expõe se email existe
-- [ ] Validação de senha segura no reset
+- [x] Endpoint forgot-password gera e "envia" token
+- [x] Endpoint reset-password valida token e atualiza senha
+- [x] Token expira após tempo configurável
+- [x] Token invalidado após uso
+- [x] Resposta de forgot-password não expõe se email existe
+- [x] Validação de senha segura no reset
 
 ## Arquivos Afetados
 
@@ -60,5 +60,6 @@ Criar os endpoints de solicitação e confirmação de reset de senha, com envio
 
 - **Prioridade**: média
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

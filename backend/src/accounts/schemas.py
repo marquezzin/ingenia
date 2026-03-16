@@ -2,7 +2,13 @@
 
 from drf_spectacular.utils import extend_schema
 
-from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    ForgotPasswordSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    ResetPasswordSerializer,
+    UserSerializer,
+)
 
 register_schema = extend_schema(
     request=RegisterSerializer,
@@ -22,4 +28,18 @@ me_schema = extend_schema(
     responses={200: UserSerializer},
     summary="Dados do usuário logado",
     description="Retorna os dados do usuário autenticado.",
+)
+
+forgot_password_schema = extend_schema(
+    request=ForgotPasswordSerializer,
+    responses={200: None},
+    summary="Solicitar recuperação de senha",
+    description="Envia instruções de recuperação de senha para o e-mail informado.",
+)
+
+reset_password_schema = extend_schema(
+    request=ResetPasswordSerializer,
+    responses={200: None},
+    summary="Redefinir senha",
+    description="Redefine a senha do usuário utilizando o token de recuperação.",
 )

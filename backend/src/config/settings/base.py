@@ -107,6 +107,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+PASSWORD_RESET_TOKEN_EXPIRY_HOURS = config(
+    "PASSWORD_RESET_TOKEN_EXPIRY_HOURS", default=24, cast=int
+)
+
 # ─── Internationalization ──────────────────────────────────────────────────────
 LANGUAGE_CODE = "pt-br"
 TIME_ZONE = "America/Sao_Paulo"

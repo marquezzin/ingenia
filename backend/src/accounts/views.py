@@ -7,11 +7,19 @@ from rest_framework.views import APIView
 
 from core.errors import ApplicationError
 
-from .schemas import login_schema, me_schema, register_schema
+from .schemas import (
+    forgot_password_schema,
+    login_schema,
+    me_schema,
+    register_schema,
+    reset_password_schema,
+)
 from .serializers import (
     CustomTokenObtainPairSerializer,
+    ForgotPasswordSerializer,
     LoginSerializer,
     RegisterSerializer,
+    ResetPasswordSerializer,
     UserMeSerializer,
 )
 from .services.auth import (
@@ -19,6 +27,12 @@ from .services.auth import (
     LoginUserUseCase,
     RegisterUserInput,
     RegisterUserUseCase,
+)
+from .services.password_reset import (
+    ForgotPasswordInput,
+    ForgotPasswordUseCase,
+    ResetPasswordInput,
+    ResetPasswordUseCase,
 )
 
 
@@ -89,3 +103,40 @@ class MeView(APIView):
     @me_schema
     def get(self, request):
         return Response(UserMeSerializer(request.user).data)
+
+
+class ForgotPasswordView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ForgotPasswordSerializer
+
+    @forgot_password_schema
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ForgotPasswordUseCase().execute(
+            input=ForgotPasswordInput(email=serializer.validated_data["email"])
+        )
+        return Response(
+            {"detail": "Se o e-mail estiver cadastrado, as instruções serão enviadas."}
+        )
+
+
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = ResetPasswordSerializer
+
+    @reset_password_schema
+    def post(self, request):
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        try:
+            ResetPasswordUseCase().execute(
+                input=ResetPasswordInput(
+                    token=data["token"],
+                    new_password=data["new_password"],
+                )
+            )
+        except ApplicationError as e:
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "Senha redefinida com sucesso."})

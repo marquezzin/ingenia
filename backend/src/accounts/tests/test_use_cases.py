@@ -158,3 +158,148 @@ class LoginUserUseCaseTest(TestCase):
             LoginUserUseCase().execute(input=input_data)
 
         self.assertEqual(str(context.exception), "Conta inativa ou suspensa.")
+
+
+class ForgotPasswordUseCaseTest(TestCase):
+    def setUp(self):
+        self.user = UserFactory(email="forgot@example.com")
+
+    def test_forgot_creates_token_for_existing_user(self):
+        from src.accounts.models import PasswordResetToken
+        from src.accounts.services.password_reset import (
+            ForgotPasswordInput,
+            ForgotPasswordUseCase,
+        )
+
+        ForgotPasswordUseCase().execute(
+            input=ForgotPasswordInput(email="forgot@example.com")
+        )
+
+        tokens = PasswordResetToken.objects.filter(user=self.user)
+        self.assertEqual(tokens.count(), 1)
+        token = tokens.first()
+        self.assertFalse(token.used)
+        self.assertIsNotNone(token.expires_at)
+
+    def test_forgot_does_not_raise_for_nonexistent_email(self):
+        from src.accounts.services.password_reset import (
+            ForgotPasswordInput,
+            ForgotPasswordUseCase,
+        )
+
+        # Should not raise any exception
+        ForgotPasswordUseCase().execute(
+            input=ForgotPasswordInput(email="nonexistent@example.com")
+        )
+
+    def test_forgot_does_not_create_token_for_nonexistent_email(self):
+        from src.accounts.models import PasswordResetToken
+        from src.accounts.services.password_reset import (
+            ForgotPasswordInput,
+            ForgotPasswordUseCase,
+        )
+
+        ForgotPasswordUseCase().execute(
+            input=ForgotPasswordInput(email="nonexistent@example.com")
+        )
+
+        self.assertEqual(PasswordResetToken.objects.count(), 0)
+
+
+class ResetPasswordUseCaseTest(TestCase):
+    def setUp(self):
+        self.user = UserFactory(email="reset@example.com")
+        self.user.set_password("oldpassword123")
+        self.user.save()
+
+    def _create_token(self, *, used=False, expired=False):
+        import uuid
+
+        from django.utils import timezone
+
+        from src.accounts.models import PasswordResetToken
+
+        token = uuid.uuid4().hex
+        if expired:
+            expires_at = timezone.now() - timezone.timedelta(hours=1)
+        else:
+            expires_at = timezone.now() + timezone.timedelta(hours=24)
+
+        return PasswordResetToken.objects.create(
+            user=self.user,
+            token=token,
+            expires_at=expires_at,
+            used=used,
+        )
+
+    def test_reset_updates_password_with_valid_token(self):
+        from src.accounts.services.password_reset import (
+            ResetPasswordInput,
+            ResetPasswordUseCase,
+        )
+
+        reset_token = self._create_token()
+
+        ResetPasswordUseCase().execute(
+            input=ResetPasswordInput(
+                token=reset_token.token,
+                new_password="newpassword123",
+            )
+        )
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("newpassword123"))
+        reset_token.refresh_from_db()
+        self.assertTrue(reset_token.used)
+
+    def test_reset_raises_error_for_invalid_token(self):
+        from src.accounts.services.password_reset import (
+            ResetPasswordInput,
+            ResetPasswordUseCase,
+        )
+
+        with self.assertRaises(ApplicationError) as context:
+            ResetPasswordUseCase().execute(
+                input=ResetPasswordInput(
+                    token="invalidtoken",
+                    new_password="newpassword123",
+                )
+            )
+
+        self.assertEqual(str(context.exception), "Token inválido ou expirado.")
+
+    def test_reset_raises_error_for_expired_token(self):
+        from src.accounts.services.password_reset import (
+            ResetPasswordInput,
+            ResetPasswordUseCase,
+        )
+
+        reset_token = self._create_token(expired=True)
+
+        with self.assertRaises(ApplicationError) as context:
+            ResetPasswordUseCase().execute(
+                input=ResetPasswordInput(
+                    token=reset_token.token,
+                    new_password="newpassword123",
+                )
+            )
+
+        self.assertEqual(str(context.exception), "Token inválido ou expirado.")
+
+    def test_reset_raises_error_for_used_token(self):
+        from src.accounts.services.password_reset import (
+            ResetPasswordInput,
+            ResetPasswordUseCase,
+        )
+
+        reset_token = self._create_token(used=True)
+
+        with self.assertRaises(ApplicationError) as context:
+            ResetPasswordUseCase().execute(
+                input=ResetPasswordInput(
+                    token=reset_token.token,
+                    new_password="newpassword123",
+                )
+            )
+
+        self.assertEqual(str(context.exception), "Token inválido ou expirado.")

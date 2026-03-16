@@ -3,7 +3,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import AdminProfile, StudentProfile, TeacherProfile, User
+from .models import (
+    AdminProfile,
+    PasswordResetToken,
+    StudentProfile,
+    TeacherProfile,
+    User,
+)
 
 
 class StudentProfileInline(admin.StackedInline):
@@ -95,3 +101,11 @@ class AdminProfileAdmin(admin.ModelAdmin):
     list_display = ["user", "created_at"]
     search_fields = ["user__email", "user__first_name", "user__last_name"]
     readonly_fields = ["created_at", "updated_at"]
+
+
+@admin.register(PasswordResetToken)
+class PasswordResetTokenAdmin(admin.ModelAdmin):
+    list_display = ["user", "token", "expires_at", "used", "created_at"]
+    list_filter = ["used"]
+    search_fields = ["user__email", "token"]
+    readonly_fields = ["created_at"]

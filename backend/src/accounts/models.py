@@ -171,3 +171,30 @@ class AdminProfile(models.Model):
             raise ValidationError(
                 "Perfil de administrador só pode ser criado para usuários com papel de Administrador."
             )
+
+
+class PasswordResetToken(models.Model):
+    """
+    Token de recuperação de senha.
+    Armazena tokens com expiração para o fluxo de forgot/reset password.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="password_reset_tokens",
+        verbose_name="Usuário",
+    )
+    token = models.CharField(max_length=64, unique=True, db_index=True)
+    expires_at = models.DateTimeField(verbose_name="Expira em")
+    used = models.BooleanField(default=False, verbose_name="Usado")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Token de Reset de Senha"
+        verbose_name_plural = "Tokens de Reset de Senha"
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:
+        return f"PasswordResetToken({self.user.email}, used={self.used})"

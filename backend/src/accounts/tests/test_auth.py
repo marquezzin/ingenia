@@ -126,3 +126,126 @@ class MeViewTest(APITestCase):
     def test_me_without_auth_returns_401(self):
         response = self.client.get("/api/auth/me/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ForgotPasswordViewTest(APITestCase):
+    def test_forgot_password_returns_200_for_existing_email(self):
+        UserFactory(email="exists@example.com")
+        response = self.client.post(
+            "/api/auth/forgot-password/",
+            {"email": "exists@example.com"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("detail", response.data)
+
+    def test_forgot_password_returns_200_for_nonexistent_email(self):
+        response = self.client.post(
+            "/api/auth/forgot-password/",
+            {"email": "nonexistent@example.com"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("detail", response.data)
+
+    def test_forgot_password_does_not_leak_email_existence(self):
+        UserFactory(email="exists@example.com")
+        response_exists = self.client.post(
+            "/api/auth/forgot-password/",
+            {"email": "exists@example.com"},
+        )
+        response_missing = self.client.post(
+            "/api/auth/forgot-password/",
+            {"email": "missing@example.com"},
+        )
+        self.assertEqual(
+            response_exists.data["detail"], response_missing.data["detail"]
+        )
+
+
+class ResetPasswordViewTest(APITestCase):
+    def setUp(self):
+        import uuid
+
+        from django.utils import timezone
+
+        from src.accounts.models import PasswordResetToken
+
+        self.user = UserFactory(email="resetview@example.com")
+        self.user.set_password("oldpass123")
+        self.user.save()
+
+        self.token = uuid.uuid4().hex
+        PasswordResetToken.objects.create(
+            user=self.user,
+            token=self.token,
+            expires_at=timezone.now() + timezone.timedelta(hours=24),
+        )
+
+    def test_reset_password_returns_200_with_valid_token(self):
+        response = self.client.post(
+            "/api/auth/reset-password/",
+            {
+                "token": self.token,
+                "new_password": "newpass123",
+                "new_password_confirm": "newpass123",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("newpass123"))
+
+    def test_reset_password_returns_400_with_invalid_token(self):
+        response = self.client.post(
+            "/api/auth/reset-password/",
+            {
+                "token": "invalidtoken",
+                "new_password": "newpass123",
+                "new_password_confirm": "newpass123",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_reset_password_returns_400_with_expired_token(self):
+        import uuid
+
+        from django.utils import timezone
+
+        from src.accounts.models import PasswordResetToken
+
+        expired_token = uuid.uuid4().hex
+        PasswordResetToken.objects.create(
+            user=self.user,
+            token=expired_token,
+            expires_at=timezone.now() - timezone.timedelta(hours=1),
+        )
+
+        response = self.client.post(
+            "/api/auth/reset-password/",
+            {
+                "token": expired_token,
+                "new_password": "newpass123",
+                "new_password_confirm": "newpass123",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_reset_password_returns_400_with_weak_password(self):
+        response = self.client.post(
+            "/api/auth/reset-password/",
+            {
+                "token": self.token,
+                "new_password": "nodigits",
+                "new_password_confirm": "nodigits",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_reset_password_returns_400_with_mismatched_passwords(self):
+        response = self.client.post(
+            "/api/auth/reset-password/",
+            {
+                "token": self.token,
+                "new_password": "newpass123",
+                "new_password_confirm": "differentpass123",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

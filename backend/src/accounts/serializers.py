@@ -102,3 +102,26 @@ class RegisterSerializer(serializers.Serializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    token = serializers.CharField()
+    new_password = serializers.CharField(write_only=True, min_length=8)
+    new_password_confirm = serializers.CharField(write_only=True)
+
+    def validate_new_password(self, value):
+        """Senha deve conter ao menos um número."""
+        if not any(c.isdigit() for c in value):
+            raise serializers.ValidationError("A senha deve conter ao menos um número.")
+        return value
+
+    def validate(self, data):
+        if data["new_password"] != data["new_password_confirm"]:
+            raise serializers.ValidationError(
+                {"new_password_confirm": "As senhas não coincidem."}
+            )
+        return data
