@@ -26,10 +26,10 @@ Criar as telas de erro padrão da aplicação. Estas telas não dependem de back
 
 ## Critérios de Aceite
 
-- [ ] Tela de unauthorized com mensagem clara e botões de navegação
-- [ ] Tela de not found com mensagem e botão de voltar
-- [ ] Layout visual consistente com o design system
-- [ ] Botão "Ir para minha área" redireciona pela role do usuário
+- [x] Tela de unauthorized com mensagem clara e botões de navegação
+- [x] Tela de not found com mensagem e botão de voltar
+- [x] Layout visual consistente com o design system
+- [x] Botão "Ir para minha área" redireciona pela role do usuário
 
 ## Arquivos Afetados
 
@@ -51,5 +51,6 @@ Criar as telas de erro padrão da aplicação. Estas telas não dependem de back
 
 - **Prioridade**: média
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

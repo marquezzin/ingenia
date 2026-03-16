@@ -12,6 +12,8 @@ const LandingPage = lazy(() => import("@/domains/landing/pages/LandingPage"));
 const LoginPage = lazy(() => import("@/domains/auth/pages/LoginPage"));
 const RegisterPage = lazy(() => import("@/domains/auth/pages/RegisterPage"));
 const ForgotPasswordPage = lazy(() => import("@/domains/auth/pages/ForgotPasswordPage"));
+const UnauthorizedPage = lazy(() => import("@/domains/auth/pages/UnauthorizedPage"));
+const NotFoundPage = lazy(() => import("@/domains/auth/pages/NotFoundPage"));
 
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
@@ -71,6 +73,16 @@ export const router = createBrowserRouter([
         ),
     },
 
+    // ─── Telas de erro ──────────────────────────────────────────────────────
+    {
+        path: "/unauthorized",
+        element: (
+            <Suspense fallback={<Spinner />}>
+                <UnauthorizedPage />
+            </Suspense>
+        ),
+    },
+
     // ─── Rotas protegidas ───────────────────────────────────────────────────
     {
         path: "/dashboard",
@@ -104,5 +116,17 @@ export const router = createBrowserRouter([
     //       </Suspense>
     //     </RequireAuth>
     //   ),
+    //     </RequireAuth>
+    //   ),
     // },
+
+    // ─── Fallback (404) ─────────────────────────────────────────────────────
+    {
+        path: "*",
+        element: (
+            <Suspense fallback={<Spinner />}>
+                <NotFoundPage />
+            </Suspense>
+        ),
+    },
 ]);
