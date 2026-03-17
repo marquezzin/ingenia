@@ -77,7 +77,7 @@ class RegisterUserUseCaseTest(TestCase):
         with self.assertRaises(ApplicationError) as context:
             RegisterUserUseCase().execute(input=input_data)
 
-        self.assertEqual(str(context.exception), "Não foi possível criar a conta.")
+        self.assertEqual(str(context.exception), "Este e-mail já está cadastrado.")
 
     def test_register_splits_full_name_correctly(self):
         input_data = RegisterUserInput(

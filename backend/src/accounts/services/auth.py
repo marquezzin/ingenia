@@ -26,7 +26,7 @@ class RegisterUserResult:
 class RegisterUserUseCase:
     def execute(self, *, input: RegisterUserInput) -> RegisterUserResult:
         if User.objects.filter(email=input.email).exists():
-            raise ApplicationError("Não foi possível criar a conta.")
+            raise ApplicationError("Este e-mail já está cadastrado.")
 
         first_name, _, last_name = input.full_name.partition(" ")
         username = self._generate_unique_username(input.email)

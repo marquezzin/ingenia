@@ -58,7 +58,7 @@
 | ISSUE-008-C | Telas de erro (Unauthorized + Not Found) | feature | 🟢 | — |
 | ISSUE-008-D | Guards de rota (ProtectedRoute, StudentRoute, etc.) | feature | 🟢 | 007-A, 007-C, 008-A |
 | ISSUE-008-E | Layout base com navegação por perfil | feature | 🟢 | 007-A, 008-A, 008-D |
-| ISSUE-008-F | Testes E2E de login e registro | chore | 🟡 | 007-E, 008-A, 008-B, 008-D, 008-E |
+| ISSUE-008-F | Testes E2E de login e registro | chore | 🟢 | 007-E, 008-A, 008-B, 008-D, 008-E |
 
 ---
 
@@ -183,8 +183,8 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 14 |
+| Concluídas | 15 |
 | Em andamento | 0 |
-| Pendentes | 50 |
+| Pendentes | 49 |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

@@ -7,6 +7,9 @@ from decouple import config
 
 from .base import *  # noqa: F401, F403
 
+# Permitir todas as hosts no ambiente de teste (Vite proxy, Docker, etc.)
+ALLOWED_HOSTS = ["*"]
+
 # Banco de teste separado — configurado via .env.test
 DATABASES = {
     "default": {

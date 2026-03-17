@@ -130,14 +130,14 @@ test-frontend: ## Roda testes unitários do frontend (vitest)
 
 test-e2e: ## Roda E2E completo (up → seed → playwright → logs)
 	$(MAKE) test-reset
-	$(BACKEND_TEST) uv run python manage.py runserver 0.0.0.0:8000 &
+	$(COMPOSE_TEST) exec -T backend uv run python manage.py runserver 0.0.0.0:8000 &
 	@sleep 3
 	$(FRONTEND_TEST) pnpm exec playwright test
 	@echo "✓ Resultados em frontend/playwright-report/"
 
 test-e2e-ui: ## Roda Playwright com UI interativa (http://localhost:8080)
 	$(MAKE) test-reset
-	$(BACKEND_TEST) uv run python manage.py runserver 0.0.0.0:8000 &
+	$(COMPOSE_TEST) exec -T backend uv run python manage.py runserver 0.0.0.0:8000 &
 	@sleep 3
 	$(FRONTEND_TEST) xvfb-run pnpm exec playwright test --ui --ui-host 0.0.0.0 --ui-port 8080
 

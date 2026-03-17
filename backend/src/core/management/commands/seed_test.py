@@ -38,31 +38,61 @@ class Command(BaseCommand):
 
     def _seed_users(self):
         """Cria usuários de teste com credenciais determinísticas."""
-        from src.accounts.models import User
+        from src.accounts.enums import AccountStatus, UserRole
+        from src.accounts.models import (
+            AdminProfile,
+            StudentProfile,
+            TeacherProfile,
+            User,
+        )
 
-        # Admin de teste
-        User.objects.create_superuser(
+        password = "Test@123456"
+
+        # ── Aluno ativo ──────────────────────────────────────────────────
+        student = User.objects.create_user(
+            email="student@test.dev",
+            username="student_test",
+            password=password,
+            first_name="Aluno",
+            last_name="Teste",
+            role=UserRole.STUDENT,
+        )
+        StudentProfile.objects.create(user=student)
+        self.stdout.write(f"  ✓ Student: {student.email} / {password}")
+
+        # ── Professor ativo ──────────────────────────────────────────────
+        teacher = User.objects.create_user(
+            email="teacher@test.dev",
+            username="teacher_test",
+            password=password,
+            first_name="Professor",
+            last_name="Teste",
+            role=UserRole.TEACHER,
+        )
+        TeacherProfile.objects.create(user=teacher)
+        self.stdout.write(f"  ✓ Teacher: {teacher.email} / {password}")
+
+        # ── Admin ────────────────────────────────────────────────────────
+        admin = User.objects.create_superuser(
             email="admin@test.dev",
             username="admin_test",
-            password="Test@123456",
+            password=password,
             first_name="Admin",
-            last_name="Test",
+            last_name="Teste",
+            role=UserRole.ADMIN,
         )
-        self.stdout.write("  ✓ Admin: admin@test.dev / Test@123456")
+        AdminProfile.objects.create(user=admin)
+        self.stdout.write(f"  ✓ Admin:   {admin.email} / {password}")
 
-        # Usuário comum de teste
-        User.objects.create_user(
-            email="user@test.dev",
-            username="user_test",
-            password="Test@123456",
-            first_name="User",
-            last_name="Test",
+        # ── Aluno inativo (para testar bloqueio de login) ────────────────
+        inactive = User.objects.create_user(
+            email="inactive@test.dev",
+            username="inactive_test",
+            password=password,
+            first_name="Inativo",
+            last_name="Teste",
+            role=UserRole.STUDENT,
+            account_status=AccountStatus.INACTIVE,
         )
-        self.stdout.write("  ✓ User:  user@test.dev / Test@123456")
-
-        # Adicione mais usuários de teste conforme necessário:
-        # User.objects.create_user(
-        #     email="viewer@test.dev",
-        #     username="viewer_test",
-        #     password="Test@123456",
-        # )
+        StudentProfile.objects.create(user=inactive)
+        self.stdout.write(f"  ✓ Inactive: {inactive.email} / {password}")

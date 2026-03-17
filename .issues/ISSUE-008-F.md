@@ -30,10 +30,10 @@ Criar testes end-to-end cobrindo os fluxos de autenticação implementados.
 
 ## Critérios de Aceite
 
-- [ ] Testes E2E de login passando (válido, inválido, inativo)
-- [ ] Testes E2E de registro passando (válido, duplicado)
-- [ ] Testes de guards de rota passando
-- [ ] Todos os testes executando no Playwright
+- [x] Testes E2E de login passando (válido, inválido, inativo)
+- [x] Testes E2E de registro passando (válido, duplicado)
+- [x] Testes de guards de rota passando
+- [x] Todos os testes executando no Playwright
 
 ## Arquivos Afetados
 
@@ -55,5 +55,6 @@ Criar testes end-to-end cobrindo os fluxos de autenticação implementados.
 
 - **Prioridade**: alta
 - **Tipo**: chore
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16

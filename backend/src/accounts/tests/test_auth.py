@@ -49,7 +49,7 @@ class RegisterViewTest(APITestCase):
         }
         response = self.client.post("/api/auth/register/", payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["detail"], "Não foi possível criar a conta.")
+        self.assertEqual(response.data["detail"], "Este e-mail já está cadastrado.")
 
     def test_register_with_mismatched_passwords_returns_400(self):
         payload = {
