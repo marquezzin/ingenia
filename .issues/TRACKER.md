@@ -69,7 +69,7 @@
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
 | ISSUE-009-A | CRUD de Module (serializer, service, view, URLs) | feature | 🟢 | 003, 007-C |
-| ISSUE-009-B | CRUD de Lesson + VideoLesson (nested sob Module) | feature | 🟡 | 003, 007-C, 009-A |
+| ISSUE-009-B | CRUD de Lesson + VideoLesson (nested sob Module) | feature | 🟢 | 003, 007-C, 009-A |
 | ISSUE-009-C | CRUD de Exercise + ExerciseTestCase (nested sob Lesson) | feature | 🟡 | 003, 007-C, 009-B |
 | ISSUE-009-D | CRUD de User admin (criação com profile por role) | feature | 🟡 | 001, 007-C |
 | ISSUE-009-E | Regras BR-008 e BR-010 (validações de publicação) | feature | 🟡 | 009-B, 009-C |
@@ -183,8 +183,8 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 16 |
+| Concluídas | 17 |
 | Em andamento | 0 |
-| Pendentes | 48 |
+| Pendentes | 47 |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

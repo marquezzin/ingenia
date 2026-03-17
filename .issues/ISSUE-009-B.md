@@ -33,11 +33,11 @@ Criar serializers, service e views para CRUD de Lesson e VideoLesson, acessívei
 
 ## Critérios de Aceite
 
-- [ ] CRUD completo de Lesson nested sob Module
-- [ ] VideoLesson criado/atualizado inline com Lesson
-- [ ] Filtro por `publication_status`
-- [ ] Validação de `sequence_order` único por módulo
-- [ ] Protegido por `IsAdmin`
+- [x] CRUD completo de Lesson nested sob Module
+- [x] VideoLesson criado/atualizado inline com Lesson
+- [x] Filtro por `publication_status`
+- [x] Validação de `sequence_order` único por módulo
+- [x] Protegido por `IsAdmin`
 
 ## Arquivos Afetados
 
@@ -61,5 +61,6 @@ Criar serializers, service e views para CRUD de Lesson e VideoLesson, acessívei
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-17
