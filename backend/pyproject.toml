@@ -16,6 +16,7 @@ dependencies = [
     "tenacity>=8.5",
     "jsonschema>=4.23",
     "openai>=1.40",
+    "django-filter>=25.2",
 ]
 
 [dependency-groups]

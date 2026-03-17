@@ -35,12 +35,12 @@ Criar serializer, service e view para o CRUD de Module com filtros, busca e orde
 
 ## Critérios de Aceite
 
-- [ ] CRUD completo de Module funcionando
-- [ ] Filtro por `publication_status`
-- [ ] Busca por `title`
-- [ ] Ordenação por `sequence_order`
-- [ ] Protegido por `IsAdmin`
-- [ ] Paginação funcional
+- [x] CRUD completo de Module funcionando
+- [x] Filtro por `publication_status`
+- [x] Busca por `title`
+- [x] Ordenação por `sequence_order`
+- [x] Protegido por `IsAdmin`
+- [x] Paginação funcional
 
 ## Arquivos Afetados
 
@@ -65,5 +65,6 @@ Criar serializer, service e view para o CRUD de Module com filtros, busca e orde
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-16
