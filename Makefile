@@ -104,7 +104,7 @@ test-up: ## Sobe containers de teste (DB separado em tmpfs)
 	$(COMPOSE_TEST) up -d --wait
 
 test-down: ## Derruba containers de teste e remove volumes
-	$(COMPOSE_TEST) down -v --remove-orphans
+	$(COMPOSE_TEST) down --remove-orphans
 
 test-seed: ## Aplica migrations e seed de teste (idempotente)
 	$(BACKEND_TEST) uv run python manage.py migrate --no-input
@@ -118,12 +118,12 @@ test-reset: ## Derruba, sobe e popula o banco de teste do zero
 test-backend: ## Roda testes do backend (pytest) com DB de teste
 	$(COMPOSE_TEST) up -d db_test redis --wait
 	$(COMPOSE_TEST) run --rm -e DJANGO_SETTINGS_MODULE=config.settings.test backend uv run pytest -v
-	$(COMPOSE_TEST) down db_test -v
+	$(COMPOSE_TEST) rm -s -f -v db_test
 
 test-backend-cov: ## Roda testes do backend com cobertura
 	$(COMPOSE_TEST) up -d db_test redis --wait
 	$(COMPOSE_TEST) run --rm -e DJANGO_SETTINGS_MODULE=config.settings.test backend uv run pytest -v --cov=src --cov-report=term-missing
-	$(COMPOSE_TEST) down db_test -v
+	$(COMPOSE_TEST) rm -s -f -v db_test
 
 test-frontend: ## Roda testes unitários do frontend (vitest)
 	$(FRONTEND_TEST) pnpm test
