@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from core.serializers import BaseModelSerializer
 
-from .models import Lesson, Module, VideoLesson
+from .models import Exercise, ExerciseTestCase, Lesson, Module, VideoLesson
 
 # ─── Module Serializers ───────────────────────────────────────────────────────
 
@@ -123,3 +123,97 @@ class LessonCreateUpdateSerializer(serializers.Serializer):
         default="DRAFT",
     )
     video_lesson = VideoLessonInputSerializer(required=False, allow_null=True)
+
+
+# ─── Exercise Serializers ────────────────────────────────────────────────────
+
+
+class ExerciseListSerializer(BaseModelSerializer):
+    """Campos resumidos para listagem de exercícios."""
+
+    test_cases_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Exercise
+        fields = [
+            "id",
+            "title",
+            "sequence_order",
+            "publication_status",
+            "test_cases_count",
+        ]
+
+
+class ExerciseDetailSerializer(BaseModelSerializer):
+    """Todos os campos + contagem de test cases para detalhe do exercício."""
+
+    test_cases_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Exercise
+        fields = [
+            "id",
+            "title",
+            "statement",
+            "support_message",
+            "sequence_order",
+            "publication_status",
+            "test_cases_count",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class ExerciseCreateUpdateSerializer(serializers.Serializer):
+    """Serializer de escrita para criação/edição de exercícios."""
+
+    title = serializers.CharField(max_length=255)
+    statement = serializers.CharField()
+    support_message = serializers.CharField(
+        required=False, allow_null=True, allow_blank=True, default=None
+    )
+    sequence_order = serializers.IntegerField(min_value=1)
+    publication_status = serializers.ChoiceField(
+        choices=["DRAFT", "PUBLISHED", "ARCHIVED"],
+        default="DRAFT",
+    )
+
+
+# ─── ExerciseTestCase Serializers ────────────────────────────────────────────
+
+
+class ExerciseTestCaseListSerializer(BaseModelSerializer):
+    """Campos resumidos para listagem de test cases."""
+
+    class Meta:
+        model = ExerciseTestCase
+        fields = ["id", "name", "sequence_order", "is_hidden"]
+
+
+class ExerciseTestCaseDetailSerializer(BaseModelSerializer):
+    """Todos os campos para detalhe do test case."""
+
+    class Meta:
+        model = ExerciseTestCase
+        fields = [
+            "id",
+            "name",
+            "input_data",
+            "expected_output",
+            "sequence_order",
+            "is_hidden",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class ExerciseTestCaseCreateUpdateSerializer(serializers.Serializer):
+    """Serializer de escrita para criação/edição de test cases."""
+
+    name = serializers.CharField(max_length=255)
+    input_data = serializers.CharField(
+        required=False, allow_null=True, allow_blank=True, default=None
+    )
+    expected_output = serializers.CharField()
+    sequence_order = serializers.IntegerField(min_value=1)
+    is_hidden = serializers.BooleanField(default=False)

@@ -8,9 +8,20 @@ from rest_framework.response import Response
 from core.errors import NotFoundError
 from core.permissions import IsAdmin
 
-from .models import Module
-from .selectors import list_lessons_for_module, list_modules
+from .models import Exercise, Lesson, Module
+from .selectors import (
+    list_exercises_for_lesson,
+    list_lessons_for_module,
+    list_modules,
+    list_test_cases_for_exercise,
+)
 from .serializers import (
+    ExerciseCreateUpdateSerializer,
+    ExerciseDetailSerializer,
+    ExerciseListSerializer,
+    ExerciseTestCaseCreateUpdateSerializer,
+    ExerciseTestCaseDetailSerializer,
+    ExerciseTestCaseListSerializer,
     LessonCreateUpdateSerializer,
     LessonDetailSerializer,
     LessonListSerializer,
@@ -19,14 +30,26 @@ from .serializers import (
     ModuleListSerializer,
 )
 from .services import (
+    CreateExerciseInput,
+    CreateExerciseTestCaseInput,
+    CreateExerciseTestCaseUseCase,
+    CreateExerciseUseCase,
     CreateLessonInput,
     CreateLessonUseCase,
     CreateModuleInput,
     CreateModuleUseCase,
+    DeleteExerciseInput,
+    DeleteExerciseTestCaseInput,
+    DeleteExerciseTestCaseUseCase,
+    DeleteExerciseUseCase,
     DeleteLessonInput,
     DeleteLessonUseCase,
     DeleteModuleInput,
     DeleteModuleUseCase,
+    UpdateExerciseInput,
+    UpdateExerciseTestCaseInput,
+    UpdateExerciseTestCaseUseCase,
+    UpdateExerciseUseCase,
     UpdateLessonInput,
     UpdateLessonUseCase,
     UpdateModuleInput,
@@ -202,4 +225,196 @@ class LessonViewSet(viewsets.ModelViewSet):
         self._validate_module_exists()
         instance = self.get_object()
         DeleteLessonUseCase().execute(input=DeleteLessonInput(id=str(instance.id)))
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ExerciseViewSet(viewsets.ModelViewSet):
+    """CRUD de exercícios nested sob aula — acessível apenas por administradores."""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+    filterset_fields = ["publication_status"]
+    ordering = ["sequence_order"]
+
+    def _get_module_id(self) -> str:
+        return str(self.kwargs["module_pk"])
+
+    def _get_lesson_id(self) -> str:
+        return str(self.kwargs["lesson_pk"])
+
+    def _validate_parents_exist(self) -> None:
+        """Valida que o módulo e a aula da URL existem."""
+        module_id = self._get_module_id()
+        if not Module.objects.filter(id=module_id).exists():
+            raise NotFoundError("Módulo não encontrado.")
+
+        lesson_id = self._get_lesson_id()
+        if not Lesson.objects.filter(id=lesson_id, module_id=module_id).exists():
+            raise NotFoundError("Aula não encontrada.")
+
+    def get_queryset(self):
+        lesson_id = self._get_lesson_id()
+        return list_exercises_for_lesson(lesson_id=lesson_id).annotate(
+            test_cases_count=Count("test_cases")
+        )
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ExerciseListSerializer
+        if self.action == "retrieve":
+            return ExerciseDetailSerializer
+        return ExerciseCreateUpdateSerializer
+
+    def list(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        return super().list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        exercise = CreateExerciseUseCase().execute(
+            input=CreateExerciseInput(
+                lesson_id=self._get_lesson_id(),
+                title=data["title"],
+                statement=data["statement"],
+                support_message=data.get("support_message"),
+                sequence_order=data["sequence_order"],
+                publication_status=data.get("publication_status", "DRAFT"),
+            )
+        )
+
+        return Response(
+            ExerciseDetailSerializer(self.get_queryset().get(id=exercise.id)).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def update(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        exercise = UpdateExerciseUseCase().execute(
+            input=UpdateExerciseInput(
+                id=str(instance.id),
+                title=data["title"],
+                statement=data["statement"],
+                support_message=data.get("support_message"),
+                sequence_order=data["sequence_order"],
+                publication_status=data["publication_status"],
+            )
+        )
+
+        return Response(
+            ExerciseDetailSerializer(self.get_queryset().get(id=exercise.id)).data,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        instance = self.get_object()
+        DeleteExerciseUseCase().execute(input=DeleteExerciseInput(id=str(instance.id)))
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ExerciseTestCaseViewSet(viewsets.ModelViewSet):
+    """CRUD de test cases nested sob exercício — acessível apenas por administradores."""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+    ordering = ["sequence_order"]
+
+    def _get_module_id(self) -> str:
+        return str(self.kwargs["module_pk"])
+
+    def _get_lesson_id(self) -> str:
+        return str(self.kwargs["lesson_pk"])
+
+    def _get_exercise_id(self) -> str:
+        return str(self.kwargs["exercise_pk"])
+
+    def _validate_parents_exist(self) -> None:
+        """Valida que módulo, aula e exercício da URL existem."""
+        module_id = self._get_module_id()
+        if not Module.objects.filter(id=module_id).exists():
+            raise NotFoundError("Módulo não encontrado.")
+
+        lesson_id = self._get_lesson_id()
+        if not Lesson.objects.filter(id=lesson_id, module_id=module_id).exists():
+            raise NotFoundError("Aula não encontrada.")
+
+        exercise_id = self._get_exercise_id()
+        if not Exercise.objects.filter(id=exercise_id, lesson_id=lesson_id).exists():
+            raise NotFoundError("Exercício não encontrado.")
+
+    def get_queryset(self):
+        exercise_id = self._get_exercise_id()
+        return list_test_cases_for_exercise(exercise_id=exercise_id)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ExerciseTestCaseListSerializer
+        if self.action == "retrieve":
+            return ExerciseTestCaseDetailSerializer
+        return ExerciseTestCaseCreateUpdateSerializer
+
+    def list(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        return super().list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        test_case = CreateExerciseTestCaseUseCase().execute(
+            input=CreateExerciseTestCaseInput(
+                exercise_id=self._get_exercise_id(),
+                name=data["name"],
+                input_data=data.get("input_data"),
+                expected_output=data["expected_output"],
+                sequence_order=data["sequence_order"],
+                is_hidden=data.get("is_hidden", False),
+            )
+        )
+
+        return Response(
+            ExerciseTestCaseDetailSerializer(
+                self.get_queryset().get(id=test_case.id)
+            ).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def update(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        test_case = UpdateExerciseTestCaseUseCase().execute(
+            input=UpdateExerciseTestCaseInput(
+                id=str(instance.id),
+                name=data["name"],
+                input_data=data.get("input_data"),
+                expected_output=data["expected_output"],
+                sequence_order=data["sequence_order"],
+                is_hidden=data.get("is_hidden", False),
+            )
+        )
+
+        return Response(
+            ExerciseTestCaseDetailSerializer(
+                self.get_queryset().get(id=test_case.id)
+            ).data,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        self._validate_parents_exist()
+        instance = self.get_object()
+        DeleteExerciseTestCaseUseCase().execute(
+            input=DeleteExerciseTestCaseInput(id=str(instance.id))
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)

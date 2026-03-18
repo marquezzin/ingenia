@@ -33,11 +33,11 @@ Criar serializers, service e views para CRUD de Exercise e ExerciseTestCase, ace
 
 ## Critérios de Aceite
 
-- [ ] CRUD completo de Exercise nested sob Lesson
-- [ ] CRUD completo de ExerciseTestCase nested sob Exercise
-- [ ] Validação de `sequence_order` único
-- [ ] Protegido por `IsAdmin`
-- [ ] Apenas admin tem acesso a test cases (authorization.md)
+- [x] CRUD completo de Exercise nested sob Lesson
+- [x] CRUD completo de ExerciseTestCase nested sob Exercise
+- [x] Validação de `sequence_order` único
+- [x] Protegido por `IsAdmin`
+- [x] Apenas admin tem acesso a test cases (authorization.md)
 
 ## Arquivos Afetados
 
@@ -60,5 +60,6 @@ Criar serializers, service e views para CRUD de Exercise e ExerciseTestCase, ace
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-18
