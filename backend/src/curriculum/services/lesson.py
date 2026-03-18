@@ -53,6 +53,20 @@ class CreateLessonUseCase:
         except Module.DoesNotExist:
             raise NotFoundError("Módulo não encontrado.")
 
+        # Defesa extra, mas a priori vai vir com status DRAFT
+        if input.publication_status == "PUBLISHED":
+            errors: list[str] = []
+            if not input.written_content or not input.written_content.strip():
+                errors.append(
+                    "A aula deve possuir conteúdo escrito para ser publicada."
+                )
+            if not input.video_lesson:
+                errors.append(
+                    "A aula deve possuir uma videoaula associada para ser publicada."
+                )
+            if errors:
+                raise ApplicationError(" ".join(errors))
+
         # Validar sequence_order único no módulo
         if Lesson.objects.filter(
             module_id=input.module_id,
@@ -89,6 +103,23 @@ class UpdateLessonUseCase:
             lesson = get_lesson_by_id(id=input.id)
         except Lesson.DoesNotExist:
             raise NotFoundError("Aula não encontrada.")
+
+        # BR-008: Validar requisitos de publicação
+        if input.publication_status == "PUBLISHED":
+            errors: list[str] = []
+            if not input.written_content or not input.written_content.strip():
+                errors.append(
+                    "A aula deve possuir conteúdo escrito para ser publicada."
+                )
+            # video_lesson=None no update significa remoção do vídeo
+            if input.video_lesson is None:
+                # Verificar se já existe um vídeo associado
+                if not VideoLesson.objects.filter(lesson=lesson).exists():
+                    errors.append(
+                        "A aula deve possuir uma videoaula associada para ser publicada."
+                    )
+            if errors:
+                raise ApplicationError(" ".join(errors))
 
         # Validar sequence_order único no módulo (excluindo a própria)
         if (

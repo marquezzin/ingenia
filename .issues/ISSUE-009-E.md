@@ -30,11 +30,11 @@ Garantir que aulas e exercícios só possam ser publicados quando atenderem aos 
 
 ## Critérios de Aceite
 
-- [ ] BR-008: Não é possível publicar aula sem vídeo
-- [ ] BR-008: Não é possível publicar aula sem conteúdo escrito
-- [ ] BR-010: Não é possível publicar exercício sem test cases
-- [ ] Mensagens de erro descritivas e claras
-- [ ] Validação ocorre no service layer
+- [x] BR-008: Não é possível publicar aula sem vídeo
+- [x] BR-008: Não é possível publicar aula sem conteúdo escrito
+- [x] BR-010: Não é possível publicar exercício sem test cases
+- [x] Mensagens de erro descritivas e claras
+- [x] Validação ocorre no service layer
 
 ## Arquivos Afetados
 
@@ -53,5 +53,6 @@ Garantir que aulas e exercícios só possam ser publicados quando atenderem aos 
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-18

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from core.errors import ApplicationError, NotFoundError
 
-from ..models import Exercise, Lesson
+from ..models import Exercise, ExerciseTestCase, Lesson
 from ..selectors import get_exercise_by_id, get_lesson_by_id
 
 # ─── Inputs ───────────────────────────────────────────────────────────────────
@@ -46,6 +46,14 @@ class CreateExerciseUseCase:
         except Lesson.DoesNotExist:
             raise NotFoundError("Aula não encontrada.")
 
+        # BR-010: Exercício recém-criado não pode ser publicado (sem test cases)
+        if input.publication_status == "PUBLISHED":
+            raise ApplicationError(
+                "O exercício deve possuir ao menos um caso de teste "
+                "para ser publicado. Crie o exercício como rascunho e "
+                "adicione casos de teste antes de publicá-lo."
+            )
+
         # Validar sequence_order único na aula
         if Exercise.objects.filter(
             lesson_id=input.lesson_id,
@@ -72,6 +80,14 @@ class UpdateExerciseUseCase:
             exercise = get_exercise_by_id(id=input.id)
         except Exercise.DoesNotExist:
             raise NotFoundError("Exercício não encontrado.")
+
+        # BR-010: Validar que exercício tem ao menos 1 test case ao publicar
+        if input.publication_status == "PUBLISHED":
+            if not ExerciseTestCase.objects.filter(exercise=exercise).exists():
+                raise ApplicationError(
+                    "O exercício deve possuir ao menos um caso de teste "
+                    "para ser publicado."
+                )
 
         # Validar sequence_order único na aula (excluindo o próprio)
         if (
