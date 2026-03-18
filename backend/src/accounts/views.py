@@ -1,11 +1,12 @@
 """Accounts views — Auth endpoints."""
 
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.errors import ApplicationError
+from core.permissions import IsAdmin
 
 from .schemas import (
     forgot_password_schema,
@@ -14,12 +15,17 @@ from .schemas import (
     register_schema,
     reset_password_schema,
 )
+from .selectors import list_users
 from .serializers import (
     CustomTokenObtainPairSerializer,
     ForgotPasswordSerializer,
     LoginSerializer,
     RegisterSerializer,
     ResetPasswordSerializer,
+    UserAdminCreateSerializer,
+    UserAdminDetailSerializer,
+    UserAdminListSerializer,
+    UserAdminUpdateSerializer,
     UserMeSerializer,
 )
 from .services.auth import (
@@ -33,6 +39,12 @@ from .services.password_reset import (
     ForgotPasswordUseCase,
     ResetPasswordInput,
     ResetPasswordUseCase,
+)
+from .services.user_admin import (
+    CreateUserAdminInput,
+    CreateUserAdminUseCase,
+    UpdateUserAdminInput,
+    UpdateUserAdminUseCase,
 )
 
 
@@ -140,3 +152,77 @@ class ResetPasswordView(APIView):
         except ApplicationError as e:
             return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "Senha redefinida com sucesso."})
+
+
+class UserAdminViewSet(viewsets.ModelViewSet):
+    """CRUD de Users para admin."""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+    filterset_fields = ["role", "account_status"]
+    search_fields = ["first_name", "last_name", "email"]
+    ordering = ["-date_joined"]
+
+    def get_queryset(self):
+        return list_users()
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return UserAdminListSerializer
+        if self.action == "retrieve":
+            return UserAdminDetailSerializer
+        if self.action in ["update", "partial_update"]:
+            return UserAdminUpdateSerializer
+        return UserAdminCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        try:
+            result = CreateUserAdminUseCase().execute(
+                input=CreateUserAdminInput(
+                    full_name=data["full_name"],
+                    email=data["email"],
+                    password=data["password"],
+                    role=data["role"],
+                )
+            )
+        except ApplicationError as e:
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            UserAdminDetailSerializer(self.get_queryset().get(id=result.user.id)).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        try:
+            result = UpdateUserAdminUseCase().execute(
+                input=UpdateUserAdminInput(
+                    id=str(instance.id),
+                    full_name=data["full_name"],
+                    email=data["email"],
+                    account_status=data["account_status"],
+                )
+            )
+        except ApplicationError as e:
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            UserAdminDetailSerializer(self.get_queryset().get(id=result.user.id)).data,
+            status=status.HTTP_200_OK,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        return Response(
+            {
+                "detail": "Exclusão não permitida. Altere o status da conta para inativo."
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )

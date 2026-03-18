@@ -34,11 +34,11 @@ Criar serializers, service e views para o admin gerenciar usuários da plataform
 
 ## Critérios de Aceite
 
-- [ ] CRUD completo de User para admin
-- [ ] Criação cria profile correspondente ao role
-- [ ] Filtro por `role` e `account_status`
-- [ ] Busca por `full_name` e `email`
-- [ ] Protegido por `IsAdmin`
+- [x] CRUD completo de User para admin
+- [x] Criação cria profile correspondente ao role
+- [x] Filtro por `role` e `account_status`
+- [x] Busca por `full_name` e `email`
+- [x] Protegido por `IsAdmin`
 
 ## Arquivos Afetados
 
@@ -62,4 +62,5 @@ Criar serializers, service e views para o admin gerenciar usuários da plataform
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-18
+- **Status da Issue**: Concluída

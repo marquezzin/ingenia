@@ -51,6 +51,10 @@ class User(AbstractUser):
     def __str__(self) -> str:
         return self.email
 
+    @property
+    def full_name(self) -> str:
+        return self.get_full_name()
+
     def clean(self) -> None:
         """BR-001: Validar que o role é válido."""
         super().clean()

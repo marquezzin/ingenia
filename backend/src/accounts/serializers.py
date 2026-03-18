@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .enums import UserRole
+from .enums import AccountStatus, UserRole
 from .models import AdminProfile, StudentProfile, TeacherProfile, User
 
 
@@ -125,3 +125,52 @@ class ResetPasswordSerializer(serializers.Serializer):
                 {"new_password_confirm": "As senhas não coincidem."}
             )
         return data
+
+
+class UserAdminListSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source="get_full_name", read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "full_name",
+            "email",
+            "role",
+            "account_status",
+        ]
+        read_only_fields = fields
+
+
+class UserAdminDetailSerializer(UserAdminListSerializer):
+    profile_info = serializers.SerializerMethodField()
+
+    class Meta(UserAdminListSerializer.Meta):
+        fields = UserAdminListSerializer.Meta.fields + ["profile_info", "date_joined"]
+
+    def get_profile_info(self, obj):
+        if obj.role == UserRole.STUDENT and hasattr(obj, "student_profile"):
+            return StudentProfileSerializer(obj.student_profile).data
+        elif obj.role == UserRole.TEACHER and hasattr(obj, "teacher_profile"):
+            return TeacherProfileSerializer(obj.teacher_profile).data
+        elif obj.role == UserRole.ADMIN and hasattr(obj, "admin_profile"):
+            return AdminProfileSerializer(obj.admin_profile).data
+        return None
+
+
+class UserAdminCreateSerializer(serializers.Serializer):
+    full_name = serializers.CharField(max_length=300)
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True, min_length=8)
+    role = serializers.ChoiceField(choices=UserRole.choices)
+
+    def validate_password(self, value):
+        if not any(c.isdigit() for c in value):
+            raise serializers.ValidationError("A senha deve conter ao menos um número.")
+        return value
+
+
+class UserAdminUpdateSerializer(serializers.Serializer):
+    full_name = serializers.CharField(max_length=300)
+    email = serializers.EmailField()
+    account_status = serializers.ChoiceField(choices=AccountStatus.choices)
