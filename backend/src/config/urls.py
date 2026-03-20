@@ -7,6 +7,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # Login/logout para o Browsable API do DRF (SessionAuthentication)
+    path("api-auth/", include("rest_framework.urls")),
     # Auth (core — sempre ativo)
     path("api/auth/", include("src.accounts.urls")),
     # Curriculum (core — sempre ativo)
