@@ -65,11 +65,13 @@ class ModuleViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "publication_status"
     ]  # permite filtrar por status com ?publication_status=DRAFT por exemplo
-    search_fields = ["title"]  # permite buscar por titulo com ?search=titulo
+    search_fields = [
+        "title"
+    ]  # permite buscar por titulo com ?search=titulo , busca por like no BD
     ordering_fields = [
         "sequence_order"
     ]  # permite ordenar por ordem com ?ordering=sequence_order
-    ordering = ["sequence_order"]  # ordem padrão
+    ordering = ["sequence_order"]  # ordem padrão na resposta
 
     def get_queryset(self):
         return list_modules().annotate(lesson_count=Count("lessons"))

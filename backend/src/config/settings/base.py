@@ -140,7 +140,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "src.core.pagination.StandardPagination",
     "PAGE_SIZE": 20,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "EXCEPTION_HANDLER": "src.core.errors.custom_exception_handler",
+    "EXCEPTION_HANDLER": "core.errors.custom_exception_handler",
 }
 
 # ─── JWT ──────────────────────────────────────────────────────────────────────

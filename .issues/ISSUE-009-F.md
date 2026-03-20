@@ -37,17 +37,21 @@ Criar testes unitários cobrindo serializers, services e validações de negóci
 
 ## Critérios de Aceite
 
-- [ ] Testes de CRUD Module passando
-- [ ] Testes de CRUD Lesson + VideoLesson passando
-- [ ] Testes de CRUD Exercise + TestCase passando
-- [ ] Testes de CRUD User passando
-- [ ] Testes de BR-008 e BR-010 passando
-- [ ] Todos endpoints testados com permission IsAdmin
+- [x] Testes de CRUD Module passando
+- [x] Testes de CRUD Lesson + VideoLesson passando
+- [x] Testes de CRUD Exercise + TestCase passando
+- [x] Testes de CRUD User passando
+- [x] Testes de BR-008 e BR-010 passando
+- [x] Todos endpoints testados com permission IsAdmin
 
 ## Arquivos Afetados
 
-- `backend/src/curriculum/tests/` — testes de curriculum
-- `backend/src/accounts/tests/` — testes de User admin
+- `backend/src/curriculum/tests/test_module_admin.py` — testes de Module CRUD
+- `backend/src/curriculum/tests/test_lesson_admin.py` — testes de Lesson CRUD
+- `backend/src/curriculum/tests/test_exercise_admin.py` — testes de Exercise + TestCase CRUD
+- `backend/src/curriculum/tests/test_business_rules.py` — testes de BR-008 e BR-010
+- `backend/src/accounts/tests/test_user_admin.py` — testes de User admin CRUD
+- `backend/src/config/settings/base.py` — fix EXCEPTION_HANDLER path
 
 ## Notas Técnicas
 
@@ -62,5 +66,6 @@ Criar testes unitários cobrindo serializers, services e validações de negóci
 
 - **Prioridade**: alta
 - **Tipo**: chore
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-18
