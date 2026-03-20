@@ -69,3 +69,4 @@ Acesse **`/dev/components`** para ver todos os componentes com exemplos interati
 2. **Componente existe na lib?** Use-o em vez de criar novo
 3. **Novo componente genérico?** Adicione em `shared/ui/components/` + exporte no barrel
 4. **Estilos específicos do domínio** → CSS modules em `domains/<domain>/ui/`
+5. **Siga os padrões de estilização** → Veja [Padrões de Estilização](./06-styling-patterns.md) para cards, botões, hover, listas e formulários

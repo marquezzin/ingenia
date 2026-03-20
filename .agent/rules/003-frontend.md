@@ -214,3 +214,4 @@ make lint-frontend    # ESLint + tsc --noEmit
 - [State Management](../../docs/frontend/03-state-management.md)
 - [Testes E2E](../../docs/frontend/04-testing.md)
 - [Design System](../../docs/frontend/05-design-system.md)
+- [Padrões de Estilização](../../docs/frontend/06-styling-patterns.md)
