@@ -234,3 +234,43 @@ export interface ListUsersParams {
   ordering?: string;
 }
 
+// ─── Class Groups ───────────────────────────────────────────────────────────
+
+export type ClassStatus = "ACTIVE" | "ARCHIVED";
+
+export interface ClassGroupListItem {
+  [key: string]: unknown;
+  id: string;
+  name: string;
+  class_status: ClassStatus;
+  teacher_name: string;
+  student_count: number;
+  created_at: string;
+}
+
+export interface EnrolledStudent {
+  id: string;
+  student_name: string;
+  student_email: string;
+  enrollment_status: "ACTIVE" | "REMOVED";
+  enrolled_at: string;
+}
+
+export interface ClassGroupDetail {
+  id: string;
+  name: string;
+  description: string | null;
+  class_status: ClassStatus;
+  teacher_name: string;
+  teacher_email: string;
+  students: EnrolledStudent[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ListClassGroupsParams {
+  search?: string;
+  class_status?: ClassStatus;
+  page?: number;
+}
+

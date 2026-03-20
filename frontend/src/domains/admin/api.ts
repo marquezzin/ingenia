@@ -5,6 +5,8 @@ import { httpClient } from "@/shared/http/client";
 import type { PaginatedResponse } from "@/shared/http/types";
 import type {
   AdminDashboardStats,
+  ClassGroupDetail,
+  ClassGroupListItem,
   CreateExercisePayload,
   CreateLessonPayload,
   CreateModulePayload,
@@ -14,6 +16,7 @@ import type {
   ExerciseListItem,
   LessonDetail,
   LessonListItem,
+  ListClassGroupsParams,
   ListModulesParams,
   ListUsersParams,
   ModuleDetail,
@@ -269,6 +272,20 @@ export const updateUserApi = async (
   payload: UpdateUserPayload,
 ): Promise<UserDetail> => {
   const { data } = await httpClient.put(`/api/auth/admin/users/${id}/`, payload);
+  return data;
+};
+
+// ─── Class Groups (read-only) ───────────────────────────────────────────────
+
+export const listClassGroupsApi = async (
+  params?: ListClassGroupsParams,
+): Promise<PaginatedResponse<ClassGroupListItem>> => {
+  const { data } = await httpClient.get("/api/v1/admin/classes/", { params });
+  return data;
+};
+
+export const getClassGroupApi = async (id: string): Promise<ClassGroupDetail> => {
+  const { data } = await httpClient.get(`/api/v1/admin/classes/${id}/`);
   return data;
 };
 

@@ -41,6 +41,10 @@ const UserCreatePage = lazy(() => import("@/domains/admin/pages/users/UserCreate
 const UserDetailPage = lazy(() => import("@/domains/admin/pages/users/UserDetailPage"));
 const UserEditPage = lazy(() => import("@/domains/admin/pages/users/UserEditPage"));
 
+// Admin — Class pages
+const ClassListPage = lazy(() => import("@/domains/admin/pages/classes/ClassListPage"));
+const ClassDetailPage = lazy(() => import("@/domains/admin/pages/classes/ClassDetailPage"));
+
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
 
@@ -289,7 +293,15 @@ export const router = createBrowserRouter([
                 path: "classes",
                 element: (
                     <Suspense fallback={<Spinner />}>
-                        <div>Turmas — Em construção (ISSUE-010-E)</div>
+                        <ClassListPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes/:classId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ClassDetailPage />
                     </Suspense>
                 ),
             },

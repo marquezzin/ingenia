@@ -49,3 +49,10 @@ export const ACCOUNT_STATUS_MAP: StatusMap = {
   SUSPENDED: { label: "Suspenso", color: "red" },
 };
 
+/** Mapa de status de turma para exibição */
+export const CLASS_STATUS_MAP: StatusMap = {
+  ACTIVE: { label: "Ativa", color: "green" },
+  ARCHIVED: { label: "Arquivada", color: "orange" },
+};
+
+

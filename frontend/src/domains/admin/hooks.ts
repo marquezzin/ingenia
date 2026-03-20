@@ -13,10 +13,12 @@ import {
   deleteModuleApi,
   deleteTestCaseApi,
   getAdminDashboardStatsApi,
+  getClassGroupApi,
   getExerciseApi,
   getLessonApi,
   getModuleApi,
   getUserApi,
+  listClassGroupsApi,
   listExercisesApi,
   listModuleLessonsApi,
   listModulesApi,
@@ -34,6 +36,7 @@ import type {
   CreateModulePayload,
   CreateTestCasePayload,
   CreateUserPayload,
+  ListClassGroupsParams,
   ListModulesParams,
   ListUsersParams,
   UpdateExercisePayload,
@@ -84,6 +87,13 @@ const ADMIN_KEYS = {
     [...ADMIN_KEYS.users(), "list", params] as const,
   userDetail: (id: string) =>
     [...ADMIN_KEYS.users(), "detail", id] as const,
+
+  // Class Groups
+  classGroups: () => [...ADMIN_KEYS.all, "classGroups"] as const,
+  classGroupList: (params?: ListClassGroupsParams) =>
+    [...ADMIN_KEYS.classGroups(), "list", params] as const,
+  classGroupDetail: (id: string) =>
+    [...ADMIN_KEYS.classGroups(), "detail", id] as const,
 };
 
 // ─── Dashboard ──────────────────────────────────────────────────────────────
@@ -480,3 +490,18 @@ export const useUpdateUser = () => {
     },
   });
 };
+
+// ─── Class Group Queries ────────────────────────────────────────────────────
+
+export const useClassGroups = (params?: ListClassGroupsParams) =>
+  useQuery({
+    queryKey: ADMIN_KEYS.classGroupList(params),
+    queryFn: () => listClassGroupsApi(params),
+  });
+
+export const useClassGroup = (id: string) =>
+  useQuery({
+    queryKey: ADMIN_KEYS.classGroupDetail(id),
+    queryFn: () => getClassGroupApi(id),
+    enabled: !!id,
+  });
