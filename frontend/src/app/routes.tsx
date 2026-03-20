@@ -25,6 +25,16 @@ const ModuleCreatePage = lazy(() => import("@/domains/admin/pages/modules/Module
 const ModuleDetailPage = lazy(() => import("@/domains/admin/pages/modules/ModuleDetailPage"));
 const ModuleEditPage = lazy(() => import("@/domains/admin/pages/modules/ModuleEditPage"));
 
+// Admin — Lesson pages
+const LessonCreatePage = lazy(() => import("@/domains/admin/pages/lessons/LessonCreatePage"));
+const LessonDetailPage = lazy(() => import("@/domains/admin/pages/lessons/LessonDetailPage"));
+const LessonEditPage = lazy(() => import("@/domains/admin/pages/lessons/LessonEditPage"));
+
+// Admin — Exercise pages
+const ExerciseCreatePage = lazy(() => import("@/domains/admin/pages/exercises/ExerciseCreatePage"));
+const ExerciseDetailPage = lazy(() => import("@/domains/admin/pages/exercises/ExerciseDetailPage"));
+const ExerciseEditPage = lazy(() => import("@/domains/admin/pages/exercises/ExerciseEditPage"));
+
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
 
@@ -183,6 +193,56 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<Spinner />}>
                         <ModuleEditPage />
+                    </Suspense>
+                ),
+            },
+            // ─── Lesson routes ──────────────────────────────────
+            {
+                path: "modules/:moduleId/lessons/new",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <LessonCreatePage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId/lessons/:lessonId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <LessonDetailPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId/lessons/:lessonId/edit",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <LessonEditPage />
+                    </Suspense>
+                ),
+            },
+            // ─── Exercise routes ────────────────────────────────
+            {
+                path: "modules/:moduleId/lessons/:lessonId/exercises/new",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ExerciseCreatePage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId/lessons/:lessonId/exercises/:exerciseId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ExerciseDetailPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId/lessons/:lessonId/exercises/:exerciseId/edit",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ExerciseEditPage />
                     </Suspense>
                 ),
             },

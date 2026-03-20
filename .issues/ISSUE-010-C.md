@@ -30,19 +30,30 @@ Criar as páginas de gestão de aulas (com vídeo e conteúdo) e exercícios (co
 
 ## Critérios de Aceite
 
-- [ ] CRUD de aulas nested dentro de módulo
-- [ ] Editor de conteúdo escrito funcional
-- [ ] CRUD de exercícios nested dentro de aula
-- [ ] Gestão de test cases inline
-- [ ] Alerta visual para exercício sem test cases (BR-010)
-- [ ] Feedback visual de BR-008 (aula sem vídeo/conteúdo)
-- [ ] States loading/empty/error/success
+- [x] CRUD de aulas nested dentro de módulo
+- [x] Editor de conteúdo escrito funcional
+- [x] CRUD de exercícios nested dentro de aula
+- [x] Gestão de test cases inline
+- [x] Alerta visual para exercício sem test cases (BR-010)
+- [x] Feedback visual de BR-008 (aula sem vídeo/conteúdo)
+- [x] States loading/empty/error/success
 
 ## Arquivos Afetados
 
-- `frontend/src/domains/admin/pages/lessons/`
-- `frontend/src/domains/admin/pages/exercises/`
-- `frontend/src/domains/admin/components/TestCaseForm.tsx`
+- `frontend/src/domains/admin/types.ts`
+- `frontend/src/domains/admin/api.ts`
+- `frontend/src/domains/admin/hooks.ts`
+- `frontend/src/domains/admin/model.ts`
+- `frontend/src/domains/admin/.context.md`
+- `frontend/src/domains/admin/pages/lessons/LessonDetailPage.tsx`
+- `frontend/src/domains/admin/pages/lessons/LessonCreatePage.tsx`
+- `frontend/src/domains/admin/pages/lessons/LessonEditPage.tsx`
+- `frontend/src/domains/admin/pages/exercises/ExerciseDetailPage.tsx`
+- `frontend/src/domains/admin/pages/exercises/ExerciseCreatePage.tsx`
+- `frontend/src/domains/admin/pages/exercises/ExerciseEditPage.tsx`
+- `frontend/src/domains/admin/pages/modules/ModuleDetailPage.tsx`
+- `frontend/src/app/routes.tsx`
+- `frontend/src/shared/ui/components/DataTable.tsx`
 
 ## Notas Técnicas
 
@@ -58,5 +69,6 @@ Criar as páginas de gestão de aulas (com vídeo e conteúdo) e exercícios (co
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-20

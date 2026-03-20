@@ -55,6 +55,7 @@ export interface DataTableProps<T> {
     emptyState?: EmptyStateProps;
     rowKey?: (row: T) => string;
     onSort?: (key: string, direction: "asc" | "desc") => void;
+    onRowClick?: (row: T) => void;
 }
 
 export function DataTable<T extends Record<string, unknown>>({
@@ -68,6 +69,7 @@ export function DataTable<T extends Record<string, unknown>>({
     emptyState,
     rowKey,
     onSort,
+    onRowClick,
 }: DataTableProps<T>) {
     const [sortKey, setSortKey] = useState<string | null>(null);
     const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -136,7 +138,11 @@ export function DataTable<T extends Record<string, unknown>>({
                             </Table.Tr>
                         ) : (
                             data.map((row, i) => (
-                                <Table.Tr key={rowKey ? rowKey(row) : i}>
+                                <Table.Tr
+                                    key={rowKey ? rowKey(row) : i}
+                                    onClick={onRowClick ? () => onRowClick(row) : undefined}
+                                    style={onRowClick ? { cursor: "pointer" } : undefined}
+                                >
                                     {columns.map((col) => (
                                         <Table.Td key={col.key}>
                                             {col.render

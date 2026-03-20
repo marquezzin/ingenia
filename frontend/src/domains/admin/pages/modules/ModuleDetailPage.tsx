@@ -19,6 +19,7 @@ import {
   Edit,
   EyeOff,
   Hash,
+  Plus,
   Video,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -175,7 +176,18 @@ export default function ModuleDetailPage() {
       </Card>
 
       {/* Lessons List */}
-      <PageHeader title="Aulas" subtitle={`${lessons.length} aula(s) neste módulo`} />
+      <PageHeader
+        title="Aulas"
+        subtitle={`${lessons.length} aula(s) neste módulo`}
+        actions={
+          <Button
+            leftSection={<Plus size={16} />}
+            onClick={() => navigate(`/admin/modules/${moduleId}/lessons/new`)}
+          >
+            Nova Aula
+          </Button>
+        }
+      />
 
       <DataTable<LessonListItem>
         columns={[
@@ -221,6 +233,9 @@ export default function ModuleDetailPage() {
         data={lessons}
         loading={lessonsLoading}
         rowKey={(row) => row.id}
+        onRowClick={(row) =>
+          navigate(`/admin/modules/${moduleId}/lessons/${row.id}`)
+        }
         emptyState={{
           title: "Nenhuma aula cadastrada",
           description: "Este módulo ainda não possui aulas.",

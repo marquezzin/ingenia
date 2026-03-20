@@ -132,7 +132,10 @@ export default function ModuleListPage() {
                   <ActionIcon
                     variant="subtle"
                     size="sm"
-                    onClick={() => navigate(`/admin/modules/${row.id}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/admin/modules/${row.id}`);
+                    }}
                     aria-label="Ver detalhes"
                   >
                     <Eye size={16} />
@@ -142,7 +145,10 @@ export default function ModuleListPage() {
                   <ActionIcon
                     variant="subtle"
                     size="sm"
-                    onClick={() => navigate(`/admin/modules/${row.id}/edit`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/admin/modules/${row.id}/edit`);
+                    }}
                     aria-label="Editar"
                   >
                     <Pencil size={16} />
@@ -155,6 +161,7 @@ export default function ModuleListPage() {
         data={modules}
         loading={isLoading}
         rowKey={(row) => row.id}
+        onRowClick={(row) => navigate(`/admin/modules/${row.id}`)}
         onSort={handleSort}
         pagination={{
           page,

@@ -82,7 +82,7 @@
 |---|--------|------|--------|------------|
 | ISSUE-010-A | Layout admin (sidebar, header, breadcrumb) + Dashboard | feature | 🟢 | 008-D, 008-E |
 | ISSUE-010-B | CRUD Módulos (list, create, edit, detail) | feature | 🟢 | 009-A, 010-A |
-| ISSUE-010-C | CRUD Aulas + Exercícios (nested, com test cases) | feature | 🟡 | 009-B, 009-C, 010-B |
+| ISSUE-010-C | CRUD Aulas + Exercícios (nested, com test cases) | feature | 🟢 | 009-B, 009-C, 010-B |
 | ISSUE-010-D | CRUD Usuários (list, create, edit, detail por role) | feature | 🟡 | 009-D, 010-A |
 | ISSUE-010-E | Visão de turmas (read-only) | feature | 🟡 | 002, 010-A |
 | ISSUE-010-F | Testes E2E (J-007, J-008) | chore | 🟡 | 009-F, 010-B, 010-C, 010-D |
@@ -184,8 +184,8 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 24 |
+| Concluídas | 25 |
 | Em andamento | 0 |
-| Pendentes | 42 |
+| Pendentes | 41 |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->
