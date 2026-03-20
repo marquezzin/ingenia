@@ -46,6 +46,22 @@ Criar serializers, services e views para o CRUD completo de módulos, aulas, ví
 
 9. **Testes unitários** dos serializers e services (pytest).
 
+10. **Endpoint de estatísticas do dashboard admin** (`GET /api/v1/admin/stats/`):
+    - Retorna contagens agregadas de módulos, aulas, exercícios e usuários
+    - Acessível apenas por administradores
+
+### Sub-issues
+
+| Sub-issue | Escopo |
+|---|---|
+| ISSUE-009-A | CRUD de Module |
+| ISSUE-009-B | CRUD de Lesson + VideoLesson |
+| ISSUE-009-C | CRUD de Exercise + ExerciseTestCase |
+| ISSUE-009-D | CRUD de User admin |
+| ISSUE-009-E | Regras BR-008 e BR-010 |
+| ISSUE-009-F | Testes unitários de admin CRUD |
+| ISSUE-009-G | Endpoint de Estatísticas do Dashboard Admin |
+
 ## Critérios de Aceite
 
 - [ ] CRUD completo de Module com filtros e busca

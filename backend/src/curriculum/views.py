@@ -4,6 +4,7 @@ from django.db.models import Count
 from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.errors import NotFoundError
 from core.permissions import IsAdmin
@@ -16,6 +17,7 @@ from .selectors import (
     list_test_cases_for_exercise,
 )
 from .serializers import (
+    AdminDashboardStatsSerializer,
     ExerciseCreateUpdateSerializer,
     ExerciseDetailSerializer,
     ExerciseListSerializer,
@@ -420,3 +422,22 @@ class ExerciseTestCaseViewSet(viewsets.ModelViewSet):
             input=DeleteExerciseTestCaseInput(id=str(instance.id))
         )
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AdminDashboardStatsView(APIView):
+    """Estatísticas agregadas para o dashboard admin."""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+    serializer_class = AdminDashboardStatsSerializer
+
+    def get(self, request):
+        from src.accounts.models import User
+
+        stats = {
+            "total_modules": Module.objects.count(),
+            "total_lessons": Lesson.objects.count(),
+            "total_exercises": Exercise.objects.count(),
+            "total_users": User.objects.count(),
+        }
+        serializer = AdminDashboardStatsSerializer(stats)
+        return Response(serializer.data)

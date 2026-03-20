@@ -217,3 +217,15 @@ class ExerciseTestCaseCreateUpdateSerializer(serializers.Serializer):
     expected_output = serializers.CharField()
     sequence_order = serializers.IntegerField(min_value=1)
     is_hidden = serializers.BooleanField(default=False)
+
+
+# ─── Admin Dashboard Stats ──────────────────────────────────────────────────
+
+
+class AdminDashboardStatsSerializer(serializers.Serializer):
+    """Estatísticas agregadas para o dashboard admin."""
+
+    total_modules = serializers.IntegerField()
+    total_lessons = serializers.IntegerField()
+    total_exercises = serializers.IntegerField()
+    total_users = serializers.IntegerField()

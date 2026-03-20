@@ -27,11 +27,11 @@ Criar o domain frontend `admin` com layout administrativo dedicado e dashboard c
 
 ## Critérios de Aceite
 
-- [ ] Layout admin com sidebar funcional
-- [ ] Navegação entre seções
-- [ ] Dashboard com cards de resumo
-- [ ] Breadcrumb navigation
-- [ ] Layout responsivo (sidebar colapsável)
+- [x] Layout admin com sidebar funcional
+- [x] Navegação entre seções
+- [x] Dashboard com cards de resumo
+- [x] Breadcrumb navigation
+- [x] Layout responsivo (sidebar colapsável)
 
 ## Arquivos Afetados
 
@@ -56,5 +56,6 @@ Criar o domain frontend `admin` com layout administrativo dedicado e dashboard c
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-20

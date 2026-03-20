@@ -18,6 +18,9 @@ const ForgotPasswordPage = lazy(() => import("@/domains/auth/pages/ForgotPasswor
 const UnauthorizedPage = lazy(() => import("@/domains/auth/pages/UnauthorizedPage"));
 const NotFoundPage = lazy(() => import("@/domains/auth/pages/NotFoundPage"));
 
+// Admin domain
+const AdminDashboardPage = lazy(() => import("@/domains/admin/pages/DashboardPage"));
+
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
 
@@ -143,7 +146,31 @@ export const router = createBrowserRouter([
                 index: true,
                 element: (
                     <Suspense fallback={<Spinner />}>
-                        <div>Dashboard Admin — Em construção</div>
+                        <AdminDashboardPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/*",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <div>Módulos — Em construção (ISSUE-010-B)</div>
+                    </Suspense>
+                ),
+            },
+            {
+                path: "users/*",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <div>Usuários — Em construção (ISSUE-010-D)</div>
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <div>Turmas — Em construção (ISSUE-010-E)</div>
                     </Suspense>
                 ),
             },

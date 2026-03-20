@@ -4,6 +4,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    AdminDashboardStatsView,
     ExerciseTestCaseViewSet,
     ExerciseViewSet,
     LessonViewSet,
@@ -61,5 +62,11 @@ urlpatterns = router.urls + [
         "modules/<uuid:module_pk>/lessons/<uuid:lesson_pk>/exercises/<uuid:exercise_pk>/test-cases/<uuid:pk>/",
         test_case_detail,
         name="exercise-testcase-detail",
+    ),
+    # ─── Admin Dashboard Stats ───────────────────────────────────────────
+    path(
+        "admin/stats/",
+        AdminDashboardStatsView.as_view(),
+        name="admin-dashboard-stats",
     ),
 ]

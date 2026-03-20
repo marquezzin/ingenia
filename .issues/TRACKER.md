@@ -74,12 +74,13 @@
 | ISSUE-009-D | CRUD de User admin (criação com profile por role) | feature | 🟢 | 001, 007-C |
 | ISSUE-009-E | Regras BR-008 e BR-010 (validações de publicação) | feature | 🟢 | 009-B, 009-C |
 | ISSUE-009-F | Testes unitários de admin CRUD | chore | 🟢 | 009-A a 009-E |
+| ISSUE-009-G | Endpoint de Estatísticas do Dashboard Admin | feature | 🟢 | 009-A a 009-D |
 
 ### ISSUE-010 — Frontend Admin (GG)
 
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
-| ISSUE-010-A | Layout admin (sidebar, header, breadcrumb) + Dashboard | feature | 🟡 | 008-D, 008-E |
+| ISSUE-010-A | Layout admin (sidebar, header, breadcrumb) + Dashboard | feature | 🟢 | 008-D, 008-E |
 | ISSUE-010-B | CRUD Módulos (list, create, edit, detail) | feature | 🟡 | 009-A, 010-A |
 | ISSUE-010-C | CRUD Aulas + Exercícios (nested, com test cases) | feature | 🟡 | 009-B, 009-C, 010-B |
 | ISSUE-010-D | CRUD Usuários (list, create, edit, detail por role) | feature | 🟡 | 009-D, 010-A |
@@ -183,7 +184,7 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 21 |
+| Concluídas | 23 |
 | Em andamento | 0 |
 | Pendentes | 43 |
 
