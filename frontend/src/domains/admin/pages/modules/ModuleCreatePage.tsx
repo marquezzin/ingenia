@@ -1,15 +1,18 @@
 /**
- * ModuleCreatePage — Formulário de criação de módulo.
+ * ModuleCreatePage — Formulário de criação de módulo (design aprimorado).
  */
 import {
   Alert,
   Button,
+  Card,
   Group,
   NumberInput,
+  Stack,
+  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeft, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -85,43 +88,75 @@ export default function ModuleCreatePage() {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-            label="Título"
-            placeholder="Ex: Introdução à Programação"
-            error={errors.title?.message}
-            mb="md"
-            {...register("title")}
-          />
-          <Textarea
-            label="Descrição"
-            placeholder="Descreva o conteúdo e os objetivos do módulo..."
-            minRows={4}
-            error={errors.description?.message}
-            mb="md"
-            {...register("description")}
-          />
-          <NumberInput
-            label="Ordem na trilha"
-            placeholder="1"
-            min={1}
-            error={errors.sequence_order?.message}
-            value={watch("sequence_order")}
-            onChange={(val) =>
-              setValue("sequence_order", typeof val === "number" ? val : 1, {
-                shouldValidate: true,
-              })
-            }
-            maw={200}
-          />
+        <Card withBorder padding="xl" radius="md" mb="xl">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Informações do Módulo
+          </Text>
+          <Stack gap="md">
+            <TextInput
+              label="Título"
+              placeholder="Ex: Introdução à Programação"
+              error={errors.title?.message}
+              {...register("title")}
+            />
+            <Textarea
+              label="Descrição"
+              placeholder="Descreva o conteúdo e os objetivos do módulo..."
+              minRows={4}
+              error={errors.description?.message}
+              {...register("description")}
+            />
+            <NumberInput
+              label="Ordem na trilha"
+              placeholder="1"
+              min={1}
+              error={errors.sequence_order?.message}
+              value={watch("sequence_order")}
+              onChange={(val) =>
+                setValue("sequence_order", typeof val === "number" ? val : 1, {
+                  shouldValidate: true,
+                })
+              }
+              w={120}
+            />
+          </Stack>
+        </Card>
 
-        <Group justify="flex-end" mt="xl">
+        <Group justify="flex-end">
           <Button
             variant="default"
+            radius="md"
+            leftSection={<ArrowLeft size={16} />}
             onClick={() => navigate("/admin/modules")}
+            styles={{ root: { transition: "transform 150ms ease" } }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Cancelar
           </Button>
-          <Button type="submit" loading={createModule.isPending}>
+          <Button
+            type="submit"
+            loading={createModule.isPending}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan", deg: 135 }}
+            radius="md"
+            leftSection={<Save size={16} />}
+            styles={{
+              root: {
+                fontWeight: 600,
+                transition: "transform 150ms ease, box-shadow 150ms ease",
+                boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+              },
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            }}
+          >
             Salvar Módulo
           </Button>
         </Group>

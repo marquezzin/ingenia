@@ -1,17 +1,21 @@
 /**
- * ExerciseEditPage — Formulário de edição de exercício com publish/unpublish e delete.
+ * ExerciseEditPage — Formulário de edição de exercício (design aprimorado).
  */
 import {
   Alert,
   Button,
+  Card,
+  Flex,
   Group,
   Loader,
   NumberInput,
+  Stack,
+  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { AlertCircle, Check, EyeOff, Trash2 } from "lucide-react";
+import { AlertCircle, ArrowLeft, Check, EyeOff, Save, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -73,7 +77,6 @@ export default function ExerciseEditPage() {
     resolver: zodResolver(exerciseSchema),
   });
 
-  // Populate form when data loads
   useEffect(() => {
     if (exercise) {
       reset({
@@ -142,9 +145,9 @@ export default function ExerciseEditPage() {
 
   if (isLoading) {
     return (
-      <Group justify="center" py="xl">
+      <Flex justify="center" py="xl">
         <Loader />
-      </Group>
+      </Flex>
     );
   }
 
@@ -163,20 +166,13 @@ export default function ExerciseEditPage() {
   const breadcrumbs = [
     { label: "Admin", href: "/admin" },
     { label: "Módulos", href: "/admin/modules" },
-    {
-      label: module?.title ?? "Módulo",
-      href: `/admin/modules/${moduleId}`,
-    },
-    {
-      label: lesson?.title ?? "Aula",
-      href: `/admin/modules/${moduleId}/lessons/${lessonId}`,
-    },
-    {
-      label: exercise.title,
-      href: `/admin/modules/${moduleId}/lessons/${lessonId}/exercises/${exerciseId}`,
-    },
+    { label: module?.title ?? "Módulo", href: `/admin/modules/${moduleId}` },
+    { label: lesson?.title ?? "Aula", href: `/admin/modules/${moduleId}/lessons/${lessonId}` },
+    { label: exercise.title, href: `/admin/modules/${moduleId}/lessons/${lessonId}/exercises/${exerciseId}` },
     { label: "Editar" },
   ];
+
+  const isPublished = exercise.publication_status === "PUBLISHED";
 
   return (
     <>
@@ -185,33 +181,30 @@ export default function ExerciseEditPage() {
         subtitle={exercise.title}
         breadcrumbs={breadcrumbs}
         actions={
-          <Group gap="xs">
+          <Group gap="sm">
             <Button
-              variant="light"
-              color={
-                exercise.publication_status === "PUBLISHED"
-                  ? "orange"
-                  : "green"
-              }
-              leftSection={
-                exercise.publication_status === "PUBLISHED" ? (
-                  <EyeOff size={16} />
-                ) : (
-                  <Check size={16} />
-                )
-              }
+              variant={isPublished ? "light" : "gradient"}
+              color={isPublished ? "orange" : undefined}
+              gradient={!isPublished ? { from: "teal", to: "green", deg: 135 } : undefined}
+              leftSection={isPublished ? <EyeOff size={16} /> : <Check size={16} />}
               onClick={handleTogglePublish}
               loading={updateExercise.isPending}
+              radius="md"
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              {exercise.publication_status === "PUBLISHED"
-                ? "Despublicar"
-                : "Publicar"}
+              {isPublished ? "Despublicar" : "Publicar"}
             </Button>
             <Button
               variant="light"
               color="red"
+              radius="md"
               leftSection={<Trash2 size={16} />}
               onClick={openDelete}
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Excluir
             </Button>
@@ -226,62 +219,88 @@ export default function ExerciseEditPage() {
           color="red"
           mb="lg"
         >
-          {getApiErrorMessage(
-            updateExercise.error,
-            "Não foi possível salvar as alterações. Tente novamente.",
-          )}
+          {getApiErrorMessage(updateExercise.error, "Não foi possível salvar as alterações. Tente novamente.")}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          label="Título"
-          placeholder="Ex: Soma de dois números"
-          error={errors.title?.message}
-          mb="md"
-          {...register("title")}
-        />
-        <Textarea
-          label="Enunciado"
-          placeholder="Descreva o problema que o aluno deve resolver..."
-          minRows={6}
-          error={errors.statement?.message}
-          mb="md"
-          {...register("statement")}
-        />
-        <Textarea
-          label="Mensagem de Apoio (opcional)"
-          placeholder="Dica ou orientação para ajudar o aluno..."
-          minRows={3}
-          mb="md"
-          {...register("support_message")}
-        />
-        <NumberInput
-          label="Ordem na sequência"
-          placeholder="1"
-          min={1}
-          error={errors.sequence_order?.message}
-          value={watch("sequence_order")}
-          onChange={(val) =>
-            setValue("sequence_order", typeof val === "number" ? val : 1, {
-              shouldValidate: true,
-            })
-          }
-          maw={200}
-        />
+        <Card withBorder padding="xl" radius="md" mb="xl">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Informações do Exercício
+          </Text>
+          <Stack gap="md">
+            <TextInput
+              label="Título"
+              placeholder="Ex: Soma de dois números"
+              error={errors.title?.message}
+              {...register("title")}
+            />
+            <Textarea
+              label="Enunciado"
+              placeholder="Descreva o problema que o aluno deve resolver..."
+              minRows={6}
+              error={errors.statement?.message}
+              {...register("statement")}
+            />
+            <Textarea
+              label="Mensagem de Apoio (opcional)"
+              placeholder="Dica ou orientação para ajudar o aluno..."
+              minRows={3}
+              {...register("support_message")}
+            />
+            <NumberInput
+              label="Ordem na sequência"
+              placeholder="1"
+              min={1}
+              error={errors.sequence_order?.message}
+              value={watch("sequence_order")}
+              onChange={(val) =>
+                setValue("sequence_order", typeof val === "number" ? val : 1, {
+                  shouldValidate: true,
+                })
+              }
+              w={120}
+            />
+          </Stack>
+        </Card>
 
-        <Group justify="flex-end" mt="xl">
+        <Group justify="flex-end">
           <Button
             variant="default"
+            radius="md"
+            leftSection={<ArrowLeft size={16} />}
             onClick={() =>
-              navigate(
-                `/admin/modules/${moduleId}/lessons/${lessonId}/exercises/${exerciseId}`,
-              )
+              navigate(`/admin/modules/${moduleId}/lessons/${lessonId}/exercises/${exerciseId}`)
             }
+            styles={{ root: { transition: "transform 150ms ease" } }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Cancelar
           </Button>
-          <Button type="submit" loading={updateExercise.isPending}>
+          <Button
+            type="submit"
+            loading={updateExercise.isPending}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan", deg: 135 }}
+            radius="md"
+            leftSection={<Save size={16} />}
+            styles={{
+              root: {
+                fontWeight: 600,
+                transition: "transform 150ms ease, box-shadow 150ms ease",
+                boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+              },
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            }}
+          >
             Salvar Alterações
           </Button>
         </Group>

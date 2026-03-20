@@ -1,20 +1,26 @@
 /**
- * ExerciseDetailPage — Detalhe do exercício com lista de test cases.
+ * ExerciseDetailPage — Detalhe do exercício com lista de test cases (design aprimorado).
  */
 import {
+  ActionIcon,
   Alert,
   Badge,
+  Box,
   Button,
   Card,
+  Flex,
   Group,
   Loader,
   Modal,
   NumberInput,
   SimpleGrid,
+  Stack,
   Switch,
   Text,
   Textarea,
   TextInput,
+  ThemeIcon,
+  Tooltip,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -22,10 +28,14 @@ import {
   AlertTriangle,
   Calendar,
   Check,
+  Clock,
   Edit,
+  Eye,
   EyeOff,
+  FileCheck,
   Hash,
   Plus,
+  ShieldCheck,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
@@ -35,7 +45,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   ConfirmModal,
-  DataTable,
   PageHeader,
   StatusBadge,
 } from "@/shared/ui/components";
@@ -202,9 +211,9 @@ export default function ExerciseDetailPage() {
 
   if (isLoading) {
     return (
-      <Group justify="center" py="xl">
+      <Flex justify="center" py="xl">
         <Loader />
-      </Group>
+      </Flex>
     );
   }
 
@@ -233,6 +242,7 @@ export default function ExerciseDetailPage() {
 
   const testCases = testCasesData?.results ?? [];
   const hasNoTestCases = exercise.test_cases_count === 0;
+  const isPublished = exercise.publication_status === "PUBLISHED";
 
   return (
     <>
@@ -240,34 +250,33 @@ export default function ExerciseDetailPage() {
         title={exercise.title}
         breadcrumbs={breadcrumbs}
         actions={
-          <Group gap="xs">
+          <Group gap="sm">
             <Button
-              variant="light"
-              color={
-                exercise.publication_status === "PUBLISHED" ? "orange" : "green"
-              }
-              leftSection={
-                exercise.publication_status === "PUBLISHED" ? (
-                  <EyeOff size={16} />
-                ) : (
-                  <Check size={16} />
-                )
-              }
+              variant={isPublished ? "light" : "gradient"}
+              color={isPublished ? "orange" : undefined}
+              gradient={!isPublished ? { from: "teal", to: "green", deg: 135 } : undefined}
+              leftSection={isPublished ? <EyeOff size={16} /> : <Check size={16} />}
               onClick={handleTogglePublish}
               loading={updateExercise.isPending}
+              radius="md"
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              {exercise.publication_status === "PUBLISHED"
-                ? "Despublicar"
-                : "Publicar"}
+              {isPublished ? "Despublicar" : "Publicar"}
             </Button>
             <Button
               leftSection={<Edit size={16} />}
               variant="light"
+              radius="md"
               onClick={() =>
                 navigate(
                   `/admin/modules/${moduleId}/lessons/${lessonId}/exercises/${exerciseId}/edit`,
                 )
               }
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Editar
             </Button>
@@ -288,156 +297,178 @@ export default function ExerciseDetailPage() {
         </Alert>
       )}
 
-      {/* Exercise Info */}
-      <Card withBorder mb="lg" padding="lg">
-        <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md" mb="md">
-          <Group gap="xs">
-            <Hash size={16} color="var(--mantine-color-dimmed)" />
-            <div>
-              <Text size="xs" c="dimmed">
-                Ordem
-              </Text>
-              <Text size="sm" fw={600}>
-                {exercise.sequence_order}
-              </Text>
-            </div>
+      {/* Exercise Info Card */}
+      <Card
+        withBorder
+        mb="xl"
+        padding="xl"
+        radius="md"
+        style={{
+          borderColor: "var(--color-border)",
+          background: "linear-gradient(135deg, var(--color-bg-elevated) 0%, var(--color-bg-elevated) 60%, var(--color-bg-subtle) 100%)",
+        }}
+      >
+        <Stack gap="md">
+          {/* Badges */}
+          <Group gap="sm">
+            <Badge
+              size="lg"
+              radius="md"
+              variant="gradient"
+              gradient={{ from: "blue", to: "cyan", deg: 135 }}
+              style={{ fontWeight: 700, fontSize: "var(--text-sm)" }}
+            >
+              Exercício {String(exercise.sequence_order).padStart(2, "0")}
+            </Badge>
+            <StatusBadge
+              status={exercise.publication_status}
+              statusMap={PUBLICATION_STATUS_MAP}
+            />
+            {exercise.test_cases_count === 0 ? (
+              <Badge leftSection={<AlertTriangle size={11} />} variant="light" color="red" size="sm" radius="md">
+                0 testes
+              </Badge>
+            ) : (
+              <Badge leftSection={<FileCheck size={11} />} variant="light" color="teal" size="sm" radius="md">
+                {exercise.test_cases_count} {exercise.test_cases_count === 1 ? "teste" : "testes"}
+              </Badge>
+            )}
           </Group>
-          <Group gap="xs">
-            <Hash size={16} color="var(--mantine-color-dimmed)" />
-            <div>
-              <Text size="xs" c="dimmed">
-                Test Cases
-              </Text>
-              <Text size="sm" fw={600}>
-                {exercise.test_cases_count}
-              </Text>
-            </div>
-          </Group>
-          <Group gap="xs">
-            <Calendar size={16} color="var(--mantine-color-dimmed)" />
-            <div>
-              <Text size="xs" c="dimmed">
-                Criado em
-              </Text>
-              <Text size="sm" fw={600}>
-                {formatDate(exercise.created_at)}
-              </Text>
-            </div>
-          </Group>
-          <Group gap="xs">
-            <Calendar size={16} color="var(--mantine-color-dimmed)" />
-            <div>
-              <Text size="xs" c="dimmed">
-                Atualizado em
-              </Text>
-              <Text size="sm" fw={600}>
-                {formatDate(exercise.updated_at)}
-              </Text>
-            </div>
-          </Group>
-        </SimpleGrid>
 
-        <Group mb="md">
-          <StatusBadge
-            status={exercise.publication_status}
-            statusMap={PUBLICATION_STATUS_MAP}
-          />
-        </Group>
+          {/* Stats */}
+          <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="lg" mt="xs">
+            <Group gap="sm" align="center">
+              <ThemeIcon variant="light" color="blue" size="lg" radius="md">
+                <Hash size={18} />
+              </ThemeIcon>
+              <div>
+                <Text size="xs" c="dimmed" tt="uppercase" fw={600} lh={1}>Ordem</Text>
+                <Text size="lg" fw={700} lh={1.3}>{exercise.sequence_order}</Text>
+              </div>
+            </Group>
+            <Group gap="sm" align="center">
+              <ThemeIcon variant="light" color="teal" size="lg" radius="md">
+                <ShieldCheck size={18} />
+              </ThemeIcon>
+              <div>
+                <Text size="xs" c="dimmed" tt="uppercase" fw={600} lh={1}>Test Cases</Text>
+                <Text size="lg" fw={700} lh={1.3}>{exercise.test_cases_count}</Text>
+              </div>
+            </Group>
+            <Group gap="sm" align="center">
+              <ThemeIcon variant="light" color="grape" size="lg" radius="md">
+                <Calendar size={18} />
+              </ThemeIcon>
+              <div>
+                <Text size="xs" c="dimmed" tt="uppercase" fw={600} lh={1}>Criado em</Text>
+                <Text size="sm" fw={600} lh={1.3}>{formatDate(exercise.created_at)}</Text>
+              </div>
+            </Group>
+            <Group gap="sm" align="center">
+              <ThemeIcon variant="light" color="orange" size="lg" radius="md">
+                <Clock size={18} />
+              </ThemeIcon>
+              <div>
+                <Text size="xs" c="dimmed" tt="uppercase" fw={600} lh={1}>Atualizado em</Text>
+                <Text size="sm" fw={600} lh={1.3}>{formatDate(exercise.updated_at)}</Text>
+              </div>
+            </Group>
+          </SimpleGrid>
 
-        <Text size="sm" c="dimmed" mb="xs">
-          Enunciado
-        </Text>
-        <Text size="sm" mb="md" style={{ whiteSpace: "pre-wrap" }}>
-          {exercise.statement}
-        </Text>
-
-        {exercise.support_message && (
-          <>
-            <Text size="sm" c="dimmed" mb="xs">
-              Mensagem de Apoio
+          {/* Enunciado */}
+          <Card withBorder padding="md" radius="md" mt="xs" bg="var(--color-bg-elevated)">
+            <Text size="xs" c="dimmed" tt="uppercase" fw={600} mb="xs">
+              Enunciado
             </Text>
-            <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
-              {exercise.support_message}
+            <Text size="sm" style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
+              {exercise.statement}
             </Text>
-          </>
-        )}
+          </Card>
+
+          {/* Support message */}
+          {exercise.support_message && (
+            <Card withBorder padding="md" radius="md" bg="var(--color-bg-elevated)">
+              <Text size="xs" c="dimmed" tt="uppercase" fw={600} mb="xs">
+                Mensagem de Apoio
+              </Text>
+              <Text size="sm" style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
+                {exercise.support_message}
+              </Text>
+            </Card>
+          )}
+        </Stack>
       </Card>
 
-      {/* Test Cases List */}
-      <PageHeader
-        title="Test Cases"
-        subtitle={`${testCases.length} test case(s) neste exercício`}
-        actions={
-          <Button leftSection={<Plus size={16} />} onClick={openCreateTestCase}>
-            Novo Test Case
-          </Button>
-        }
-      />
+      {/* Test Cases Section Header */}
+      <Group justify="space-between" align="center" mb="lg">
+        <div>
+          <Text size="xl" fw={700} style={{ color: "var(--color-text)" }}>
+            Test Cases
+          </Text>
+          <Text size="sm" c="dimmed">
+            {testCases.length} {testCases.length === 1 ? "test case" : "test cases"} neste exercício
+          </Text>
+        </div>
+        <Button
+          leftSection={<Plus size={18} />}
+          onClick={openCreateTestCase}
+          variant="gradient"
+          gradient={{ from: "blue", to: "cyan", deg: 135 }}
+          radius="md"
+          styles={{
+            root: {
+              fontWeight: 600,
+              transition: "transform 150ms ease, box-shadow 150ms ease",
+              boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+            },
+            section: { transition: "transform 200ms ease" },
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            const icon = e.currentTarget.querySelector(".mantine-Button-section");
+            if (icon instanceof HTMLElement) icon.style.transform = "rotate(90deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            const icon = e.currentTarget.querySelector(".mantine-Button-section");
+            if (icon instanceof HTMLElement) icon.style.transform = "rotate(0deg)";
+          }}
+        >
+          Novo Test Case
+        </Button>
+      </Group>
 
-      <DataTable<TestCaseListItem>
-        columns={[
-          { key: "name", label: "Nome", sortable: true },
-          {
-            key: "sequence_order",
-            label: "Ordem",
-            sortable: true,
-            width: 80,
-          },
-          {
-            key: "is_hidden",
-            label: "Visibilidade",
-            width: 120,
-            render: (row) =>
-              row.is_hidden ? (
-                <Badge variant="light" color="gray" size="sm">
-                  Oculto
-                </Badge>
-              ) : (
-                <Badge variant="light" color="blue" size="sm">
-                  Visível
-                </Badge>
-              ),
-          },
-          {
-            key: "id",
-            label: "Ações",
-            width: 120,
-            render: (row) => (
-              <Group gap="xs">
-                <Button
-                  variant="subtle"
-                  size="compact-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditTestCase(row);
-                  }}
-                >
-                  <Edit size={14} />
-                </Button>
-                <Button
-                  variant="subtle"
-                  size="compact-sm"
-                  color="red"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDeletingTestCaseId(row.id);
-                  }}
-                >
-                  <Trash2 size={14} />
-                </Button>
-              </Group>
-            ),
-          },
-        ]}
-        data={testCases}
-        loading={testCasesLoading}
-        rowKey={(row) => row.id}
-        emptyState={{
-          title: "Nenhum test case cadastrado",
-          description:
-            "Adicione test cases para que este exercício possa ser publicado.",
-        }}
-      />
+      {/* Test Case Cards */}
+      {testCasesLoading ? (
+        <Flex justify="center" py="xl">
+          <Loader size="md" />
+        </Flex>
+      ) : testCases.length === 0 ? (
+        <Card withBorder padding="xl" radius="md" style={{ borderStyle: "dashed", borderColor: "var(--color-border)" }}>
+          <Flex direction="column" align="center" justify="center" py="lg" gap="md" style={{ opacity: 0.7 }}>
+            <ShieldCheck size={48} strokeWidth={1.5} style={{ color: "var(--color-text-muted)" }} />
+            <Text size="lg" fw={500} c="dimmed">
+              Nenhum test case cadastrado
+            </Text>
+            <Text size="sm" c="dimmed">
+              Adicione test cases para que este exercício possa ser publicado.
+            </Text>
+          </Flex>
+        </Card>
+      ) : (
+        <Stack gap="sm">
+          {testCases.map((tc) => (
+            <TestCaseRow
+              key={tc.id}
+              testCase={tc}
+              onEdit={() => openEditTestCase(tc)}
+              onDelete={() => setDeletingTestCaseId(tc.id)}
+            />
+          ))}
+        </Stack>
+      )}
 
       {/* Test Case Create/Edit Modal */}
       <Modal
@@ -519,5 +550,106 @@ export default function ExerciseDetailPage() {
         loading={deleteTestCase.isPending}
       />
     </>
+  );
+}
+
+function TestCaseRow({
+  testCase,
+  onEdit,
+  onDelete,
+}: {
+  testCase: TestCaseListItem;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <Card
+      withBorder
+      padding="md"
+      radius="md"
+      style={{
+        cursor: "default",
+        transition: "transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease",
+        borderColor: "var(--color-border)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateX(4px)";
+        e.currentTarget.style.boxShadow = "var(--shadow-md)";
+        e.currentTarget.style.borderColor = "hsl(var(--brand-primary))";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateX(0)";
+        e.currentTarget.style.boxShadow = "";
+        e.currentTarget.style.borderColor = "var(--color-border)";
+      }}
+    >
+      <Group justify="space-between" align="center" wrap="nowrap">
+        {/* Left: order circle + name */}
+        <Group gap="md" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
+          <Box
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, hsl(217, 100%, 61%), hsl(191, 86%, 62%))",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Text size="sm" fw={700} c="white">
+              {String(testCase.sequence_order).padStart(2, "0")}
+            </Text>
+          </Box>
+          <Text fw={600} size="md" truncate="end" style={{ color: "var(--color-text)" }}>
+            {testCase.name}
+          </Text>
+        </Group>
+
+        {/* Right: visibility badge + actions */}
+        <Group gap="sm" wrap="nowrap" style={{ flexShrink: 0 }}>
+          {testCase.is_hidden ? (
+            <Badge leftSection={<EyeOff size={11} />} variant="light" color="gray" size="sm" radius="md">
+              Oculto
+            </Badge>
+          ) : (
+            <Badge leftSection={<Eye size={11} />} variant="light" color="blue" size="sm" radius="md">
+              Visível
+            </Badge>
+          )}
+          <Group gap={4}>
+            <Tooltip label="Editar" withArrow>
+              <ActionIcon
+                variant="light"
+                color="blue"
+                size="md"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit();
+                }}
+                aria-label="Editar test case"
+              >
+                <Edit size={16} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Excluir" withArrow>
+              <ActionIcon
+                variant="light"
+                color="red"
+                size="md"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
+                aria-label="Excluir test case"
+              >
+                <Trash2 size={16} />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
+        </Group>
+      </Group>
+    </Card>
   );
 }

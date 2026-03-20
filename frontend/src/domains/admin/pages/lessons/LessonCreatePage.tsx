@@ -1,5 +1,5 @@
 /**
- * LessonCreatePage — Formulário de criação de aula dentro de um módulo.
+ * LessonCreatePage — Formulário de criação de aula (design aprimorado).
  */
 import {
   Alert,
@@ -8,11 +8,12 @@ import {
   Checkbox,
   Group,
   NumberInput,
+  Stack,
   Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeft, Save, Video } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -94,9 +95,7 @@ export default function LessonCreatePage() {
       },
       {
         onSuccess: (lesson) => {
-          navigate(
-            `/admin/modules/${moduleId}/lessons/${lesson.id}`,
-          );
+          navigate(`/admin/modules/${moduleId}/lessons/${lesson.id}`);
         },
       },
     );
@@ -105,10 +104,7 @@ export default function LessonCreatePage() {
   const breadcrumbs = [
     { label: "Admin", href: "/admin" },
     { label: "Módulos", href: "/admin/modules" },
-    {
-      label: module?.title ?? "Módulo",
-      href: `/admin/modules/${moduleId}`,
-    },
+    { label: module?.title ?? "Módulo", href: `/admin/modules/${moduleId}` },
     { label: "Nova Aula" },
   ];
 
@@ -127,69 +123,81 @@ export default function LessonCreatePage() {
           color="red"
           mb="lg"
         >
-          {getApiErrorMessage(
-            createLesson.error,
-            "Não foi possível criar a aula. Verifique os dados e tente novamente.",
-          )}
+          {getApiErrorMessage(createLesson.error, "Não foi possível criar a aula. Verifique os dados e tente novamente.")}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          label="Título"
-          placeholder="Ex: Variáveis e Tipos de Dados"
-          error={errors.title?.message}
-          mb="md"
-          {...register("title")}
-        />
-        <Textarea
-          label="Conteúdo Escrito"
-          placeholder="Escreva o conteúdo da aula..."
-          minRows={8}
-          error={errors.written_content?.message}
-          mb="md"
-          {...register("written_content")}
-        />
-        <NumberInput
-          label="Ordem na sequência"
-          placeholder="1"
-          min={1}
-          error={errors.sequence_order?.message}
-          value={watch("sequence_order")}
-          onChange={(val) =>
-            setValue("sequence_order", typeof val === "number" ? val : 1, {
-              shouldValidate: true,
-            })
-          }
-          maw={200}
-          mb="lg"
-        />
+        {/* General Info */}
+        <Card withBorder padding="xl" radius="md" mb="lg">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Informações da Aula
+          </Text>
+          <Stack gap="md">
+            <TextInput
+              label="Título"
+              placeholder="Ex: Variáveis e Tipos de Dados"
+              error={errors.title?.message}
+              {...register("title")}
+            />
+            <NumberInput
+              label="Ordem na sequência"
+              placeholder="1"
+              min={1}
+              error={errors.sequence_order?.message}
+              value={watch("sequence_order")}
+              onChange={(val) =>
+                setValue("sequence_order", typeof val === "number" ? val : 1, {
+                  shouldValidate: true,
+                })
+              }
+              w={120}
+            />
+          </Stack>
+        </Card>
+
+        {/* Written Content — separate card for large markdown */}
+        <Card withBorder padding="xl" radius="md" mb="lg">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Conteúdo Escrito (Markdown)
+          </Text>
+          <Textarea
+            placeholder="Escreva o conteúdo da aula (suporta Markdown)..."
+            minRows={6}
+            autosize
+            maxRows={20}
+            error={errors.written_content?.message}
+            styles={{ input: { fontFamily: 'monospace', fontSize: 'var(--text-sm)' } }}
+            {...register("written_content")}
+          />
+        </Card>
 
         {/* Video Section */}
-        <Card withBorder padding="md" mb="lg">
+        <Card withBorder padding="xl" radius="md" mb="xl">
+          <Group gap="sm" mb="lg">
+            <Video size={18} style={{ color: "var(--mantine-color-blue-5)" }} />
+            <Text size="sm" fw={600} tt="uppercase" c="dimmed">
+              Videoaula
+            </Text>
+          </Group>
           <Checkbox
             label="Incluir videoaula"
             checked={hasVideo}
             onChange={(e) => setValue("has_video", e.currentTarget.checked)}
-            mb="md"
+            mb={hasVideo ? "md" : 0}
           />
           {hasVideo && (
-            <>
-              <Text size="sm" c="dimmed" mb="sm">
-                Dados da videoaula
-              </Text>
+            <Stack gap="md" mt="md">
               <TextInput
                 label="Título do vídeo"
                 placeholder="Ex: Aula 1 - Introdução"
                 error={errors.video_lesson?.title?.message}
-                mb="md"
                 {...register("video_lesson.title")}
               />
               <TextInput
                 label="URL do vídeo"
                 placeholder="https://youtube.com/watch?v=..."
                 error={errors.video_lesson?.video_url?.message}
-                mb="md"
                 {...register("video_lesson.video_url")}
               />
               <NumberInput
@@ -206,18 +214,45 @@ export default function LessonCreatePage() {
                 }
                 maw={200}
               />
-            </>
+            </Stack>
           )}
         </Card>
 
-        <Group justify="flex-end" mt="xl">
+        <Group justify="flex-end">
           <Button
             variant="default"
+            radius="md"
+            leftSection={<ArrowLeft size={16} />}
             onClick={() => navigate(`/admin/modules/${moduleId}`)}
+            styles={{ root: { transition: "transform 150ms ease" } }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Cancelar
           </Button>
-          <Button type="submit" loading={createLesson.isPending}>
+          <Button
+            type="submit"
+            loading={createLesson.isPending}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan", deg: 135 }}
+            radius="md"
+            leftSection={<Save size={16} />}
+            styles={{
+              root: {
+                fontWeight: 600,
+                transition: "transform 150ms ease, box-shadow 150ms ease",
+                boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+              },
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            }}
+          >
             Salvar Aula
           </Button>
         </Group>

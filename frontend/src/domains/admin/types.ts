@@ -21,8 +21,10 @@ export interface ModuleListItem {
   [key: string]: unknown;
   id: string;
   title: string;
+  description: string;
   sequence_order: number;
   publication_status: PublicationStatus;
+  lesson_count: number;
 }
 
 export interface ModuleDetail {

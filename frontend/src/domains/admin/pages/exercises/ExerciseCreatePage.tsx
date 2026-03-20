@@ -1,15 +1,18 @@
 /**
- * ExerciseCreatePage — Formulário de criação de exercício dentro de uma aula.
+ * ExerciseCreatePage — Formulário de criação de exercício (design aprimorado).
  */
 import {
   Alert,
   Button,
+  Card,
   Group,
   NumberInput,
+  Stack,
+  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeft, Save } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -84,14 +87,8 @@ export default function ExerciseCreatePage() {
   const breadcrumbs = [
     { label: "Admin", href: "/admin" },
     { label: "Módulos", href: "/admin/modules" },
-    {
-      label: module?.title ?? "Módulo",
-      href: `/admin/modules/${moduleId}`,
-    },
-    {
-      label: lesson?.title ?? "Aula",
-      href: `/admin/modules/${moduleId}/lessons/${lessonId}`,
-    },
+    { label: module?.title ?? "Módulo", href: `/admin/modules/${moduleId}` },
+    { label: lesson?.title ?? "Aula", href: `/admin/modules/${moduleId}/lessons/${lessonId}` },
     { label: "Novo Exercício" },
   ];
 
@@ -110,60 +107,86 @@ export default function ExerciseCreatePage() {
           color="red"
           mb="lg"
         >
-          {getApiErrorMessage(
-            createExercise.error,
-            "Não foi possível criar o exercício. Verifique os dados e tente novamente.",
-          )}
+          {getApiErrorMessage(createExercise.error, "Não foi possível criar o exercício. Verifique os dados e tente novamente.")}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          label="Título"
-          placeholder="Ex: Soma de dois números"
-          error={errors.title?.message}
-          mb="md"
-          {...register("title")}
-        />
-        <Textarea
-          label="Enunciado"
-          placeholder="Descreva o problema que o aluno deve resolver..."
-          minRows={6}
-          error={errors.statement?.message}
-          mb="md"
-          {...register("statement")}
-        />
-        <Textarea
-          label="Mensagem de Apoio (opcional)"
-          placeholder="Dica ou orientação para ajudar o aluno..."
-          minRows={3}
-          mb="md"
-          {...register("support_message")}
-        />
-        <NumberInput
-          label="Ordem na sequência"
-          placeholder="1"
-          min={1}
-          error={errors.sequence_order?.message}
-          value={watch("sequence_order")}
-          onChange={(val) =>
-            setValue("sequence_order", typeof val === "number" ? val : 1, {
-              shouldValidate: true,
-            })
-          }
-          maw={200}
-        />
+        <Card withBorder padding="xl" radius="md" mb="lg">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Informações do Exercício
+          </Text>
+          <Stack gap="md">
+            <TextInput
+              label="Título"
+              placeholder="Ex: Soma de dois números"
+              error={errors.title?.message}
+              {...register("title")}
+            />
+            <Textarea
+              label="Enunciado"
+              placeholder="Descreva o problema que o aluno deve resolver..."
+              minRows={6}
+              error={errors.statement?.message}
+              {...register("statement")}
+            />
+            <Textarea
+              label="Mensagem de Apoio (opcional)"
+              placeholder="Dica ou orientação para ajudar o aluno..."
+              minRows={3}
+              {...register("support_message")}
+            />
+            <NumberInput
+              label="Ordem na sequência"
+              placeholder="1"
+              min={1}
+              error={errors.sequence_order?.message}
+              value={watch("sequence_order")}
+              onChange={(val) =>
+                setValue("sequence_order", typeof val === "number" ? val : 1, {
+                  shouldValidate: true,
+                })
+              }
+              w={120}
+            />
+          </Stack>
+        </Card>
 
-        <Group justify="flex-end" mt="xl">
+        <Group justify="flex-end">
           <Button
             variant="default"
-            onClick={() =>
-              navigate(`/admin/modules/${moduleId}/lessons/${lessonId}`)
-            }
+            radius="md"
+            leftSection={<ArrowLeft size={16} />}
+            onClick={() => navigate(`/admin/modules/${moduleId}/lessons/${lessonId}`)}
+            styles={{ root: { transition: "transform 150ms ease" } }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Cancelar
           </Button>
-          <Button type="submit" loading={createExercise.isPending}>
+          <Button
+            type="submit"
+            loading={createExercise.isPending}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan", deg: 135 }}
+            radius="md"
+            leftSection={<Save size={16} />}
+            styles={{
+              root: {
+                fontWeight: 600,
+                transition: "transform 150ms ease, box-shadow 150ms ease",
+                boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+              },
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            }}
+          >
             Salvar Exercício
           </Button>
         </Group>

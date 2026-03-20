@@ -12,9 +12,18 @@ from .models import Exercise, ExerciseTestCase, Lesson, Module, VideoLesson
 class ModuleListSerializer(BaseModelSerializer):
     """Campos resumidos para listagem de módulos."""
 
+    lesson_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Module
-        fields = ["id", "title", "sequence_order", "publication_status"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "sequence_order",
+            "publication_status",
+            "lesson_count",
+        ]
 
 
 class ModuleDetailSerializer(BaseModelSerializer):

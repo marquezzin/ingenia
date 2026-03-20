@@ -1,19 +1,22 @@
 /**
- * LessonEditPage — Formulário de edição de aula com publish/unpublish e delete.
+ * LessonEditPage — Formulário de edição de aula (design aprimorado).
  */
 import {
   Alert,
   Button,
   Card,
   Checkbox,
+  Flex,
   Group,
   Loader,
   NumberInput,
+  Stack,
+  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { AlertCircle, Check, EyeOff, Trash2 } from "lucide-react";
+import { AlertCircle, ArrowLeft, Check, EyeOff, Save, Trash2, Video } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -83,7 +86,6 @@ export default function LessonEditPage() {
     resolver: zodResolver(lessonSchema),
   });
 
-  // Populate form when data loads
   useEffect(() => {
     if (lesson) {
       reset({
@@ -93,10 +95,10 @@ export default function LessonEditPage() {
         has_video: !!lesson.video,
         video_lesson: lesson.video
           ? {
-              title: lesson.video.title,
-              video_url: lesson.video.video_url,
-              duration_seconds: lesson.video.duration_seconds,
-            }
+            title: lesson.video.title,
+            video_url: lesson.video.video_url,
+            duration_seconds: lesson.video.duration_seconds,
+          }
           : undefined,
       });
     }
@@ -118,19 +120,16 @@ export default function LessonEditPage() {
           video_lesson:
             data.has_video && data.video_lesson
               ? {
-                  title: data.video_lesson.title,
-                  video_url: data.video_lesson.video_url,
-                  duration_seconds:
-                    data.video_lesson.duration_seconds ?? null,
-                }
+                title: data.video_lesson.title,
+                video_url: data.video_lesson.video_url,
+                duration_seconds: data.video_lesson.duration_seconds ?? null,
+              }
               : null,
         },
       },
       {
         onSuccess: () => {
-          navigate(
-            `/admin/modules/${moduleId}/lessons/${lessonId}`,
-          );
+          navigate(`/admin/modules/${moduleId}/lessons/${lessonId}`);
         },
       },
     );
@@ -150,10 +149,10 @@ export default function LessonEditPage() {
         publication_status: newStatus,
         video_lesson: lesson.video
           ? {
-              title: lesson.video.title,
-              video_url: lesson.video.video_url,
-              duration_seconds: lesson.video.duration_seconds,
-            }
+            title: lesson.video.title,
+            video_url: lesson.video.video_url,
+            duration_seconds: lesson.video.duration_seconds,
+          }
           : null,
       },
     });
@@ -173,9 +172,9 @@ export default function LessonEditPage() {
 
   if (isLoading) {
     return (
-      <Group justify="center" py="xl">
+      <Flex justify="center" py="xl">
         <Loader />
-      </Group>
+      </Flex>
     );
   }
 
@@ -194,16 +193,12 @@ export default function LessonEditPage() {
   const breadcrumbs = [
     { label: "Admin", href: "/admin" },
     { label: "Módulos", href: "/admin/modules" },
-    {
-      label: module?.title ?? "Módulo",
-      href: `/admin/modules/${moduleId}`,
-    },
-    {
-      label: lesson.title,
-      href: `/admin/modules/${moduleId}/lessons/${lessonId}`,
-    },
+    { label: module?.title ?? "Módulo", href: `/admin/modules/${moduleId}` },
+    { label: lesson.title, href: `/admin/modules/${moduleId}/lessons/${lessonId}` },
     { label: "Editar" },
   ];
+
+  const isPublished = lesson.publication_status === "PUBLISHED";
 
   return (
     <>
@@ -212,31 +207,30 @@ export default function LessonEditPage() {
         subtitle={lesson.title}
         breadcrumbs={breadcrumbs}
         actions={
-          <Group gap="xs">
+          <Group gap="sm">
             <Button
-              variant="light"
-              color={
-                lesson.publication_status === "PUBLISHED" ? "orange" : "green"
-              }
-              leftSection={
-                lesson.publication_status === "PUBLISHED" ? (
-                  <EyeOff size={16} />
-                ) : (
-                  <Check size={16} />
-                )
-              }
+              variant={isPublished ? "light" : "gradient"}
+              color={isPublished ? "orange" : undefined}
+              gradient={!isPublished ? { from: "teal", to: "green", deg: 135 } : undefined}
+              leftSection={isPublished ? <EyeOff size={16} /> : <Check size={16} />}
               onClick={handleTogglePublish}
               loading={updateLesson.isPending}
+              radius="md"
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              {lesson.publication_status === "PUBLISHED"
-                ? "Despublicar"
-                : "Publicar"}
+              {isPublished ? "Despublicar" : "Publicar"}
             </Button>
             <Button
               variant="light"
               color="red"
+              radius="md"
               leftSection={<Trash2 size={16} />}
               onClick={openDelete}
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Excluir
             </Button>
@@ -251,66 +245,81 @@ export default function LessonEditPage() {
           color="red"
           mb="lg"
         >
-          {getApiErrorMessage(
-            updateLesson.error,
-            "Não foi possível salvar as alterações. Tente novamente.",
-          )}
+          {getApiErrorMessage(updateLesson.error, "Não foi possível salvar as alterações. Tente novamente.")}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          label="Título"
-          placeholder="Ex: Variáveis e Tipos de Dados"
-          error={errors.title?.message}
-          mb="md"
-          {...register("title")}
-        />
-        <Textarea
-          label="Conteúdo Escrito"
-          placeholder="Escreva o conteúdo da aula..."
-          minRows={8}
-          error={errors.written_content?.message}
-          mb="md"
-          {...register("written_content")}
-        />
-        <NumberInput
-          label="Ordem na sequência"
-          placeholder="1"
-          min={1}
-          error={errors.sequence_order?.message}
-          value={watch("sequence_order")}
-          onChange={(val) =>
-            setValue("sequence_order", typeof val === "number" ? val : 1, {
-              shouldValidate: true,
-            })
-          }
-          maw={200}
-          mb="lg"
-        />
+        {/* General Info */}
+        <Card withBorder padding="xl" radius="md" mb="lg">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Informações da Aula
+          </Text>
+          <Stack gap="md">
+            <TextInput
+              label="Título"
+              placeholder="Ex: Variáveis e Tipos de Dados"
+              error={errors.title?.message}
+              {...register("title")}
+            />
+            <NumberInput
+              label="Ordem na sequência"
+              placeholder="1"
+              min={1}
+              error={errors.sequence_order?.message}
+              value={watch("sequence_order")}
+              onChange={(val) =>
+                setValue("sequence_order", typeof val === "number" ? val : 1, {
+                  shouldValidate: true,
+                })
+              }
+              w={120}
+            />
+          </Stack>
+        </Card>
+
+        {/* Written Content — separate card for large markdown */}
+        <Card withBorder padding="xl" radius="md" mb="lg">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Conteúdo Escrito
+          </Text>
+          <Textarea
+            placeholder="Escreva o conteúdo da aula (suporta Markdown)..."
+            minRows={6}
+            autosize
+            maxRows={20}
+            error={errors.written_content?.message}
+            styles={{ input: { fontFamily: 'monospace', fontSize: 'var(--text-sm)' } }}
+            {...register("written_content")}
+          />
+        </Card>
 
         {/* Video Section */}
-        <Card withBorder padding="md" mb="lg">
+        <Card withBorder padding="xl" radius="md" mb="xl">
+          <Group gap="sm" mb="lg">
+            <Video size={18} style={{ color: "var(--mantine-color-blue-5)" }} />
+            <Text size="sm" fw={600} tt="uppercase" c="dimmed">
+              Videoaula
+            </Text>
+          </Group>
           <Checkbox
             label="Incluir videoaula"
             checked={hasVideo}
             onChange={(e) => setValue("has_video", e.currentTarget.checked)}
-            mb="md"
+            mb={hasVideo ? "md" : 0}
           />
           {hasVideo && (
-            <>
+            <Stack gap="md" mt="md">
               <TextInput
                 label="Título do vídeo"
                 placeholder="Ex: Aula 1 - Introdução"
                 error={errors.video_lesson?.title?.message}
-                mb="md"
                 {...register("video_lesson.title")}
               />
               <TextInput
                 label="URL do vídeo"
                 placeholder="https://youtube.com/watch?v=..."
                 error={errors.video_lesson?.video_url?.message}
-                mb="md"
                 {...register("video_lesson.video_url")}
               />
               <NumberInput
@@ -327,20 +336,45 @@ export default function LessonEditPage() {
                 }
                 maw={200}
               />
-            </>
+            </Stack>
           )}
         </Card>
 
-        <Group justify="flex-end" mt="xl">
+        <Group justify="flex-end">
           <Button
             variant="default"
-            onClick={() =>
-              navigate(`/admin/modules/${moduleId}/lessons/${lessonId}`)
-            }
+            radius="md"
+            leftSection={<ArrowLeft size={16} />}
+            onClick={() => navigate(`/admin/modules/${moduleId}/lessons/${lessonId}`)}
+            styles={{ root: { transition: "transform 150ms ease" } }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Cancelar
           </Button>
-          <Button type="submit" loading={updateLesson.isPending}>
+          <Button
+            type="submit"
+            loading={updateLesson.isPending}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan", deg: 135 }}
+            radius="md"
+            leftSection={<Save size={16} />}
+            styles={{
+              root: {
+                fontWeight: 600,
+                transition: "transform 150ms ease, box-shadow 150ms ease",
+                boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+              },
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            }}
+          >
             Salvar Alterações
           </Button>
         </Group>

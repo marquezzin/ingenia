@@ -1,17 +1,21 @@
 /**
- * ModuleEditPage — Formulário de edição de módulo com publish/unpublish.
+ * ModuleEditPage — Formulário de edição de módulo (design aprimorado).
  */
 import {
   Alert,
   Button,
+  Card,
+  Flex,
   Group,
   Loader,
   NumberInput,
+  Stack,
+  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { AlertCircle, Check, EyeOff, Trash2 } from "lucide-react";
+import { AlertCircle, ArrowLeft, Check, EyeOff, Save, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -61,7 +65,6 @@ export default function ModuleEditPage() {
     resolver: zodResolver(moduleSchema),
   });
 
-  // Populate form when data loads
   useEffect(() => {
     if (module) {
       reset({
@@ -116,9 +119,9 @@ export default function ModuleEditPage() {
 
   if (isLoading) {
     return (
-      <Group justify="center" py="xl">
+      <Flex justify="center" py="xl">
         <Loader />
-      </Group>
+      </Flex>
     );
   }
 
@@ -140,6 +143,8 @@ export default function ModuleEditPage() {
     { label: "Editar" },
   ];
 
+  const isPublished = module.publication_status === "PUBLISHED";
+
   return (
     <>
       <PageHeader
@@ -147,23 +152,30 @@ export default function ModuleEditPage() {
         subtitle={module.title}
         breadcrumbs={breadcrumbs}
         actions={
-          <Group gap="xs">
+          <Group gap="sm">
             <Button
-              variant="light"
-              color={module.publication_status === "PUBLISHED" ? "orange" : "green"}
-              leftSection={module.publication_status === "PUBLISHED" ? <EyeOff size={16} /> : <Check size={16} />}
+              variant={isPublished ? "light" : "gradient"}
+              color={isPublished ? "orange" : undefined}
+              gradient={!isPublished ? { from: "teal", to: "green", deg: 135 } : undefined}
+              leftSection={isPublished ? <EyeOff size={16} /> : <Check size={16} />}
               onClick={handleTogglePublish}
               loading={updateModule.isPending}
+              radius="md"
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              {module.publication_status === "PUBLISHED"
-                ? "Despublicar"
-                : "Publicar"}
+              {isPublished ? "Despublicar" : "Publicar"}
             </Button>
             <Button
               variant="light"
               color="red"
+              radius="md"
               leftSection={<Trash2 size={16} />}
               onClick={openDelete}
+              styles={{ root: { transition: "transform 150ms ease" } }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
               Excluir
             </Button>
@@ -183,43 +195,75 @@ export default function ModuleEditPage() {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-            label="Título"
-            placeholder="Ex: Introdução à Programação"
-            error={errors.title?.message}
-            mb="md"
-            {...register("title")}
-          />
-          <Textarea
-            label="Descrição"
-            placeholder="Descreva o conteúdo e os objetivos do módulo..."
-            minRows={4}
-            error={errors.description?.message}
-            mb="md"
-            {...register("description")}
-          />
-          <NumberInput
-            label="Ordem na trilha"
-            placeholder="1"
-            min={1}
-            error={errors.sequence_order?.message}
-            value={watch("sequence_order")}
-            onChange={(val) =>
-              setValue("sequence_order", typeof val === "number" ? val : 1, {
-                shouldValidate: true,
-              })
-            }
-            maw={200}
-          />
+        <Card withBorder padding="xl" radius="md" mb="xl">
+          <Text size="sm" fw={600} tt="uppercase" c="dimmed" mb="lg">
+            Informações do Módulo
+          </Text>
+          <Stack gap="md">
+            <TextInput
+              label="Título"
+              placeholder="Ex: Introdução à Programação"
+              error={errors.title?.message}
+              {...register("title")}
+            />
+            <Textarea
+              label="Descrição"
+              placeholder="Descreva o conteúdo e os objetivos do módulo..."
+              minRows={4}
+              error={errors.description?.message}
+              {...register("description")}
+            />
+            <NumberInput
+              label="Ordem na trilha"
+              placeholder="1"
+              min={1}
+              error={errors.sequence_order?.message}
+              value={watch("sequence_order")}
+              onChange={(val) =>
+                setValue("sequence_order", typeof val === "number" ? val : 1, {
+                  shouldValidate: true,
+                })
+              }
+              w={120}
+            />
+          </Stack>
+        </Card>
 
-        <Group justify="flex-end" mt="xl">
+        <Group justify="flex-end">
           <Button
             variant="default"
+            radius="md"
+            leftSection={<ArrowLeft size={16} />}
             onClick={() => navigate(`/admin/modules/${module.id}`)}
+            styles={{ root: { transition: "transform 150ms ease" } }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Cancelar
           </Button>
-          <Button type="submit" loading={updateModule.isPending}>
+          <Button
+            type="submit"
+            loading={updateModule.isPending}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan", deg: 135 }}
+            radius="md"
+            leftSection={<Save size={16} />}
+            styles={{
+              root: {
+                fontWeight: 600,
+                transition: "transform 150ms ease, box-shadow 150ms ease",
+                boxShadow: "0 4px 14px rgba(58, 134, 255, 0.25)",
+              },
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 134, 255, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(58, 134, 255, 0.25)";
+            }}
+          >
             Salvar Alterações
           </Button>
         </Group>
