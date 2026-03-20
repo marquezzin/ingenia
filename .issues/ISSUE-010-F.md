@@ -27,9 +27,9 @@ Criar testes end-to-end cobrindo os fluxos de criação de conteúdo e gestão d
 
 ## Critérios de Aceite
 
-- [ ] Testes E2E de J-007 passando
-- [ ] Testes E2E de J-008 passando
-- [ ] Todos os testes executando no Playwright
+- [x] Testes E2E de J-007 passando
+- [x] Testes E2E de J-008 passando
+- [x] Todos os testes executando no Playwright
 
 ## Arquivos Afetados
 
@@ -50,5 +50,6 @@ Criar testes end-to-end cobrindo os fluxos de criação de conteúdo e gestão d
 
 - **Prioridade**: alta
 - **Tipo**: chore
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-20
