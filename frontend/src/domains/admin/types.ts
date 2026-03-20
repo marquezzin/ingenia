@@ -187,3 +187,50 @@ export interface ListModulesParams {
   page?: number;
   ordering?: string;
 }
+
+// ─── User Admin ─────────────────────────────────────────────────────────────
+
+export type UserRole = "STUDENT" | "TEACHER" | "ADMIN";
+
+export type AccountStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED";
+
+export interface UserListItem {
+  [key: string]: unknown;
+  id: string;
+  full_name: string;
+  email: string;
+  role: UserRole;
+  account_status: AccountStatus;
+}
+
+export interface UserDetail {
+  id: string;
+  full_name: string;
+  email: string;
+  role: UserRole;
+  account_status: AccountStatus;
+  profile_info: Record<string, unknown> | null;
+  date_joined: string;
+}
+
+export interface CreateUserPayload {
+  full_name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
+export interface UpdateUserPayload {
+  full_name: string;
+  email: string;
+  account_status: AccountStatus;
+}
+
+export interface ListUsersParams {
+  search?: string;
+  role?: UserRole;
+  account_status?: AccountStatus;
+  page?: number;
+  ordering?: string;
+}
+

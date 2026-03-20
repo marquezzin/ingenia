@@ -34,3 +34,18 @@ export const getApiErrorMessage = (
   const axiosError = error as AxiosError<ApiError>;
   return axiosError?.response?.data?.detail ?? fallback;
 };
+
+/** Mapa de roles para exibição */
+export const ROLE_MAP: StatusMap = {
+  STUDENT: { label: "Aluno", color: "blue" },
+  TEACHER: { label: "Professor", color: "grape" },
+  ADMIN: { label: "Administrador", color: "orange" },
+};
+
+/** Mapa de status de conta para exibição */
+export const ACCOUNT_STATUS_MAP: StatusMap = {
+  ACTIVE: { label: "Ativo", color: "green" },
+  INACTIVE: { label: "Inativo", color: "gray" },
+  SUSPENDED: { label: "Suspenso", color: "red" },
+};
+

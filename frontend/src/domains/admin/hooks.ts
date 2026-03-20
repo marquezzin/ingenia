@@ -7,6 +7,7 @@ import {
   createLessonApi,
   createModuleApi,
   createTestCaseApi,
+  createUserApi,
   deleteExerciseApi,
   deleteLessonApi,
   deleteModuleApi,
@@ -15,25 +16,31 @@ import {
   getExerciseApi,
   getLessonApi,
   getModuleApi,
+  getUserApi,
   listExercisesApi,
   listModuleLessonsApi,
   listModulesApi,
   listTestCasesApi,
+  listUsersApi,
   updateExerciseApi,
   updateLessonApi,
   updateModuleApi,
   updateTestCaseApi,
+  updateUserApi,
 } from "./api";
 import type {
   CreateExercisePayload,
   CreateLessonPayload,
   CreateModulePayload,
   CreateTestCasePayload,
+  CreateUserPayload,
   ListModulesParams,
+  ListUsersParams,
   UpdateExercisePayload,
   UpdateLessonPayload,
   UpdateModulePayload,
   UpdateTestCasePayload,
+  UpdateUserPayload,
 } from "./types";
 
 // ─── Query Keys ─────────────────────────────────────────────────────────────
@@ -70,6 +77,13 @@ const ADMIN_KEYS = {
     [...ADMIN_KEYS.exercises(moduleId, lessonId), exerciseId, "testCases"] as const,
   testCaseList: (moduleId: string, lessonId: string, exerciseId: string) =>
     [...ADMIN_KEYS.testCases(moduleId, lessonId, exerciseId), "list"] as const,
+
+  // User
+  users: () => [...ADMIN_KEYS.all, "users"] as const,
+  userList: (params?: ListUsersParams) =>
+    [...ADMIN_KEYS.users(), "list", params] as const,
+  userDetail: (id: string) =>
+    [...ADMIN_KEYS.users(), "detail", id] as const,
 };
 
 // ─── Dashboard ──────────────────────────────────────────────────────────────
@@ -424,6 +438,45 @@ export const useDeleteTestCase = () => {
           variables.exerciseId,
         ),
       });
+    },
+  });
+};
+
+// ─── User Queries ───────────────────────────────────────────────────────────
+
+export const useUsers = (params?: ListUsersParams) =>
+  useQuery({
+    queryKey: ADMIN_KEYS.userList(params),
+    queryFn: () => listUsersApi(params),
+  });
+
+export const useUser = (id: string) =>
+  useQuery({
+    queryKey: ADMIN_KEYS.userDetail(id),
+    queryFn: () => getUserApi(id),
+    enabled: !!id,
+  });
+
+// ─── User Mutations ─────────────────────────────────────────────────────────
+
+export const useCreateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateUserPayload) => createUserApi(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ADMIN_KEYS.users() });
+      queryClient.invalidateQueries({ queryKey: ADMIN_KEYS.stats() });
+    },
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: UpdateUserPayload }) =>
+      updateUserApi(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ADMIN_KEYS.users() });
     },
   });
 };

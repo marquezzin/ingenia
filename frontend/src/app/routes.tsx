@@ -35,6 +35,12 @@ const ExerciseCreatePage = lazy(() => import("@/domains/admin/pages/exercises/Ex
 const ExerciseDetailPage = lazy(() => import("@/domains/admin/pages/exercises/ExerciseDetailPage"));
 const ExerciseEditPage = lazy(() => import("@/domains/admin/pages/exercises/ExerciseEditPage"));
 
+// Admin — User pages
+const UserListPage = lazy(() => import("@/domains/admin/pages/users/UserListPage"));
+const UserCreatePage = lazy(() => import("@/domains/admin/pages/users/UserCreatePage"));
+const UserDetailPage = lazy(() => import("@/domains/admin/pages/users/UserDetailPage"));
+const UserEditPage = lazy(() => import("@/domains/admin/pages/users/UserEditPage"));
+
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
 
@@ -246,11 +252,36 @@ export const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
+            // ─── User routes ────────────────────────────────────
             {
-                path: "users/*",
+                path: "users",
                 element: (
                     <Suspense fallback={<Spinner />}>
-                        <div>Usuários — Em construção (ISSUE-010-D)</div>
+                        <UserListPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "users/new",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <UserCreatePage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "users/:userId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <UserDetailPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "users/:userId/edit",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <UserEditPage />
                     </Suspense>
                 ),
             },

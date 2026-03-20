@@ -9,11 +9,13 @@ import type {
   CreateLessonPayload,
   CreateModulePayload,
   CreateTestCasePayload,
+  CreateUserPayload,
   ExerciseDetail,
   ExerciseListItem,
   LessonDetail,
   LessonListItem,
   ListModulesParams,
+  ListUsersParams,
   ModuleDetail,
   ModuleListItem,
   TestCaseDetail,
@@ -22,6 +24,9 @@ import type {
   UpdateLessonPayload,
   UpdateModulePayload,
   UpdateTestCasePayload,
+  UpdateUserPayload,
+  UserDetail,
+  UserListItem,
 } from "./types";
 
 // ─── Dashboard ──────────────────────────────────────────────────────────────
@@ -237,3 +242,33 @@ export const deleteTestCaseApi = async (
     `${testCaseBasePath(moduleId, lessonId, exerciseId)}/${testCaseId}/`,
   );
 };
+
+// ─── User Admin CRUD ────────────────────────────────────────────────────────
+
+export const listUsersApi = async (
+  params?: ListUsersParams,
+): Promise<PaginatedResponse<UserListItem>> => {
+  const { data } = await httpClient.get("/api/auth/admin/users/", { params });
+  return data;
+};
+
+export const getUserApi = async (id: string): Promise<UserDetail> => {
+  const { data } = await httpClient.get(`/api/auth/admin/users/${id}/`);
+  return data;
+};
+
+export const createUserApi = async (
+  payload: CreateUserPayload,
+): Promise<UserDetail> => {
+  const { data } = await httpClient.post("/api/auth/admin/users/", payload);
+  return data;
+};
+
+export const updateUserApi = async (
+  id: string,
+  payload: UpdateUserPayload,
+): Promise<UserDetail> => {
+  const { data } = await httpClient.put(`/api/auth/admin/users/${id}/`, payload);
+  return data;
+};
+

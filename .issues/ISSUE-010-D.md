@@ -31,11 +31,11 @@ Criar as páginas de listagem, criação e edição de usuários com seleção p
 
 ## Critérios de Aceite
 
-- [ ] Lista de usuários com filtros e busca
-- [ ] Criar usuário por role funcional
-- [ ] Editar dados e status da conta
-- [ ] Detalhe com informações de profile
-- [ ] States loading/empty/error/success
+- [x] Lista de usuários com filtros e busca
+- [x] Criar usuário por role funcional
+- [x] Editar dados e status da conta
+- [x] Detalhe com informações de profile
+- [x] States loading/empty/error/success
 
 ## Arquivos Afetados
 
@@ -57,4 +57,5 @@ Criar as páginas de listagem, criação e edição de usuários com seleção p
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-20
+- **Status**: Concluída

@@ -41,7 +41,15 @@ const NAV_CONFIG: Record<UserRole, NavItem[]> = {
         { label: "Novo Módulo", icon: <Plus size={SUB_ICON_SIZE} />, path: "/admin/modules/new" },
       ],
     },
-    { label: "Usuários", icon: <Users size={ICON_SIZE} />, path: "/admin/users" },
+    {
+      label: "Usuários",
+      icon: <Users size={ICON_SIZE} />,
+      path: "/admin/users",
+      children: [
+        { label: "Listar Usuários", icon: <List size={SUB_ICON_SIZE} />, path: "/admin/users" },
+        { label: "Novo Usuário", icon: <Plus size={SUB_ICON_SIZE} />, path: "/admin/users/new" },
+      ],
+    },
     { label: "Turmas", icon: <School size={ICON_SIZE} />, path: "/admin/classes" },
   ],
   TEACHER: [
