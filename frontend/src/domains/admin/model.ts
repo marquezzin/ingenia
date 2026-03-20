@@ -2,5 +2,35 @@
  * Admin Domain — Pure Business Logic
  *
  * Funções puras sem side effects.
- * Expansível conforme necessidade futura.
  */
+import type { AxiosError } from "axios";
+import type { StatusMap } from "@/shared/ui/components/StatusBadge";
+import type { ApiError } from "@/shared/http/types";
+
+/** Mapa de status de publicação para o StatusBadge */
+export const PUBLICATION_STATUS_MAP: StatusMap = {
+  DRAFT: { label: "Rascunho", color: "gray" },
+  PUBLISHED: { label: "Publicado", color: "green" },
+  ARCHIVED: { label: "Arquivado", color: "orange" },
+};
+
+/** Formata ISO date para exibição pt-BR */
+export const formatDate = (iso: string): string => {
+  const date = new Date(iso);
+  return date.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+/** Extrai mensagem de erro legível de um erro da API (axios) */
+export const getApiErrorMessage = (
+  error: unknown,
+  fallback = "Ocorreu um erro inesperado.",
+): string => {
+  const axiosError = error as AxiosError<ApiError>;
+  return axiosError?.response?.data?.detail ?? fallback;
+};

@@ -35,12 +35,12 @@ Criar as páginas de listagem, criação, edição e detalhe de módulos.
 
 ## Critérios de Aceite
 
-- [ ] Lista de módulos com busca e filtros
-- [ ] Criar módulo funcional
-- [ ] Editar módulo funcional
-- [ ] Detalhe com lista de aulas
-- [ ] Botão publicar/despublicar
-- [ ] States loading/empty/error/success
+- [x] Lista de módulos com busca e filtros
+- [x] Criar módulo funcional
+- [x] Editar módulo funcional
+- [x] Detalhe com lista de aulas
+- [x] Botão publicar/despublicar
+- [x] States loading/empty/error/success
 
 ## Arquivos Afetados
 
@@ -62,5 +62,6 @@ Criar as páginas de listagem, criação, edição e detalhe de módulos.
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-20

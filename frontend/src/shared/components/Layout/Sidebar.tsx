@@ -13,6 +13,8 @@ import {
   BarChart3,
   FileCode2,
   School,
+  List,
+  Plus,
 } from "lucide-react";
 import type { UserRole } from "@/domains/auth/types";
 import classes from "./Sidebar.module.css";
@@ -21,14 +23,24 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   path: string;
+  children?: NavItem[];
 }
 
 const ICON_SIZE = 18;
+const SUB_ICON_SIZE = 14;
 
 const NAV_CONFIG: Record<UserRole, NavItem[]> = {
   ADMIN: [
     { label: "Dashboard", icon: <LayoutDashboard size={ICON_SIZE} />, path: "/admin" },
-    { label: "Módulos", icon: <BookOpen size={ICON_SIZE} />, path: "/admin/modules" },
+    {
+      label: "Módulos",
+      icon: <BookOpen size={ICON_SIZE} />,
+      path: "/admin/modules",
+      children: [
+        { label: "Listar Módulos", icon: <List size={SUB_ICON_SIZE} />, path: "/admin/modules" },
+        { label: "Novo Módulo", icon: <Plus size={SUB_ICON_SIZE} />, path: "/admin/modules/new" },
+      ],
+    },
     { label: "Usuários", icon: <Users size={ICON_SIZE} />, path: "/admin/users" },
     { label: "Turmas", icon: <School size={ICON_SIZE} />, path: "/admin/classes" },
   ],
@@ -61,7 +73,72 @@ export const Sidebar = ({ role, onNavClick }: SidebarProps) => {
     if (path === `/${role.toLowerCase()}`) {
       return location.pathname === path;
     }
-    return location.pathname.startsWith(path);
+    return location.pathname === path;
+  };
+
+  const isParentActive = (item: NavItem) => {
+    if (item.children) {
+      return item.children.some((child) => location.pathname === child.path)
+        || location.pathname.startsWith(item.path);
+    }
+    return isActive(item.path);
+  };
+
+  const renderNavItem = (item: NavItem) => {
+    if (item.children) {
+      return (
+        <NavLink
+          key={item.path}
+          label={item.label}
+          leftSection={item.icon}
+          defaultOpened={isParentActive(item)}
+          variant="light"
+          styles={{
+            root: {
+              borderRadius: "var(--radius-md)",
+            },
+          }}
+        >
+          {item.children.map((child) => (
+            <NavLink
+              key={child.path}
+              label={child.label}
+              leftSection={child.icon}
+              active={isActive(child.path)}
+              onClick={() => {
+                navigate(child.path);
+                onNavClick?.();
+              }}
+              variant="light"
+              styles={{
+                root: {
+                  borderRadius: "var(--radius-md)",
+                },
+              }}
+            />
+          ))}
+        </NavLink>
+      );
+    }
+
+    return (
+      <NavLink
+        key={item.path}
+        label={item.label}
+        leftSection={item.icon}
+        active={isParentActive(item)}
+        onClick={() => {
+          navigate(item.path);
+          onNavClick?.();
+        }}
+        variant="light"
+        styles={{
+          root: {
+            borderRadius: "var(--radius-md)",
+          },
+        }}
+      />
+    );
   };
 
   return (
@@ -82,24 +159,7 @@ export const Sidebar = ({ role, onNavClick }: SidebarProps) => {
           }}
         />
         <Stack gap={4}>
-          {items.map((item) => (
-            <NavLink
-              key={item.path}
-              label={item.label}
-              leftSection={item.icon}
-              active={isActive(item.path)}
-              onClick={() => {
-                navigate(item.path);
-                onNavClick?.();
-              }}
-              variant="light"
-              styles={{
-                root: {
-                  borderRadius: "var(--radius-md)",
-                },
-              }}
-            />
-          ))}
+          {items.map(renderNavItem)}
         </Stack>
       </ScrollArea>
     </nav>

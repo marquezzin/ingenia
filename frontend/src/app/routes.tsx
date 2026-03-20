@@ -20,6 +20,10 @@ const NotFoundPage = lazy(() => import("@/domains/auth/pages/NotFoundPage"));
 
 // Admin domain
 const AdminDashboardPage = lazy(() => import("@/domains/admin/pages/DashboardPage"));
+const ModuleListPage = lazy(() => import("@/domains/admin/pages/modules/ModuleListPage"));
+const ModuleCreatePage = lazy(() => import("@/domains/admin/pages/modules/ModuleCreatePage"));
+const ModuleDetailPage = lazy(() => import("@/domains/admin/pages/modules/ModuleDetailPage"));
+const ModuleEditPage = lazy(() => import("@/domains/admin/pages/modules/ModuleEditPage"));
 
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
@@ -151,10 +155,34 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "modules/*",
+                path: "modules",
                 element: (
                     <Suspense fallback={<Spinner />}>
-                        <div>Módulos — Em construção (ISSUE-010-B)</div>
+                        <ModuleListPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/new",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ModuleCreatePage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ModuleDetailPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId/edit",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <ModuleEditPage />
                     </Suspense>
                 ),
             },

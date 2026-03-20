@@ -45,7 +45,14 @@ export function PageHeader({ title, subtitle, actions, breadcrumbs }: PageHeader
                 >
                     {breadcrumbs.map((item, i) =>
                         item.href ? (
-                            <Anchor key={i} href={item.href} size="sm" c="dimmed">
+                            <Anchor
+                                key={i}
+                                href={item.href}
+                                size="sm"
+                                c="dimmed"
+                                underline="never"
+                                className="breadcrumb-link"
+                            >
                                 {item.label}
                             </Anchor>
                         ) : (

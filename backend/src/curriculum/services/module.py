@@ -39,7 +39,7 @@ class CreateModuleUseCase:
     def execute(self, *, input: CreateModuleInput) -> Module:
         if Module.objects.filter(sequence_order=input.sequence_order).exists():
             raise ApplicationError(
-                f"Já existe um módulo com sequence_order={input.sequence_order}."
+                f"Já existe um módulo com ordem = {input.sequence_order}."
             )
 
         return Module.objects.create(
@@ -63,7 +63,7 @@ class UpdateModuleUseCase:
             .exists()
         ):
             raise ApplicationError(
-                f"Já existe um módulo com sequence_order={input.sequence_order}."
+                f"Já existe um módulo com ordem = {input.sequence_order}."
             )
 
         module.title = input.title
