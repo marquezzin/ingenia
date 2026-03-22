@@ -4,8 +4,10 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
+from core.errors import NotFoundError
 from core.permissions import IsAdmin
 
+from .models import ClassGroup
 from .selectors import get_class_group_by_id, list_class_groups
 from .serializers import ClassGroupDetailSerializer, ClassGroupListSerializer
 
@@ -32,6 +34,9 @@ class ClassGroupAdminViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet)
 
     def get_object(self):
         pk = self.kwargs["pk"]
-        obj = get_class_group_by_id(class_group_id=pk)
+        try:
+            obj = get_class_group_by_id(class_group_id=pk)
+        except ClassGroup.DoesNotExist:
+            raise NotFoundError("Turma não encontrada.")
         self.check_object_permissions(self.request, obj)
         return obj
