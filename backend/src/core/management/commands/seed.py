@@ -68,7 +68,6 @@ class Command(BaseCommand):
         admin, created = User.objects.get_or_create(
             email="admin@hub.dev",
             defaults={
-                "username": "admin",
                 "first_name": "Admin",
                 "last_name": "Hub",
                 "role": UserRole.ADMIN,
@@ -94,7 +93,6 @@ class Command(BaseCommand):
         teacher_user, created_teacher = User.objects.get_or_create(
             email="teacher1@hub.dev",
             defaults={
-                "username": "teacher1",
                 "first_name": "Professor",
                 "last_name": "Teste",
                 "role": UserRole.TEACHER,
@@ -112,16 +110,15 @@ class Command(BaseCommand):
 
         # Alunos (1 -> user@hub.dev, mais dois)
         students = [
-            ("user@hub.dev", "user", "Usuário"),
-            ("student2@hub.dev", "student2", "Aluno 2"),
-            ("student3@hub.dev", "student3", "Aluno 3"),
+            ("user@hub.dev", "Usuário"),
+            ("student2@hub.dev", "Aluno 2"),
+            ("student3@hub.dev", "Aluno 3"),
         ]
 
-        for email, username, first_name in students:
+        for email, first_name in students:
             student, student_created = User.objects.get_or_create(
                 email=email,
                 defaults={
-                    "username": username,
                     "first_name": first_name,
                     "last_name": "Teste",
                     "role": UserRole.STUDENT,

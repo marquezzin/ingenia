@@ -29,12 +29,10 @@ class RegisterUserUseCase:
             raise ApplicationError("Este e-mail já está cadastrado.")
 
         first_name, _, last_name = input.full_name.partition(" ")
-        username = self._generate_unique_username(input.email)
 
         with transaction.atomic():
             user = User.objects.create_user(
                 email=input.email,
-                username=username,
                 password=input.password,
                 first_name=first_name,
                 last_name=last_name,
@@ -43,17 +41,6 @@ class RegisterUserUseCase:
             StudentProfile.objects.create(user=user)
 
         return RegisterUserResult(user=user)
-
-    @staticmethod
-    def _generate_unique_username(email: str) -> str:
-        """Gera um username único a partir do email."""
-        base_username = email.split("@")[0]
-        username = base_username
-        counter = 1
-        while User.objects.filter(username=username).exists():
-            username = f"{base_username}{counter}"
-            counter += 1
-        return username
 
 
 @dataclass

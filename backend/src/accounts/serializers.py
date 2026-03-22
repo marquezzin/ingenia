@@ -21,7 +21,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "email",
-            "username",
             "first_name",
             "last_name",
             "role",
@@ -58,7 +57,6 @@ class UserMeSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "email",
-            "username",
             "first_name",
             "last_name",
             "full_name",

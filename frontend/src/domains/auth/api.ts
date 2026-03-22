@@ -31,7 +31,6 @@ export const getMeApi = async (): Promise<User> => {
     return {
         id: data.id,
         email: data.email,
-        username: data.username,
         firstName: data.first_name,
         lastName: data.last_name,
         fullName: data.full_name,

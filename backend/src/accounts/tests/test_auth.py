@@ -162,7 +162,6 @@ class MeViewTest(APITestCase):
         teacher_profile = TeacherProfileFactory()
         self.authenticate(teacher_profile.user)
         response = self.client.get("/api/auth/me/")
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["role"], UserRole.TEACHER)
         self.assertIsNotNone(response.data["profile_info"])

@@ -45,27 +45,6 @@ class RegisterUserUseCaseTest(TestCase):
 
         self.assertTrue(StudentProfile.objects.filter(user=result.user).exists())
 
-    def test_register_generates_username_from_email(self):
-        input_data = RegisterUserInput(
-            full_name="Test User",
-            email="myuser@example.com",
-            password="securepassword123",
-        )
-        result = RegisterUserUseCase().execute(input=input_data)
-
-        self.assertEqual(result.user.username, "myuser")
-
-    def test_register_generates_unique_username_on_conflict(self):
-        UserFactory(username="existing")
-        input_data = RegisterUserInput(
-            full_name="Test User",
-            email="existing@example.com",
-            password="securepassword123",
-        )
-        result = RegisterUserUseCase().execute(input=input_data)
-
-        self.assertEqual(result.user.username, "existing1")
-
     def test_register_raises_generic_error_for_duplicate_email(self):
         UserFactory(email="existing@example.com")
         input_data = RegisterUserInput(

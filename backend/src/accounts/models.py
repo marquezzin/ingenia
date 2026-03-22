@@ -2,11 +2,29 @@
 
 import uuid
 
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ValidationError
 from django.db import models
 
 from .enums import AccountStatus, LearningStatus, UserRole
+
+
+class UserManager(BaseUserManager):
+    """Custom manager para User sem username."""
+
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("O e-mail é obrigatório.")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -14,7 +32,12 @@ class User(AbstractUser):
     User model customizado.
     Usa UUID como primary key e email como identificador principal.
     Possui um papel (role) e status de conta.
+    O campo username herdado de AbstractUser é removido — email é o identificador.
     """
+
+    username = None
+
+    objects = UserManager()
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
@@ -37,7 +60,7 @@ class User(AbstractUser):
     )
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = "Usuário"

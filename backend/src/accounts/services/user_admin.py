@@ -8,7 +8,6 @@ from core.errors import ApplicationError
 
 from ..enums import AccountStatus, UserRole
 from ..models import AdminProfile, StudentProfile, TeacherProfile, User
-from .auth import RegisterUserUseCase
 
 
 @dataclass
@@ -35,12 +34,10 @@ class CreateUserAdminUseCase:
             raise ApplicationError("Papel (role) inválido.")
 
         first_name, _, last_name = input.full_name.partition(" ")
-        username = RegisterUserUseCase._generate_unique_username(input.email)
 
         with transaction.atomic():
             user = User.objects.create_user(
                 email=input.email,
-                username=username,
                 password=input.password,
                 first_name=first_name,
                 last_name=last_name,

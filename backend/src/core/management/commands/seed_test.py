@@ -51,7 +51,6 @@ class Command(BaseCommand):
         # ── Aluno ativo ──────────────────────────────────────────────────
         student = User.objects.create_user(
             email="student@test.dev",
-            username="student_test",
             password=password,
             first_name="Aluno",
             last_name="Teste",
@@ -63,7 +62,6 @@ class Command(BaseCommand):
         # ── Professor ativo ──────────────────────────────────────────────
         teacher = User.objects.create_user(
             email="teacher@test.dev",
-            username="teacher_test",
             password=password,
             first_name="Professor",
             last_name="Teste",
@@ -75,7 +73,6 @@ class Command(BaseCommand):
         # ── Admin ────────────────────────────────────────────────────────
         admin = User.objects.create_superuser(
             email="admin@test.dev",
-            username="admin_test",
             password=password,
             first_name="Admin",
             last_name="Teste",
@@ -87,7 +84,6 @@ class Command(BaseCommand):
         # ── Aluno inativo (para testar bloqueio de login) ────────────────
         inactive = User.objects.create_user(
             email="inactive@test.dev",
-            username="inactive_test",
             password=password,
             first_name="Inativo",
             last_name="Teste",

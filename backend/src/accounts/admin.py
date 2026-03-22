@@ -43,7 +43,6 @@ class AdminProfileInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     list_display = [
         "email",
-        "username",
         "first_name",
         "last_name",
         "role",
@@ -52,13 +51,37 @@ class UserAdmin(BaseUserAdmin):
         "date_joined",
     ]
     list_filter = ["role", "account_status", "is_staff", "is_active"]
-    search_fields = ["email", "username", "first_name", "last_name"]
+    search_fields = ["email", "first_name", "last_name"]
     ordering = ["-date_joined"]
     inlines = [StudentProfileInline, TeacherProfileInline, AdminProfileInline]
-    fieldsets = BaseUserAdmin.fieldsets + (
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        ("Informações pessoais", {"fields": ("first_name", "last_name")}),
+        (
+            "Permissões",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        ("Datas importantes", {"fields": ("last_login", "date_joined")}),
         (
             "Informações adicionais",
             {"fields": ("role", "account_status", "last_login_at")},
+        ),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
         ),
     )
     readonly_fields = ["last_login_at"]

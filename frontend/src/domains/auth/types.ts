@@ -9,7 +9,6 @@ export type AccountStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED";
 export interface User {
     id: string;
     email: string;
-    username: string;
     firstName: string;
     lastName: string;
     fullName: string;
