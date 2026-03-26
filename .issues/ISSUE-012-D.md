@@ -1,46 +1,48 @@
-# [ISSUE-012-D] Gerar SubmissionResult + Feedback Pedagógico
+# [ISSUE-012-D] Resultado no Frontend + Persistência Backend — Score, Feedback e Submissão
 
 ## Contexto
 
-Sub-issue de [ISSUE-012](./ISSUE-012.md) — Motor de Correção (Fase 3).
-Gerar o resultado da avaliação e feedback para o aluno.
+Sub-issue de [ISSUE-012](./ISSUE-012.md) — Motor de Correção Skulpt (Fase 3).
+Calcular score, montar feedback pedagógico no frontend e enviar resultado ao backend para persistência.
 
 ## Descrição
 
-Criar o `SubmissionResult` com contagem de testes e feedback pedagógico sem expor respostas.
+Após a avaliação dos test cases (012-C), montar o resultado consolidado com feedback pedagógico e enviar ao endpoint de submissão (012-A).
 
-> **Dependência**: ISSUE-004 (SubmissionResult model), 012-C (resultado da avaliação).
+> **Dependência**: ISSUE-004 (SubmissionResult model), 012-A (endpoint de persistência), 012-C (avaliação Skulpt).
 
 ### Tarefas
 
-1. **Gerar `SubmissionResult`**:
-   - `passed_tests_count` e `failed_tests_count`
+1. **Cálculo de resultado**:
    - `result_status`: `PASSED` se todos passaram, `FAILED` se algum falhou, `ERROR` se erro técnico
-   - Atualizar `Submission.score_percentage`
-   - Atualizar `Submission.evaluation_status` para `EVALUATED`
+   - `score_percentage = (passed_count / total_count) * 100`
+   - `passed_tests_count` e `failed_tests_count`
 
-2. **Gerar `feedback_message`** (BR-013):
-   - Mensagem pedagógica simples
-   - Exemplos: "Parabéns! Todos os X testes passaram! 🎉"
-   - "X de Y testes passaram. Revise sua lógica e tente novamente."
+2. **Geração de `feedback_message`** (BR-013):
+   - Mensagem pedagógica simples:
+     - "Parabéns! Todos os X testes passaram! 🎉"
+     - "X de Y testes passaram. Revise sua lógica e tente novamente."
+     - "Erro de sintaxe: [mensagem simplificada]"
    - NÃO expor resposta esperada dos test cases
 
-3. **Trigger de progresso**:
-   - Após gerar resultado, chamar service de progresso (011-C) se aprovado
+3. **Envio ao backend**:
+   - POST `/api/v1/submissions/` com payload completo
+   - Aguardar confirmação de persistência
+   - Exibir resultado final ao aluno
 
 ## Critérios de Aceite
 
-- [ ] SubmissionResult criado corretamente
-- [ ] BR-012: Cada submissão gera exatamente um resultado
-- [ ] BR-013: Feedback não expõe resposta completa
 - [ ] result_status correto (PASSED/FAILED/ERROR)
-- [ ] score_percentage atualizado na Submission
-- [ ] Progresso do aluno atualizado após aprovação
+- [ ] score_percentage calculado
+- [ ] BR-013: Feedback não expõe resposta completa
+- [ ] Resultado enviado e aceito pelo backend
+- [ ] Feedback exibido imediatamente ao aluno
 
 ## Arquivos Afetados
 
-- `backend/src/submissions/services/evaluation.py` — geração de resultado
-- `backend/src/submissions/services/` — trigger de progresso
+- `frontend/src/domains/student/services/feedbackGenerator.ts`
+- `frontend/src/domains/student/hooks/useSubmission.ts`
+- `frontend/src/domains/student/api/submissions.ts`
 
 ## Notas Técnicas
 
@@ -57,4 +59,4 @@ Criar o `SubmissionResult` com contagem de testes e feedback pedagógico sem exp
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-26

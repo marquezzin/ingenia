@@ -7,35 +7,37 @@ Implementar o service e endpoint de submissão de código pelo aluno.
 
 ## Descrição
 
-Criar o endpoint de submissão que recebe o código fonte do aluno e dispara a avaliação assíncrona.
+Criar o endpoint de submissão que recebe o código fonte do aluno **junto com o resultado já avaliado pelo frontend (via Skulpt)** e persiste `Submission` + `SubmissionResult`.
 
 > **Dependência**: ISSUE-004 (Submission model), ISSUE-003 (Exercise), 007-C (IsStudent).
+> **Nota**: Com a migração para Skulpt, este endpoint é **síncrono** — não dispara Celery task. O frontend envia o resultado já avaliado.
 
 ### Tarefas
 
 1. **Endpoint `POST /api/v1/student/submissions/`**:
-   - Campos: `exercise_id`, `source_code`
-   - Cria registro `Submission` com `evaluation_status=PENDING`
-   - Dispara Celery task de avaliação (ISSUE-012)
-   - Retorna `submission_id` e status
+   - Campos: `exercise_id`, `source_code`, `score_percentage`, `passed_tests_count`, `failed_tests_count`, `result_status`, `feedback_message`
+   - Cria registro `Submission` com `evaluation_status=EVALUATED`
+   - Cria `SubmissionResult` associado
+   - Retorna `submission_id`, `evaluation_status`, `score_percentage`
 
 2. **Service de submissão**:
-   - Validar que aluno está autenticado
+   - Validar que aluno está autenticado (IsStudent)
    - Validar que exercício está publicado (BR-011)
-   - Criar `Submission` em transação
-   - Disparar task `.delay(submission_id)`
+   - Criar `Submission` + `SubmissionResult` em transação atômica
+   - Chamar service de progresso (011-C) se resultado PASSED
 
 3. **Serializer de submissão**:
-   - Input: `exercise_id`, `source_code`
-   - Output: `id`, `evaluation_status`, `submitted_at`
+   - Input: `exercise_id`, `source_code`, `score_percentage`, `passed_tests_count`, `failed_tests_count`, `result_status`, `feedback_message`
+   - Output: `id`, `evaluation_status`, `score_percentage`, `submitted_at`
 
 ## Critérios de Aceite
 
-- [ ] Endpoint cria Submission corretamente
+- [ ] Endpoint cria Submission + SubmissionResult corretamente
 - [ ] BR-011: Só aluno autenticado pode submeter para exercício publicado
-- [ ] Task de avaliação é disparada assincronamente
-- [ ] Status retornado como `PENDING`
+- [ ] BR-012: Cada submissão gera exatamente um resultado (transação atômica)
+- [ ] Status retornado como `EVALUATED`
 - [ ] Validação de tamanho máximo de source_code
+- [ ] Validação de score entre 0-100
 
 ## Arquivos Afetados
 
@@ -51,7 +53,8 @@ Criar o endpoint de submissão que recebe o código fonte do aluno e dispara a a
 | Documento | Caminho | O que consultar |
 |---|---|---|
 | **ISSUE-011** | `.issues/ISSUE-011.md` | Contexto completo |
-| **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | BR-011 |
+| **ISSUE-012** | `.issues/ISSUE-012.md` | Arquitetura Skulpt (resultado vem do frontend) |
+| **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | BR-011, BR-012 |
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-003 steps 1-4 |
 
 ## Status
@@ -59,4 +62,4 @@ Criar o endpoint de submissão que recebe o código fonte do aluno e dispara a a
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-26

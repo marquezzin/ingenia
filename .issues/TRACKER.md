@@ -96,21 +96,21 @@
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
 | ISSUE-011-A | Endpoints de leitura (módulos, aulas, exercícios publicados) | feature | 🟢 | 003, 007-C |
-| ISSUE-011-B | Service de submissão de código + endpoint | feature | 🟡 | 003, 004, 007-C |
+| ISSUE-011-B | Service de submissão de código + endpoint (recebe resultado do Skulpt) | feature | 🟡 | 003, 004, 007-C |
 | ISSUE-011-C | Service de progresso automático (lesson, exercise, module) | feature | 🟡 | 003, 004, 005, 011-B |
 | ISSUE-011-D | Endpoints de histórico + progresso consolidado | feature | 🟡 | 004, 005, 007-C, 011-B, 011-C |
 | ISSUE-011-E | Testes unitários (progress + submission) | chore | 🟡 | 011-A a 011-D |
 
-### ISSUE-012 — Motor de Correção (G)
+### ISSUE-012 — Motor de Correção Skulpt — Client-Side (M)
 
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
-| ISSUE-012-A | Celery task básica (recebe submission_id, atualiza status) | feature | 🟡 | 004 |
-| ISSUE-012-B | Executor de sandbox (subprocess/Docker, com limites) | feature | 🟡 | — |
-| ISSUE-012-C | Avaliação por test cases (comparação output, score) | feature | 🟡 | 003, 012-A, 012-B |
-| ISSUE-012-D | Gerar SubmissionResult + feedback pedagógico | feature | 🟡 | 004, 012-C |
-| ISSUE-012-E | Tratamento de erros e timeout | feature | 🟡 | 012-B, 012-C |
-| ISSUE-012-F | Testes unitários do motor (sucesso, falha, timeout, erro) | chore | 🟡 | 012-A a 012-E |
+| ISSUE-012-A | Endpoint síncrono de submissão (recebe resultado avaliado + persiste) | feature | 🟡 | 004 |
+| ISSUE-012-B | ~~Executor de sandbox~~ | feature | ⚪ | — (cancelada — Skulpt substitui) |
+| ISSUE-012-C | Avaliação no frontend: hook/service Skulpt por test case | feature | 🟡 | 003 |
+| ISSUE-012-D | Resultado no frontend: score, feedback + envio ao backend | feature | 🟡 | 004, 012-A, 012-C |
+| ISSUE-012-E | Tratamento de erros e timeout no frontend (Skulpt) | feature | 🟡 | 012-C |
+| ISSUE-012-F | Testes: vitest (avaliação Skulpt) + pytest (persistência) | chore | 🟡 | 012-A, 012-C, 012-D, 012-E |
 
 ### ISSUE-013 — Frontend Aluno (GG)
 
@@ -119,7 +119,7 @@
 | ISSUE-013-A | Layout aluno + Dashboard/Trilha | feature | 🟡 | 008-D, 008-E, 011-A |
 | ISSUE-013-B | Lista de módulos + Detalhe do módulo | feature | 🟡 | 011-A, 011-D, 013-A |
 | ISSUE-013-C | Tela de aula (vídeo + conteúdo + exercícios) | feature | 🟡 | 011-A, 013-B |
-| ISSUE-013-D | Tela de exercício com Editor de Código (Monaco) + submissão | feature | 🟡 | 011-B, 012-D, 013-C |
+| ISSUE-013-D | Tela de exercício com Editor de Código (Monaco) + Motor Skulpt + submissão | feature | 🟡 | 011-B, 012-C, 012-D, 012-E, 013-C |
 | ISSUE-013-E | Painel de resultado + histórico de tentativas | feature | 🟡 | 011-D, 012-D, 013-D |
 | ISSUE-013-F | Tela de progresso + Tela de histórico de submissões | feature | 🟡 | 011-D, 013-A |
 | ISSUE-013-G | Testes E2E (J-002, J-003, J-004) | chore | 🟡 | 011-E, 012-F, 013-A a 013-F |
@@ -156,7 +156,7 @@
 |---|--------|------|--------|------------|
 | ISSUE-016-A | Rate limiting (login + submissões) | feature | 🟡 | 007-A, 011-B |
 | ISSUE-016-B | Validação de entrada (revisão de serializers) | feature | 🟡 | 009-*, 011-* |
-| ISSUE-016-C | Hardening do sandbox (rede, disco, CPU, memória) | feature | 🟡 | 012-B |
+| ISSUE-016-C | ~~Hardening do sandbox~~ | feature | ⚪ | — (cancelada — Skulpt roda no browser) |
 | ISSUE-016-D | Auditoria de ações admin + CORS/CSRF/headers | feature | 🟡 | 009-* |
 
 ### ISSUE-017 — UX & Responsividade (M) — Não quebrada
@@ -170,8 +170,8 @@
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
 | ISSUE-018-A | Suite E2E completa (J-001 a J-008) | chore | 🟡 | 008-F, 010-F, 013-G, 015-D |
-| ISSUE-018-B | Testes de segurança do sandbox | chore | 🟡 | 016-C |
-| ISSUE-018-C | Testes de performance do motor de correção | chore | 🟡 | 012-F, 016-A |
+| ISSUE-018-B | ~~Testes de segurança do sandbox~~ | chore | ⚪ | — (cancelada — sem sandbox server-side) |
+| ISSUE-018-C | Testes de performance do motor Skulpt no browser | chore | 🟡 | 012-F |
 | ISSUE-018-D | Revisão da matriz de autorização | chore | 🟡 | 007-C, 009-F, 011-E, 014-D |
 
 ---
@@ -186,6 +186,7 @@
 | Total de itens rastreáveis | 64 |
 | Concluídas | 29 |
 | Em andamento | 0 |
-| Pendentes | 37 |
+| Pendentes | 32 |
+| Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

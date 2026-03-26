@@ -1,70 +1,74 @@
-# [ISSUE-012] Backend — Motor de Correção Automática (Celery + Sandbox)
+# [ISSUE-012] Backend + Frontend — Motor de Correção Automática (Skulpt — Client-Side)
 
 ## Contexto
 
 Fase 3 do [roadmap.md](../docs/requirements/ingenia-documents/roadmap.md) — Experiência do Aluno.
-Implementar o motor de correção automática que executa o código submetido pelo aluno em ambiente controlado, roda os test cases e gera o resultado da avaliação.
+Implementar o motor de correção automática que executa o código submetido pelo aluno **no browser via Skulpt** (interpretador Python em JavaScript), avalia os test cases localmente e persiste o resultado no backend.
 
 ## Descrição
 
-Criar a Celery task de avaliação automática que recebe o source code e os test cases, executa em sandbox isolado e gera o `SubmissionResult`.
+O motor de correção é dividido em duas partes:
+- **Frontend**: executa o código via Skulpt, fornece input dos test cases, captura stdout, compara com expected_output, calcula score e monta feedback — tudo no browser.
+- **Backend**: recebe o resultado já avaliado e persiste `Submission` + `SubmissionResult`.
 
 > **Dependência**: ISSUE-004 (Submission/SubmissionResult models), ISSUE-003 (ExerciseTestCase model).
 
 ### Tarefas
 
-1. **Celery task de avaliação automática**:
-   - Receber `submission_id` como parâmetro
-   - Carregar submission, exercise e test cases
-   - Atualizar `evaluation_status` para `RUNNING`
+1. **Endpoint síncrono de submissão** (backend):
+   - Receber source_code + resultado avaliado (score, passed, failed, status, feedback)
+   - Persistir `Submission` + `SubmissionResult` em transação única
+   - Atualizar `evaluation_status` para `EVALUATED`
+   - Chamar service de progresso (011-C)
 
-2. **Execução em sandbox**:
-   - Executar código em container Docker isolado OU subprocess com resource limits
-   - Limitar tempo de execução (timeout configurável)
-   - Limitar memória e acesso a rede/disco do host
-   - Capturar stdout/stderr da execução
-
-3. **Avaliação por test cases**:
+2. **Motor de avaliação Skulpt** (frontend):
+   - Integrar lib Skulpt no projeto frontend (pnpm)
    - Para cada `ExerciseTestCase`:
-     - Fornecer `input_data` como stdin
-     - Comparar stdout com `expected_output`
+     - Fornecer `input_data` via `Sk.inputfun`
+     - Capturar `stdout` via `Sk.output`
+     - Comparar stdout com `expected_output` (trim whitespace)
      - Registrar PASSED/FAILED por test case
    - Calcular `score_percentage` = (passed / total) * 100
 
-4. **Gerar `SubmissionResult`**:
-   - `passed_tests_count` e `failed_tests_count`
-   - `feedback_message` gerado automaticamente (BR-013: sem expor resposta)
-   - `result_status`: `PASSED` se todos aprovados, `FAILED` se algum falhou, `ERROR` se erro técnico
-   - Atualizar `evaluation_status` da Submission para `EVALUATED` ou `FAILED`
+3. **Resultado e feedback** (frontend):
+   - Gerar `feedback_message` pedagógico (BR-013: sem expor resposta)
+   - Determinar `result_status`: PASSED se todos aprovados, FAILED se algum falhou, ERROR se erro técnico
+   - Enviar resultado ao backend via POST
 
-5. **Tratamento de erros**:
-   - Timeout → resultado `ERROR` + mensagem amigável
-   - Erro de execução → capturar mensagem simplificada
-   - Falha técnica → `evaluation_status = FAILED`
+4. **Tratamento de erros** (frontend):
+   - Timeout configurável → mensagem amigável ("código excedeu o tempo limite")
+   - Erro de sintaxe → capturar mensagem do Skulpt e simplificar
+   - Runtime error → mensagem amigável sem expor internals
 
-6. **Testes unitários** do motor de correção (pytest).
+5. **Testes**:
+   - vitest: avaliação Skulpt, comparação de output, tratamento de erros
+   - pytest: endpoint de submissão, persistência, validações
 
 ## Critérios de Aceite
 
-- [ ] Celery task processa submissão assincronamente
-- [ ] Código executado em ambiente isolado (sandbox)
-- [ ] Sandbox sem acesso a rede/disco do host
-- [ ] Timeout configurável por execução
-- [ ] Comparação output × expected_output para cada test case
-- [ ] `SubmissionResult` gerado com contagem de passed/failed
+- [ ] Código Python executado no browser via Skulpt
+- [ ] Cada test case avaliado individualmente com comparação output × expected_output
+- [ ] Score calculado corretamente
+- [ ] Feedback pedagógico gerado (BR-013)
+- [ ] Resultado enviado e persistido no backend
 - [ ] BR-012: Cada submissão gera exatamente um resultado
-- [ ] BR-013: Feedback não expõe resposta completa do exercício
-- [ ] Tratamento de timeout e erros de execução
-- [ ] Testes unitários cobrindo cenários: sucesso, falha, timeout, erro
+- [ ] Timeout configurável no frontend
+- [ ] Erros de sintaxe e runtime capturados e reportados
+- [ ] Testes unitários cobrindo: sucesso, falha parcial, timeout, erro de sintaxe, runtime error
 
 ## Arquivos Afetados
 
-- `backend/src/submissions/tasks.py` — Celery task de avaliação
-- `backend/src/submissions/services/evaluation.py` — service de avaliação
-- `backend/src/submissions/services/sandbox.py` — executor de sandbox
-- `backend/src/config/celery.py` — configuração Celery (se necessário)
-- `docker/` — possível Dockerfile de sandbox
-- `backend/src/submissions/tests/` — testes
+### Backend
+- `backend/src/submissions/services/submission.py` — service de persistência
+- `backend/src/submissions/views.py` — endpoint de submissão
+- `backend/src/submissions/serializers.py` — serializer de submissão com resultado
+- `backend/src/submissions/tests/` — testes pytest
+
+### Frontend
+- `frontend/src/domains/student/services/skulptRunner.ts` — executor Skulpt
+- `frontend/src/domains/student/services/evaluator.ts` — avaliador por test cases
+- `frontend/src/domains/student/hooks/useCodeExecution.ts` — hook React
+- `frontend/src/domains/student/__tests__/` — testes vitest
 
 ## Notas Técnicas
 
@@ -72,21 +76,22 @@ Criar a Celery task de avaliação automática que recebe o source code e os tes
 
 | Documento | Caminho | O que consultar |
 |---|---|---|
-| **Roadmap** | `docs/requirements/ingenia-documents/roadmap.md` | Seção "Fase 3 — Motor de correção automática" |
+| **Roadmap** | `docs/requirements/ingenia-documents/roadmap.md` | Seção "Fase 3 — Motor de correção Skulpt" |
 | **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | Entities: Submission, SubmissionResult, ExerciseTestCase; Business Rules BR-012, BR-013 |
-| **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-003 — Steps 5-7 (execução, avaliação, feedback); Expected Errors |
-| **Spec** | `docs/requirements/ingenia-documents/discover/spec.md` | Architecture §4 (Camada de avaliação automática); Security §9 (Execução segura) |
-| **Architecture** | `docs/backend/01-architecture.md` | Celery e tasks assíncronas |
+| **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-003 — Steps 5-7 |
+| **Spec** | `docs/requirements/ingenia-documents/discover/spec.md` | ADR-004 (Skulpt no browser) |
 
-### Decisões Técnicas Críticas
-- **Linguagem de programação dos exercícios**: GAP #1 do roadmap — precisa ser definido com o cliente. Iniciar com Python é recomendado.
-- **Sandbox**: Docker container isolado é mais seguro; subprocess com `resource` limits é mais simples para MVP.
-- **Timeout**: sugerir 10-30 segundos como default.
-- **Feedback**: mensagens pedagógicas simples como "X de Y testes passaram. Revise sua lógica de [dica]."
+### Decisões Técnicas
+- **Linguagem**: Python via Skulpt (resolve GAP #1 do roadmap)
+- **Execução**: client-side no browser — sem Celery, sem sandbox server-side
+- **Timeout**: sugerir 10 segundos como default no frontend
+- **Hidden test cases**: não utilizados no MVP — todos os test cases são visíveis
+- **Feedback**: mensagens pedagógicas simples como "X de Y testes passaram."
+- **Skulpt**: instalar via `pnpm add skulpt`
 
 ## Status
 
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-26

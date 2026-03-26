@@ -1,43 +1,23 @@
-# [ISSUE-018-B] Testes de Segurança do Sandbox
+# [ISSUE-018-B] ~~Testes de Segurança do Sandbox~~ — CANCELADA
 
-## Contexto
+## Status: ⚪ Cancelada
+
+> **Motivo do cancelamento**: Com a migração para Skulpt (execução Python no browser), não há mais sandbox server-side para testar. O isolamento é garantido pelo browser sandbox nativo.
+
+## Contexto Original
 
 Sub-issue de [ISSUE-018](./ISSUE-018.md) — Validação Final (Fase 5).
+~~Testes de segurança focados no sandbox de execução de código (tentativas de escape, fork bomb, memory exhaustion).~~
 
-## Descrição
+## Substituído por
 
-Testes de segurança focados no sandbox de execução de código.
-
-> **Dependência**: 016-C (sandbox hardened).
-
-### Tarefas
-
-1. Tentativa de acesso a arquivos do host
-2. Tentativa de acesso à rede
-3. Fork bomb / memory exhaustion
-4. Timeout enforcement
-
-## Critérios de Aceite
-
-- [ ] Todas tentativas de escape bloqueadas
-- [ ] Fork bomb contido
-- [ ] Memory exhaustion contido
-- [ ] Timeout enforced
-
-## Arquivos Afetados
-
-- `backend/src/submissions/tests/test_sandbox_security.py`
-
-## Notas Técnicas
-
-| Documento | Caminho | O que consultar |
-|---|---|---|
-| **ISSUE-018** | `.issues/ISSUE-018.md` | Contexto completo |
-| **Spec** | `docs/requirements/ingenia-documents/discover/spec.md` | Security §9 |
+- Testes de timeout e erro do Skulpt estão cobertos em [ISSUE-012-E](./ISSUE-012-E.md) e [ISSUE-012-F](./ISSUE-012-F.md)
+- Browser sandbox nativo não requer testes de segurança customizados
 
 ## Status
 
-- **Prioridade**: alta
+- **Prioridade**: —
 - **Tipo**: chore
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-26
+- **Cancelado em**: 2026-03-26

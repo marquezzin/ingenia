@@ -99,8 +99,8 @@ A solução deve ser organizada, no mínimo, pelos seguintes blocos lógicos:
 3. **Camada de conteúdo educacional**  
    Gerencia módulos, aulas, videoaulas, materiais escritos e associação entre aulas e exercícios.
 
-4. **Camada de avaliação automática**  
-   Recebe a submissão de código do aluno, executa o código em ambiente controlado, roda testes predefinidos e devolve resultado de aprovação ou falha com feedback.
+4. **Camada de avaliação automática (client-side)**  
+   Executa o código do aluno diretamente no browser via **Skulpt** (interpretador Python em JavaScript). O frontend fornece os inputs dos test cases, captura a saída, compara com o esperado, calcula o score e gera o feedback — tudo localmente, sem chamada ao servidor. O resultado consolidado é então enviado ao backend para persistência.
 
 5. **Camada de persistência**  
    Armazena usuários, perfis, turmas, conteúdo, exercícios, testes, submissões e progresso acadêmico.
@@ -109,18 +109,20 @@ A solução deve ser organizada, no mínimo, pelos seguintes blocos lógicos:
 - A solução será **web**, não um app mobile nativo na primeira versão.
 - O uso principal será por **desktop**.
 - O sistema terá **três perfis principais** com permissões distintas: aluno, professor e administrador.
-- A plataforma exigirá **isolamento e controle na execução de código** por razões de segurança.
+- A execução de código acontece no **browser via Skulpt** — o isolamento é garantido pelo próprio browser sandbox.
 - A experiência deve ser **simples, intuitiva e guiada**, adequada a alunos iniciantes.
 
 ### Lacunas ainda abertas
 Não há definição no transcript sobre:
 - arquitetura monolítica ou microsserviços;
-- uso de serviços de fila;
 - estratégia de armazenamento de vídeos;
 - tecnologia do editor de código;
-- linguagem de programação suportada na primeira versão;
-- estratégia de sandbox para execução segura;
 - modelo de deploy e observabilidade.
+
+### Lacunas resolvidas
+- ~~Linguagem de programação suportada~~ → **Python via Skulpt** (execução client-side no browser)
+- ~~Estratégia de sandbox para execução segura~~ → **Browser sandbox nativo** (Skulpt roda em JS isolado)
+- ~~Uso de serviços de fila~~ → **Não necessário** (Celery removido — avaliação é client-side)
 
 ## 5. Data Model
 
@@ -305,14 +307,17 @@ A segurança é um requisito central do projeto, especialmente porque a platafor
 - conteúdo submetido pelo usuário deve ser tratado para reduzir risco de vulnerabilidades comuns em aplicações web.
 
 ### Execução segura de código
-Este é o ponto mais sensível da solução.
-- o código do aluno não deve ser executado sem isolamento;
-- a execução deve ocorrer em ambiente controlado;
-- os testes de correção devem ser predefinidos pelo sistema;
-- o mecanismo deve limitar riscos operacionais e de segurança.
+A execução do código do aluno ocorre via **Skulpt no browser**:
+- o código roda inteiramente no browser do aluno, em JavaScript, sem acesso ao servidor;
+- o browser sandbox nativo impede acesso a disco, rede e sistema operacional;
+- o Skulpt não possui acesso a módulos perigosos (os, sys, subprocess, etc.);
+- os testes de correção são predefinidos pelo admin e enviados ao frontend;
+- timeout configurável no frontend previne loops infinitos.
+
+> **Nota**: Com execução client-side, o risco de segurança no servidor é eliminado. O risco residual (aluno manipulando resultados no browser) é aceitável para o contexto educacional do MVP.
 
 ### Rate limiting
-- necessário especialmente em rotas de autenticação e submissão de código;
+- necessário especialmente em rotas de autenticação e submissão de resultados;
 - parâmetros concretos não foram definidos no transcript.
 
 ## 10. Design & Architecture Artifacts
@@ -406,14 +411,21 @@ Ainda não há solicitações formais de mudança registradas. Mudanças futuras
   - simplifica o MVP;
   - pode exigir refinamento futuro caso surjam subpapéis ou regras mais granulares.
 
-### ADR-004 — Execução de código em ambiente controlado
-- **Status:** Aceito
-- **Contexto:** O sistema corrige automaticamente exercícios executando código submetido por alunos.
-- **Decisão:** Toda submissão deverá ser processada em ambiente controlado e isolado, com testes predefinidos.
+### ADR-004 — Execução de código via Skulpt no browser (atualizado)
+- **Status:** Aceito (atualizado)
+- **Contexto:** O sistema corrige automaticamente exercícios executando código submetido por alunos. Originalmente previsto como sandbox server-side (Celery + Docker/subprocess).
+- **Decisão:** A execução do código do aluno ocorre inteiramente no browser via **Skulpt** (interpretador Python em JavaScript). O frontend avalia todos os test cases localmente, gera o resultado e envia ao backend apenas para persistência.
+- **Justificativa da mudança:**
+  - o público-alvo (8º/9º ano) usa apenas construtos básicos de Python, que o Skulpt suporta plenamente;
+  - elimina complexidade de infra (Celery, Redis broker, Docker sandbox);
+  - feedback instantâneo melhora a experiência pedagógica;
+  - browser sandbox nativo garante isolamento sem configuração adicional.
 - **Consequências:**  
-  - segurança passa a ser requisito arquitetural crítico;
-  - a correção automática depende de mecanismo de sandbox ou equivalente;
-  - haverá impacto em complexidade operacional, monitoramento e tratamento de falhas.
+  - a segurança de execução é delegada ao browser sandbox nativo;
+  - a correção automática depende da disponibilidade do Skulpt como dependência frontend;
+  - não há necessidade de infra adicional para processamento assíncrono;
+  - risco residual: resultado do frontend pode ser manipulado pelo aluno (aceitável para contexto educacional do MVP);  
+  - limitação: exercícios não podem usar `numpy`, `matplotlib` ou outros módulos C-based.
 
 ### ADR-005 — Linguagem e experiência guiadas para público iniciante
 - **Status:** Aceito
@@ -427,15 +439,17 @@ Ainda não há solicitações formais de mudança registradas. Mudanças futuras
 ## 14. Gaps Conhecidos
 
 Os seguintes pontos não estão definidos no transcript e precisam de aprofundamento futuro:
-- stack tecnológica de frontend, backend e banco de dados;
-- linguagem de programação suportada nos exercícios;
 - contratos de API e UI;
 - metas quantitativas de performance, disponibilidade e escala;
-- arquitetura de sandbox para execução de código;
 - estratégia de monitoramento e observabilidade;
 - política de backup, retenção e auditoria;
 - detalhamento completo de permissões por ação;
 - critérios de aceite por funcionalidade.
+
+Pontos resolvidos:
+- ~~stack tecnológica~~ → Django + DRF, Vite + React + TypeScript + Mantine, Skulpt;
+- ~~linguagem de programação dos exercícios~~ → Python via Skulpt;
+- ~~arquitetura de sandbox~~ → browser sandbox nativo (Skulpt roda em JS no browser).
 
 ## 15. Estado Atual do Projeto
 

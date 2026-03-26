@@ -82,7 +82,7 @@ graph TD
 |---|-------|--------|---------|-----------------|
 | 10 | ISSUE-010 | Frontend Admin — Telas de CRUD | **GG** | ✅ **SIM** |
 | 11 | ISSUE-011 | Backend Aluno — Trilha, Submissão, Progresso | **GG** | ✅ **SIM** |
-| 12 | ISSUE-012 | Motor de Correção Automática | **G** | ✅ **SIM** |
+| 12 | ISSUE-012 | Motor de Correção Automática (Skulpt — Client-Side) | **M** | ✅ **SIM** (reestruturado para Skulpt) |
 
 ### 🔵 Camada 5 — Depende da Camada 4
 | # | Issue | Título | Tamanho | Precisa quebrar? |
@@ -277,36 +277,34 @@ graph LR
 
 ---
 
-### 6. ISSUE-012 — Motor de Correção (Fase 3) ⭐⭐ Crítica/Complexa
+### 6. ISSUE-012 — Motor de Correção via Skulpt (Fase 3) ⭐⭐ Reestruturada
 
-**Motivo da quebra**: Alta complexidade técnica (Celery + sandbox + execução isolada).
+**Motivo da reestruturação**: Decisão de migrar de Celery + sandbox server-side para **Skulpt** (execução Python no browser). Toda a avaliação acontece no frontend; o backend apenas persiste resultados.
 
 | Sub-Issue | Título | Depende de (externa) | Depende de (interna) |
 |-----------|--------|----------------------|----------------------|
-| **012-A** | Celery task básica (recebe submission_id, atualiza status) | ISSUE-004 (Submission model) | — |
-| **012-B** | Executor de sandbox (subprocess/Docker, com limites) | — (isolada tecnicamente) | — |
-| **012-C** | Avaliação por test cases (comparação output, cálculo score) | ISSUE-003 (ExerciseTestCase) | 012-A (task recebe a submission), 012-B (sandbox executa o código) |
-| **012-D** | Gerar SubmissionResult + feedback pedagógico | ISSUE-004 (SubmissionResult model) | 012-C (resultado da avaliação) |
-| **012-E** | Tratamento de erros e timeout | — | 012-B (sandbox), 012-C (avaliação) |
-| **012-F** | Testes unitários (sucesso, falha, timeout, erro) | ISSUE-003, ISSUE-004 | 012-A a 012-E (testa tudo) |
+| **012-A** | Endpoint síncrono de submissão (recebe resultado avaliado + persiste) | ISSUE-004 (Submission model) | — |
+| **012-B** | ~~Executor de sandbox~~ → **Cancelada** (Skulpt substitui no frontend) | — | — |
+| **012-C** | Avaliação no frontend: hook/service React que executa Skulpt por test case | ISSUE-003 (ExerciseTestCase) | — |
+| **012-D** | Resultado no frontend: calcular score, montar feedback, enviar ao backend | ISSUE-004 (SubmissionResult model) | 012-A (endpoint de persistência), 012-C (avaliação) |
+| **012-E** | Tratamento de erros e timeout no frontend (Skulpt timeout, syntax error) | — | 012-C (avaliação) |
+| **012-F** | Testes: vitest (frontend: avaliação Skulpt) + pytest (backend: persistência) | ISSUE-003, ISSUE-004 | 012-A, 012-C, 012-D, 012-E |
 
 ```mermaid
 graph LR
-    E004[ISSUE-004] --> A012[012-A Celery Task]
-    E003[ISSUE-003] --> C012[012-C Avaliação TestCases]
-    A012 --> C012
-    B012[012-B Sandbox Executor] --> C012
-    C012 --> D012[012-D SubmissionResult]
-    B012 --> E012[012-E Erros/Timeout]
-    C012 --> E012
+    E004[ISSUE-004] --> A012[012-A Endpoint Submissão]
+    E003[ISSUE-003] --> C012[012-C Avaliação Skulpt Frontend]
+    A012 --> D012[012-D Resultado + Feedback]
+    C012 --> D012
+    C012 --> E012[012-E Erros/Timeout Frontend]
     A012 --> F012[012-F Testes]
-    B012 --> F012
     C012 --> F012
     D012 --> F012
     E012 --> F012
 ```
 
-> ⚠️ **012-B (Sandbox)** é independente e pode ser desenvolvida em paralelo com 012-A. É a sub-issue mais complexa tecnicamente.
+> ℹ️ **012-B (Sandbox) foi CANCELADA** — não há mais sandbox server-side. A execução do código é feita pelo Skulpt diretamente no browser.
+> ℹ️ A complexidade caiu de **G** para **M** com a remoção de Celery e sandbox.
 
 ---
 
@@ -403,23 +401,22 @@ graph LR
 
 ### 10. ISSUE-016 — Segurança (Fase 5)
 
-**Motivo da quebra**: 5 tarefas com domínios distintos (rate limiting, sandbox, auditoria, CORS).
+**Motivo da quebra**: 5 tarefas com domínios distintos (rate limiting, validação, auditoria, CORS). 016-C cancelada com a migração para Skulpt.
 
 | Sub-Issue | Título | Depende de (externa) | Depende de (interna) |
 |-----------|--------|----------------------|----------------------|
 | **016-A** | Rate limiting (login + submissões) | 007-A (login endpoint), 011-B (submissões endpoint) | — |
 | **016-B** | Validação de entrada (revisão de serializers existentes) | 009-A a 009-D (serializers admin), 011-A a 011-B (serializers aluno) | — |
-| **016-C** | Hardening do sandbox (rede, disco, CPU, memória) | 012-B (sandbox implementado) | — |
+| **016-C** | ~~Hardening do sandbox~~ → **Cancelada** (não há sandbox server-side — Skulpt roda no browser) | — | — |
 | **016-D** | Auditoria de ações admin + CORS/CSRF/headers | 009-A a 009-D (rotas admin) | — |
 
-> ⚠️ Todas as sub-issues de 016 são **independentes entre si** e podem ser executadas em paralelo.
+> ℹ️ 016-C foi CANCELADA com a migração de sandbox server-side para Skulpt (browser).
 
 ```mermaid
 graph LR
     E007A[007-A Login] --> A016[016-A Rate Limiting]
     E011B[011-B Submissão] --> A016
     E009[009-* Serializers] --> B016[016-B Validação Entrada]
-    E012B[012-B Sandbox] --> C016[016-C Hardening Sandbox]
     E009D[009-* Rotas Admin] --> D016[016-D Auditoria+CORS]
 ```
 
@@ -427,23 +424,21 @@ graph LR
 
 ### 11. ISSUE-018 — Validação Final (Fase 5)
 
-**Motivo da quebra**: 4 macro-tarefas abrangendo toda a plataforma.
+**Motivo da quebra**: 4 macro-tarefas abrangendo toda a plataforma. 018-B cancelada com migração para Skulpt.
 
 | Sub-Issue | Título | Depende de (externa) | Depende de (interna) |
 |-----------|--------|----------------------|----------------------|
 | **018-A** | Suite E2E completa (J-001 a J-008) | 008-F, 010-F, 013-G, 015-D (todos os testes E2E) | — |
-| **018-B** | Testes de segurança do sandbox | 016-C (sandbox hardened) | — |
-| **018-C** | Testes de performance do motor de correção | 012-F (motor testado), 016-A (rate limiting) | — |
+| **018-B** | ~~Testes de segurança do sandbox~~ → **Cancelada** (não há sandbox server-side) | — | — |
+| **018-C** | Testes de performance do motor Skulpt no browser | 012-F (motor testado) | — |
 | **018-D** | Revisão da matriz de autorização (role × resource × action) | 007-C (permissions), 009-F, 011-E, 014-D (todos backends testados) | — |
 
-> ⚠️ As sub-issues de 018 são **independentes entre si**, mas cada uma depende de que o "mundo" esteja pronto.
+> ℹ️ 018-B foi CANCELADA. 018-C atualizada para testar performance do Skulpt no browser em vez de motor server-side.
 
 ```mermaid
 graph LR
     E_E2E[Todos E2E prontos] --> A018[018-A Suite E2E completa]
-    E016C[016-C Sandbox] --> B018[018-B Testes Segurança]
-    E012F[012-F Motor] --> C018[018-C Performance]
-    E016A[016-A Rate Limit] --> C018
+    E012F[012-F Motor] --> C018[018-C Performance Skulpt]
     E007C[007-C Perms] --> D018[018-D Revisão Autorização]
     E_backends[Todos backends] --> D018
 ```
@@ -620,5 +615,4 @@ ISSUE-003 → ISSUE-004 → 011-B → 011-C → 011-D → 011-E
 
 1. **Decidir se quer criar as sub-issues como arquivos** (ex: `ISSUE-007-A.md`, `ISSUE-007-B.md`) e atualizar o tracker
 2. **Começar pela Camada 1**: ISSUE-001 e ISSUE-003 podem ser executadas em paralelo
-3. **Definir GAPs pendentes** (mencionados no roadmap):
-   - GAP #1: Qual linguagem de programação os exercícios suportarão? (mencionado em ISSUE-012)
+3. **GAP #1 resolvido**: Linguagem = Python, via Skulpt (execução no browser)

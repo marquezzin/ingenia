@@ -6,8 +6,8 @@
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Backend | Django 5 + DRF, Python 3.14, Celery, PostgreSQL, Redis |
-| Frontend | Vite + React + TypeScript + Mantine v7 |
+| Backend | Django 5 + DRF, Python 3.14, PostgreSQL, Redis |
+| Frontend | Vite + React + TypeScript + Mantine v7, Skulpt (Python no browser) |
 | Infra | Docker Compose, uv (backend), pnpm (frontend) |
 | Testes | pytest, vitest, Playwright |
 
@@ -158,15 +158,13 @@ gantt
 ## Fase 3 — Experiência do Aluno (Trilha & Exercícios)
 
 > **Objetivo:** Aluno percorre trilha, consome aulas, submete código e recebe correção automática.
+> **Motor de correção**: execução via **Skulpt** (Python no browser) — sem Celery/sandbox.
 
 ### Backend
 - [ ] Endpoints de leitura de Módulos/Aulas/Exercícios (filtro `publication_status=PUBLISHED`)
-- [ ] Service de submissão de código (criar `Submission`, chamar avaliação)
-- [ ] **Motor de correção automática** (Celery task):
-  - Recebe source code + test cases
-  - Executa em sandbox (Docker container isolado ou subprocess com limits)
-  - Compara output × expected_output para cada test case
-  - Gera `SubmissionResult` com contagem de passed/failed + feedback
+- [ ] Endpoint de test cases por exercício (todos visíveis — sem hidden no MVP)
+- [ ] Service de submissão de código (recebe resultado já avaliado pelo frontend via Skulpt)
+  - Persiste `Submission` + `SubmissionResult` em uma única chamada
 - [ ] Service de progresso:
   - Atualizar `StudentLessonProgress` ao consumir aula
   - Atualizar `StudentExerciseProgress` ao submeter exercício (BR-014, BR-020)
@@ -187,16 +185,22 @@ gantt
 - [ ] Tela de exercício (`/student/modules/:id/lessons/:id/exercises/:id`):
   - Enunciado
   - **Editor de código** (Monaco Editor ou CodeMirror)
-  - Botão submeter
-  - Painel de resultado (loading → passed/failed com feedback)
+  - **Motor de correção Skulpt** (executa Python no browser):
+    - Executa código do aluno para cada test case
+    - Fornece `input_data` via `Sk.inputfun`
+    - Captura `stdout` via `Sk.output`
+    - Compara output × expected_output
+    - Calcula score e monta resultado com feedback
+  - Botão submeter (envia resultado ao backend)
+  - Painel de resultado (feedback instantâneo)
   - Histórico de tentativas
 - [ ] Tela de progresso (`/student/progress`)
 - [ ] Tela de histórico de submissões (`/student/submissions`)
 
 ### Validação
-- Testes unitários do motor de correção (pytest)
+- Testes unitários do backend (pytest) — persistência e progresso
+- Testes do motor Skulpt (vitest) — avaliação e comparação
 - Testes E2E dos fluxos J-002, J-003, J-004 (Playwright)
-- Teste manual de segurança do sandbox
 
 ---
 
@@ -233,9 +237,10 @@ gantt
 ### Segurança
 - [ ] Rate limiting em login e submissões (django-ratelimit ou throttle DRF)
 - [ ] Validação de entrada em todas as rotas
-- [ ] Garantir que sandbox de execução não acesse rede/disco do host
 - [ ] Auditoria básica de ações administrativas
 - [ ] Revisão de CORS, CSRF e headers de segurança
+
+> **Nota**: A execução de código do aluno acontece no browser via Skulpt — o isolamento é garantido pelo próprio browser sandbox. Não há sandbox server-side.
 
 ### UX & Responsividade
 - [ ] Mensagens de erro pedagógicas (conforme UX Flows §5)
@@ -245,24 +250,23 @@ gantt
 
 ### Validação Final
 - [ ] Suite E2E cobrindo todas as 8 jornadas críticas
-- [ ] Testes de segurança do sandbox
-- [ ] Testes de performance do motor de correção
+- [ ] Testes de performance do motor Skulpt no browser
 - [ ] Revisão completa da matriz de autorização
 
 ---
 
 ## Gaps Conhecidos (a validar com o cliente)
 
-| # | Gap | Impacto |
-|---|-----|---------|
-| 1 | Linguagem de programação dos exercícios (Python? JS?) | Define sandbox, editor, test cases e conteúdo |
-| 2 | Auto-cadastro de alunos em contexto escolar | Define se precisa de convite/aprovação  |
-| 3 | Vídeos: upload próprio vs. link externo (YouTube)? | Define infra de storage |
-| 4 | Dados de menores: consentimento, LGPD | Pode exigir fluxo de termos |
-| 5 | Professor pode criar contas? | Afeta autorização |
-| 6 | Campos editáveis pelo aluno no autoatendimento | Define tela de perfil |
-| 7 | Conteúdo público sem login? | Afeta rotas e guards |
-| 8 | Importação em lote de alunos/turmas? | Afeta UX admin e fluxo escolar |
+| # | Gap | Impacto | Status |
+|---|-----|---------|--------|
+| 1 | ~~Linguagem de programação dos exercícios~~ | ~~Define sandbox, editor, test cases e conteúdo~~ | ✅ Resolvido — **Python via Skulpt** (execução no browser) |
+| 2 | Auto-cadastro de alunos em contexto escolar | Define se precisa de convite/aprovação | 🟡 Pendente |
+| 3 | Vídeos: upload próprio vs. link externo (YouTube)? | Define infra de storage | 🟡 Pendente |
+| 4 | Dados de menores: consentimento, LGPD | Pode exigir fluxo de termos | 🟡 Pendente |
+| 5 | Professor pode criar contas? | Afeta autorização | 🟡 Pendente |
+| 6 | Campos editáveis pelo aluno no autoatendimento | Define tela de perfil | 🟡 Pendente |
+| 7 | Conteúdo público sem login? | Afeta rotas e guards | 🟡 Pendente |
+| 8 | Importação em lote de alunos/turmas? | Afeta UX admin e fluxo escolar | 🟡 Pendente |
 
 ---
 

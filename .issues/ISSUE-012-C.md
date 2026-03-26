@@ -1,45 +1,53 @@
-# [ISSUE-012-C] Avaliação por Test Cases — Comparação Output e Cálculo Score
+# [ISSUE-012-C] Avaliação no Frontend — Hook/Service Skulpt por Test Case
 
 ## Contexto
 
-Sub-issue de [ISSUE-012](./ISSUE-012.md) — Motor de Correção (Fase 3).
-Implementar a lógica de avaliação que roda cada test case e calcula o score.
+Sub-issue de [ISSUE-012](./ISSUE-012.md) — Motor de Correção Skulpt (Fase 3).
+Implementar o service/hook React que executa o código do aluno via Skulpt para cada test case e compara outputs.
 
 ## Descrição
 
-Criar o avaliador que, para cada test case, fornece o input ao sandbox, compara o output e calcula a pontuação.
+Criar a camada de avaliação no frontend que usa o Skulpt para interpretar o código Python do aluno, fornecendo input e capturando output de cada test case.
 
-> **Dependência**: ISSUE-003 (ExerciseTestCase), 012-A (task que recebe a submission), 012-B (sandbox que executa o código).
+> **Dependência**: ISSUE-003 (ExerciseTestCase — precisa do endpoint que retorna test cases).
 
 ### Tarefas
 
-1. **Avaliação por test case**:
-   - Para cada `ExerciseTestCase`:
-     - Fornecer `input_data` como stdin ao sandbox
-     - Executar código do aluno
-     - Comparar stdout com `expected_output` (trim whitespace)
-     - Registrar resultado: `PASSED` ou `FAILED`
+1. **Integração Skulpt**:
+   - Instalar Skulpt (`pnpm add skulpt`)
+   - Configurar `Sk.configure()` com `output` e `inputfun` customizados
+   - Criar `skulptRunner.ts`:
+     - `runCode(sourceCode, stdin, timeout) → { stdout, stderr, exitCode, timedOut }`
 
-2. **Cálculo de score**:
-   - `score_percentage = (passed_count / total_count) * 100`
-   - Contar passed_tests_count e failed_tests_count
+2. **Avaliador por test case**:
+   - Criar `evaluator.ts`:
+     - Para cada `ExerciseTestCase`:
+       - Chamar `runCode()` com `input_data` como stdin
+       - Comparar `stdout.trim()` com `expected_output.trim()`
+       - Registrar `PASSED` ou `FAILED`
+     - Retornar resultado consolidado: `{ results[], passedCount, failedCount, scorePercentage }`
 
-3. **Integração com task**:
-   - Receber source_code e test_cases
-   - Chamar sandbox para cada test case
-   - Retornar resultado consolidado
+3. **Hook React**:
+   - Criar `useCodeExecution()`:
+     - Estado: idle → running → complete/error
+     - Executa avaliação para todos test cases
+     - Retorna resultados por test case + score + status
 
 ## Critérios de Aceite
 
+- [ ] Skulpt executa código Python no browser
 - [ ] Cada test case avaliado individualmente
-- [ ] Comparação output × expected_output funcional
+- [ ] input_data fornecido como stdin via `Sk.inputfun`
+- [ ] stdout capturado via `Sk.output`
+- [ ] Comparação output × expected_output (whitespace trimmed)
 - [ ] Score calculado corretamente
-- [ ] Whitespace trimmed na comparação
-- [ ] Resultados individuais rastreados
+- [ ] Hook gerencia estados (idle/running/complete/error)
 
 ## Arquivos Afetados
 
-- `backend/src/submissions/services/evaluation.py` — service de avaliação
+- `frontend/src/domains/student/services/skulptRunner.ts`
+- `frontend/src/domains/student/services/evaluator.ts`
+- `frontend/src/domains/student/hooks/useCodeExecution.ts`
 
 ## Notas Técnicas
 
@@ -51,9 +59,14 @@ Criar o avaliador que, para cada test case, fornece o input ao sandbox, compara 
 | **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | ExerciseTestCase entity |
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-003 steps 5-6 |
 
+### Decisões Técnicas
+- `Sk.output`: função customizada que acumula stdout em array
+- `Sk.inputfun`: retorna os valores de `input_data` na ordem, ou prompt no browser se chamado pelo código
+- Timeout: implementar via `setTimeout` + rejeição de Promise (default 10s)
+
 ## Status
 
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-26
