@@ -238,3 +238,174 @@ class AdminDashboardStatsSerializer(serializers.Serializer):
     total_lessons = serializers.IntegerField()
     total_exercises = serializers.IntegerField()
     total_users = serializers.IntegerField()
+
+
+# ─── Student Serializers (conteúdo publicado + progresso) ─────────────────────
+
+
+class StudentModuleProgressSerializer(serializers.Serializer):
+    """Progresso do aluno em um módulo."""
+
+    progress_status = serializers.CharField()
+    started_at = serializers.DateTimeField()
+    completed_at = serializers.DateTimeField()
+
+
+class StudentLessonProgressSerializer(serializers.Serializer):
+    """Progresso do aluno em uma aula."""
+
+    progress_status = serializers.CharField()
+    started_at = serializers.DateTimeField()
+    completed_at = serializers.DateTimeField()
+
+
+class StudentExerciseProgressSerializer(serializers.Serializer):
+    """Progresso do aluno em um exercício."""
+
+    progress_status = serializers.CharField()
+    attempts_count = serializers.IntegerField()
+    first_attempt_at = serializers.DateTimeField()
+    completed_at = serializers.DateTimeField()
+
+
+def _get_student_progress(obj, serializer_class):
+    """Helper para extrair progresso do prefetch to_attr."""
+    progress_list = getattr(obj, "student_progress_list", [])
+    if progress_list:
+        return serializer_class(progress_list[0]).data
+    return None
+
+
+class StudentExerciseListSerializer(BaseModelSerializer):
+    """Resumo de exercício para listagem do aluno (sem test cases)."""
+
+    progress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Exercise
+        fields = ["id", "title", "sequence_order", "progress"]
+
+    def get_progress(self, obj):
+        return _get_student_progress(obj, StudentExerciseProgressSerializer)
+
+
+class StudentExerciseDetailSerializer(BaseModelSerializer):
+    """Detalhe do exercício para aluno (sem test cases, com progresso)."""
+
+    progress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Exercise
+        fields = [
+            "id",
+            "title",
+            "statement",
+            "support_message",
+            "sequence_order",
+            "progress",
+        ]
+
+    def get_progress(self, obj):
+        return _get_student_progress(obj, StudentExerciseProgressSerializer)
+
+
+class StudentLessonListSerializer(BaseModelSerializer):
+    """Resumo de aula para listagem do aluno."""
+
+    has_video = serializers.SerializerMethodField()
+    exercise_count = serializers.IntegerField(read_only=True)
+    progress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Lesson
+        fields = [
+            "id",
+            "title",
+            "sequence_order",
+            "has_video",
+            "exercise_count",
+            "progress",
+        ]
+
+    def get_has_video(self, obj: Lesson) -> bool:
+        return hasattr(obj, "video") and obj.video is not None
+
+    def get_progress(self, obj):
+        return _get_student_progress(obj, StudentLessonProgressSerializer)
+
+
+class StudentLessonDetailSerializer(BaseModelSerializer):
+    """Detalhe da aula para aluno (com vídeo, exercícios publicados e progresso)."""
+
+    video = VideoLessonSerializer(read_only=True)
+    exercises = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Lesson
+        fields = [
+            "id",
+            "title",
+            "written_content",
+            "sequence_order",
+            "video",
+            "exercises",
+            "progress",
+        ]
+
+    def get_exercises(self, obj):
+        """Retorna exercícios publicados com progresso (prefetched no view)."""
+        exercises = getattr(obj, "published_exercises", [])
+        return StudentExerciseListSerializer(exercises, many=True).data
+
+    def get_progress(self, obj):
+        return _get_student_progress(obj, StudentLessonProgressSerializer)
+
+
+class StudentModuleListSerializer(BaseModelSerializer):
+    """Resumo de módulo para listagem do aluno."""
+
+    lesson_count = serializers.IntegerField(read_only=True)
+    progress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Module
+        fields = [
+            "id",
+            "title",
+            "description",
+            "sequence_order",
+            "lesson_count",
+            "progress",
+        ]
+
+    def get_progress(self, obj):
+        return _get_student_progress(obj, StudentModuleProgressSerializer)
+
+
+class StudentModuleDetailSerializer(BaseModelSerializer):
+    """Detalhe do módulo para aluno (com aulas publicadas e progresso)."""
+
+    lesson_count = serializers.IntegerField(read_only=True)
+    lessons = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Module
+        fields = [
+            "id",
+            "title",
+            "description",
+            "sequence_order",
+            "lesson_count",
+            "lessons",
+            "progress",
+        ]
+
+    def get_lessons(self, obj):
+        """Retorna aulas publicadas com progresso (prefetched no view)."""
+        lessons = getattr(obj, "published_lessons", [])
+        return StudentLessonListSerializer(lessons, many=True).data
+
+    def get_progress(self, obj):
+        return _get_student_progress(obj, StudentModuleProgressSerializer)

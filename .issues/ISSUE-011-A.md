@@ -30,11 +30,11 @@ Criar endpoints de leitura filtrados por `publication_status=PUBLISHED` com prog
 
 ## Critérios de Aceite
 
-- [ ] Endpoints retornam apenas conteúdo publicado (BR-019)
-- [ ] Test cases NÃO são expostos ao aluno
-- [ ] Progresso do aluno incluído nos serializers
-- [ ] Protegido por `IsStudent`
-- [ ] Queries otimizadas (sem N+1)
+- [x] Endpoints retornam apenas conteúdo publicado (BR-019)
+- [x] Test cases NÃO são expostos ao aluno
+- [x] Progresso do aluno incluído nos serializers
+- [x] Protegido por `IsStudent`
+- [x] Queries otimizadas (sem N+1)
 
 ## Arquivos Afetados
 
@@ -58,4 +58,5 @@ Criar endpoints de leitura filtrados por `publication_status=PUBLISHED` com prog
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-24
+- **Status**: Concluída

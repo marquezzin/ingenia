@@ -7,13 +7,17 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.errors import NotFoundError
-from core.permissions import IsAdmin
+from core.permissions import IsAdmin, IsStudent
 
+from .enums import ContentStatus
 from .models import Exercise, Lesson, Module
 from .selectors import (
     list_exercises_for_lesson,
     list_lessons_for_module,
     list_modules,
+    list_published_exercises_for_lesson,
+    list_published_lessons_for_module,
+    list_published_modules,
     list_test_cases_for_exercise,
 )
 from .serializers import (
@@ -30,6 +34,12 @@ from .serializers import (
     ModuleCreateUpdateSerializer,
     ModuleDetailSerializer,
     ModuleListSerializer,
+    StudentExerciseDetailSerializer,
+    StudentExerciseListSerializer,
+    StudentLessonDetailSerializer,
+    StudentLessonListSerializer,
+    StudentModuleDetailSerializer,
+    StudentModuleListSerializer,
 )
 from .services import (
     CreateExerciseInput,
@@ -441,3 +451,134 @@ class AdminDashboardStatsView(APIView):
         }
         serializer = AdminDashboardStatsSerializer(stats)
         return Response(serializer.data)
+
+
+# ─── Student Views (leitura de conteúdo publicado) ───────────────────────────
+
+
+class StudentModuleViewSet(viewsets.ReadOnlyModelViewSet):
+    """Módulos publicados — acessível apenas por alunos."""
+
+    permission_classes = [IsAuthenticated, IsStudent]
+    ordering = ["sequence_order"]
+
+    def _get_student_profile_id(self) -> str:
+        return str(self.request.user.student_profile.id)
+
+    def get_queryset(self):
+        return list_published_modules(student_profile_id=self._get_student_profile_id())
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return StudentModuleDetailSerializer
+        return StudentModuleListSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        # Attach published lessons with progress for the detail serializer
+        lessons = list_published_lessons_for_module(
+            module_id=str(instance.id),
+            student_profile_id=self._get_student_profile_id(),
+        )
+        instance.published_lessons = list(lessons)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+class StudentLessonViewSet(viewsets.ReadOnlyModelViewSet):
+    """Aulas publicadas de um módulo — acessível apenas por alunos."""
+
+    permission_classes = [IsAuthenticated, IsStudent]
+    ordering = ["sequence_order"]
+
+    def _get_module_id(self) -> str:
+        return str(self.kwargs["module_pk"])
+
+    def _get_student_profile_id(self) -> str:
+        return str(self.request.user.student_profile.id)
+
+    def _validate_module_published(self) -> None:
+        """Valida que o módulo da URL existe e está publicado."""
+        module_id = self._get_module_id()
+        if not Module.objects.filter(
+            id=module_id, publication_status=ContentStatus.PUBLISHED
+        ).exists():
+            raise NotFoundError("Módulo não encontrado.")
+
+    def get_queryset(self):
+        return list_published_lessons_for_module(
+            module_id=self._get_module_id(),
+            student_profile_id=self._get_student_profile_id(),
+        )
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return StudentLessonDetailSerializer
+        return StudentLessonListSerializer
+
+    def list(self, request, *args, **kwargs):
+        self._validate_module_published()
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        self._validate_module_published()
+        instance = self.get_object()
+        # Attach published exercises with progress for the detail serializer
+        exercises = list_published_exercises_for_lesson(
+            lesson_id=str(instance.id),
+            student_profile_id=self._get_student_profile_id(),
+        )
+        instance.published_exercises = list(exercises)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+class StudentExerciseViewSet(viewsets.ReadOnlyModelViewSet):
+    """Exercícios publicados de uma aula — acessível apenas por alunos."""
+
+    permission_classes = [IsAuthenticated, IsStudent]
+    ordering = ["sequence_order"]
+
+    def _get_module_id(self) -> str:
+        return str(self.kwargs["module_pk"])
+
+    def _get_lesson_id(self) -> str:
+        return str(self.kwargs["lesson_pk"])
+
+    def _get_student_profile_id(self) -> str:
+        return str(self.request.user.student_profile.id)
+
+    def _validate_parents_published(self) -> None:
+        """Valida que módulo e aula da URL existem e estão publicados."""
+        module_id = self._get_module_id()
+        if not Module.objects.filter(
+            id=module_id, publication_status=ContentStatus.PUBLISHED
+        ).exists():
+            raise NotFoundError("Módulo não encontrado.")
+
+        lesson_id = self._get_lesson_id()
+        if not Lesson.objects.filter(
+            id=lesson_id,
+            module_id=module_id,
+            publication_status=ContentStatus.PUBLISHED,
+        ).exists():
+            raise NotFoundError("Aula não encontrada.")
+
+    def get_queryset(self):
+        return list_published_exercises_for_lesson(
+            lesson_id=self._get_lesson_id(),
+            student_profile_id=self._get_student_profile_id(),
+        )
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return StudentExerciseDetailSerializer
+        return StudentExerciseListSerializer
+
+    def list(self, request, *args, **kwargs):
+        self._validate_parents_published()
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        self._validate_parents_published()
+        return super().retrieve(request, *args, **kwargs)
