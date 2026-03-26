@@ -96,7 +96,7 @@
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
 | ISSUE-011-A | Endpoints de leitura (módulos, aulas, exercícios publicados) | feature | 🟢 | 003, 007-C |
-| ISSUE-011-B | Service de submissão de código + endpoint (recebe resultado do Skulpt) | feature | 🟡 | 003, 004, 007-C |
+| ISSUE-011-B | Service de submissão de código + endpoint (recebe resultado do Skulpt) | feature | 🟢 | 003, 004, 007-C |
 | ISSUE-011-C | Service de progresso automático (lesson, exercise, module) | feature | 🟡 | 003, 004, 005, 011-B |
 | ISSUE-011-D | Endpoints de histórico + progresso consolidado | feature | 🟡 | 004, 005, 007-C, 011-B, 011-C |
 | ISSUE-011-E | Testes unitários (progress + submission) | chore | 🟡 | 011-A a 011-D |
@@ -184,9 +184,9 @@
 | Sub-issues | 57 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 64 |
-| Concluídas | 29 |
+| Concluídas | 30 |
 | Em andamento | 0 |
-| Pendentes | 32 |
+| Pendentes | 31 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

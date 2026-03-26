@@ -15,6 +15,8 @@ urlpatterns = [
     path("api/v1/", include("src.curriculum.urls")),
     # Classes (core — sempre ativo)
     path("api/v1/", include("src.classes.urls")),
+    # Submissions (core — sempre ativo)
+    path("api/v1/", include("src.submissions.urls")),
     # API Schema
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

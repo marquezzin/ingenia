@@ -32,12 +32,12 @@ Criar o endpoint de submissão que recebe o código fonte do aluno **junto com o
 
 ## Critérios de Aceite
 
-- [ ] Endpoint cria Submission + SubmissionResult corretamente
-- [ ] BR-011: Só aluno autenticado pode submeter para exercício publicado
-- [ ] BR-012: Cada submissão gera exatamente um resultado (transação atômica)
-- [ ] Status retornado como `EVALUATED`
-- [ ] Validação de tamanho máximo de source_code
-- [ ] Validação de score entre 0-100
+- [x] Endpoint cria Submission + SubmissionResult corretamente
+- [x] BR-011: Só aluno autenticado pode submeter para exercício publicado
+- [x] BR-012: Cada submissão gera exatamente um resultado (transação atômica)
+- [x] Status retornado como `EVALUATED`
+- [x] Validação de tamanho máximo de source_code
+- [x] Validação de score entre 0-100
 
 ## Arquivos Afetados
 
@@ -61,5 +61,6 @@ Criar o endpoint de submissão que recebe o código fonte do aluno **junto com o
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
 - **Atualizado em**: 2026-03-26
