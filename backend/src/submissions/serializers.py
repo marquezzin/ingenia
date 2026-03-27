@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .enums import ResultStatus
+from .enums import ResultStatus, SubmissionStatus
 
 
 class SubmissionCreateSerializer(serializers.Serializer):
@@ -32,3 +32,39 @@ class SubmissionResponseSerializer(serializers.Serializer):
     evaluation_status = serializers.CharField()
     score_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
     submitted_at = serializers.DateTimeField()
+
+
+# ─── Submission History Serializers ──────────────────────────────────────────
+
+
+class SubmissionResultSerializer(serializers.Serializer):
+    """Serializer do resultado da avaliação (nested em submissão)."""
+
+    result_status = serializers.CharField()
+    passed_tests_count = serializers.IntegerField()
+    failed_tests_count = serializers.IntegerField()
+    feedback_message = serializers.CharField()
+
+
+class SubmissionListSerializer(serializers.Serializer):
+    """Serializer de listagem de submissões do aluno."""
+
+    id = serializers.UUIDField()
+    exercise_id = serializers.UUIDField()
+    exercise_title = serializers.SerializerMethodField()
+    source_code = serializers.CharField()
+    evaluation_status = serializers.ChoiceField(choices=SubmissionStatus.choices)
+    score_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    submitted_at = serializers.DateTimeField()
+    result = serializers.SerializerMethodField()
+
+    def get_exercise_title(self, obj) -> str:
+        """Retorna título do exercício via select_related."""
+        return obj.exercise.title
+
+    def get_result(self, obj) -> dict | None:
+        """Retorna resultado nested, se existir."""
+        result = getattr(obj, "result", None)
+        if result is not None:
+            return SubmissionResultSerializer(result).data
+        return None

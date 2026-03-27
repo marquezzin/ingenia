@@ -17,6 +17,8 @@ urlpatterns = [
     path("api/v1/", include("src.classes.urls")),
     # Submissions (core — sempre ativo)
     path("api/v1/", include("src.submissions.urls")),
+    # Progress (core — sempre ativo)
+    path("api/v1/", include("src.progress.urls")),
     # API Schema
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

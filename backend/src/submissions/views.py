@@ -7,19 +7,47 @@ from rest_framework.views import APIView
 
 from core.permissions import IsStudent
 
-from .serializers import SubmissionCreateSerializer, SubmissionResponseSerializer
+from .selectors import list_submissions_for_student
+from .serializers import (
+    SubmissionCreateSerializer,
+    SubmissionListSerializer,
+    SubmissionResponseSerializer,
+)
 from .services import CreateSubmissionInput, CreateSubmissionUseCase
 
 
-class StudentSubmissionCreateView(APIView):
-    """Endpoint de submissão de código pelo aluno.
+class StudentSubmissionView(APIView):
+    """Endpoint de submissões do aluno.
 
-    POST /api/v1/student/submissions/
-    Recebe o código e resultado já avaliado pelo Skulpt.
+    GET  /api/v1/student/submissions/ — Histórico com filtros e paginação
+    POST /api/v1/student/submissions/ — Cria nova submissão (Skulpt)
     """
 
     permission_classes = [IsAuthenticated, IsStudent]
     serializer_class = SubmissionCreateSerializer
+
+    def get(self, request):
+        student_profile_id = str(request.user.student_profile.id)
+        exercise_id = request.query_params.get("exercise_id")
+        evaluation_status = request.query_params.get("evaluation_status")
+
+        queryset = list_submissions_for_student(
+            student_profile_id=student_profile_id,
+            exercise_id=exercise_id,
+            evaluation_status=evaluation_status,
+        )
+
+        # Manual pagination using StandardPagination
+        from core.pagination import StandardPagination
+
+        paginator = StandardPagination()
+        page = paginator.paginate_queryset(queryset, request)
+        if page is not None:
+            serializer = SubmissionListSerializer(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        serializer = SubmissionListSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         serializer = SubmissionCreateSerializer(data=request.data)

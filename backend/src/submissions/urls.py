@@ -2,12 +2,12 @@
 
 from django.urls import path
 
-from .views import StudentSubmissionCreateView
+from .views import StudentSubmissionView
 
 urlpatterns = [
     path(
         "student/submissions/",
-        StudentSubmissionCreateView.as_view(),
-        name="student-submission-create",
+        StudentSubmissionView.as_view(),
+        name="student-submissions",
     ),
 ]

@@ -26,12 +26,12 @@ Criar endpoints para o aluno consultar seu histórico de submissões e progresso
 
 ## Critérios de Aceite
 
-- [ ] Histórico de submissões com filtros e paginação
-- [ ] Resultado da avaliação incluído nas submissões
-- [ ] Progresso consolidado por módulo
-- [ ] Progresso detalhado com aulas e exercícios
-- [ ] BR-017: Apenas submissões e progresso do próprio aluno
-- [ ] Protegido por `IsStudent`
+- [x] Histórico de submissões com filtros e paginação
+- [x] Resultado da avaliação incluído nas submissões
+- [x] Progresso consolidado por módulo
+- [x] Progresso detalhado com aulas e exercícios
+- [x] BR-017: Apenas submissões e progresso do próprio aluno
+- [x] Protegido por `IsStudent`
 
 ## Arquivos Afetados
 
@@ -55,5 +55,6 @@ Criar endpoints para o aluno consultar seu histórico de submissões e progresso
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-27
