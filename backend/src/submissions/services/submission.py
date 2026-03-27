@@ -62,9 +62,21 @@ class CreateSubmissionUseCase:
                 result_status=input.result_status,
             )
 
-        # TODO: Chamar service de progresso (ISSUE-011-C) se resultado PASSED
-        # if input.result_status == ResultStatus.PASSED:
-        #     UpdateExerciseProgressUseCase().execute(...)
+        from src.progress.services import (
+            UpdateExerciseProgressInput as ProgressInput,
+        )
+        from src.progress.services import (
+            UpdateExerciseProgressUseCase,
+        )
+
+        # Atualiza progresso do aluno no exercise e (lesson e module e learning_status) em cascata
+        UpdateExerciseProgressUseCase().execute(
+            input=ProgressInput(
+                student_profile_id=input.student_profile_id,
+                exercise_id=input.exercise_id,
+                is_passed=input.result_status == ResultStatus.PASSED,
+            )
+        )
 
         return CreateSubmissionResult(instance=submission)
 

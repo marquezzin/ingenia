@@ -32,11 +32,11 @@ Criar o service de progresso que atualiza automaticamente os registros de progre
 
 ## Critérios de Aceite
 
-- [ ] BR-014: Exercício concluído apenas com submissão aprovada
-- [ ] BR-015: Módulo concluído quando todos conteúdos concluídos
-- [ ] BR-020: `attempts_count` incrementado a cada submissão
-- [ ] Progresso atualizado em cascata (exercise → lesson → module → profile)
-- [ ] Invariants de progresso respeitados (completed_at preenchido ↔ COMPLETED)
+- [x] BR-014: Exercício concluído apenas com submissão aprovada
+- [x] BR-015: Módulo concluído quando todos conteúdos concluídos
+- [x] BR-020: `attempts_count` incrementado a cada submissão
+- [x] Progresso atualizado em cascata (exercise → lesson → module → profile)
+- [x] Invariants de progresso respeitados (completed_at preenchido ↔ COMPLETED)
 
 ## Arquivos Afetados
 
@@ -57,5 +57,6 @@ Criar o service de progresso que atualiza automaticamente os registros de progre
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-26

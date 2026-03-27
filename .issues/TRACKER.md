@@ -97,9 +97,10 @@
 |---|--------|------|--------|------------|
 | ISSUE-011-A | Endpoints de leitura (módulos, aulas, exercícios publicados) | feature | 🟢 | 003, 007-C |
 | ISSUE-011-B | Service de submissão de código + endpoint (recebe resultado do Skulpt) | feature | 🟢 | 003, 004, 007-C |
-| ISSUE-011-C | Service de progresso automático (lesson, exercise, module) | feature | 🟡 | 003, 004, 005, 011-B |
+| ISSUE-011-C | Service de progresso automático (lesson, exercise, module) | feature | 🟢 | 003, 004, 005, 011-B |
 | ISSUE-011-D | Endpoints de histórico + progresso consolidado | feature | 🟡 | 004, 005, 007-C, 011-B, 011-C |
-| ISSUE-011-E | Testes unitários (progress + submission) | chore | 🟡 | 011-A a 011-D |
+| ISSUE-011-F | Progresso de aula por acesso (trigger de visualização) | feature | 🟡 | 011-A, 011-C |
+| ISSUE-011-E | Testes unitários (progress + submission) | chore | 🟡 | 011-A a 011-D, 011-F |
 
 ### ISSUE-012 — Motor de Correção Skulpt — Client-Side (M)
 
@@ -118,7 +119,7 @@
 |---|--------|------|--------|------------|
 | ISSUE-013-A | Layout aluno + Dashboard/Trilha | feature | 🟡 | 008-D, 008-E, 011-A |
 | ISSUE-013-B | Lista de módulos + Detalhe do módulo | feature | 🟡 | 011-A, 011-D, 013-A |
-| ISSUE-013-C | Tela de aula (vídeo + conteúdo + exercícios) | feature | 🟡 | 011-A, 013-B |
+| ISSUE-013-C | Tela de aula (vídeo + conteúdo + exercícios) | feature | 🟡 | 011-A, 011-F, 013-B |
 | ISSUE-013-D | Tela de exercício com Editor de Código (Monaco) + Motor Skulpt + submissão | feature | 🟡 | 011-B, 012-C, 012-D, 012-E, 013-C |
 | ISSUE-013-E | Painel de resultado + histórico de tentativas | feature | 🟡 | 011-D, 012-D, 013-D |
 | ISSUE-013-F | Tela de progresso + Tela de histórico de submissões | feature | 🟡 | 011-D, 013-A |
@@ -181,10 +182,10 @@
 | Métrica | Valor |
 |---------|-------|
 | Issues pai | 18 |
-| Sub-issues | 57 |
+| Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
-| Total de itens rastreáveis | 64 |
-| Concluídas | 30 |
+| Total de itens rastreáveis | 65 |
+| Concluídas | 31 |
 | Em andamento | 0 |
 | Pendentes | 31 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
