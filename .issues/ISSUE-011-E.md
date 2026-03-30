@@ -34,15 +34,16 @@ Criar testes unitários cobrindo os cenários de submissão, progresso e consult
 
 ## Critérios de Aceite
 
-- [ ] Testes de leitura de conteúdo publicado
-- [ ] Testes de submissão (válido, inválido)
-- [ ] Testes de progresso automático (cascata)
-- [ ] Testes de BR-014, BR-015, BR-017, BR-020
-- [ ] Todos passando
+- [x] Testes de leitura de conteúdo publicado
+- [x] Testes de submissão (válido, inválido)
+- [x] Testes de progresso automático (cascata)
+- [x] Testes de BR-014, BR-015, BR-017, BR-020
+- [x] Todos passando (297 testes)
 
 ## Arquivos Afetados
 
 - `backend/src/submissions/tests/` — testes de submissão
+- `backend/src/submissions/tests/test_submission_progress_integration.py` — testes de integração submission → progress (NOVO)
 - `backend/src/progress/tests/` — testes de progresso
 - `backend/src/curriculum/tests/` — testes de leitura aluno
 
@@ -59,5 +60,6 @@ Criar testes unitários cobrindo os cenários de submissão, progresso e consult
 
 - **Prioridade**: alta
 - **Tipo**: chore
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-03-30
