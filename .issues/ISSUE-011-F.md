@@ -36,11 +36,11 @@ Criar um endpoint e service para registrar progresso de aula ao acessar/visualiz
 
 ## Critérios de Aceite
 
-- [ ] Endpoint de marcação de aula funcional
-- [ ] Aulas sem exercícios podem ter progresso registrado
-- [ ] Cascata de progresso atualiza módulo e perfil
-- [ ] Protegido por `IsStudent` + aula publicada
-- [ ] Testes unitários cobrindo o novo fluxo
+- [x] Endpoint de marcação de aula funcional
+- [x] Aulas sem exercícios podem ter progresso registrado
+- [x] Cascata de progresso atualiza módulo e perfil
+- [x] Protegido por `IsStudent` + aula publicada
+- [x] Testes unitários cobrindo o novo fluxo
 
 ## Arquivos Afetados
 
@@ -64,5 +64,6 @@ Criar um endpoint e service para registrar progresso de aula ao acessar/visualiz
 
 - **Prioridade**: média
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-27
-- **Atualizado em**: 2026-03-27
+- **Atualizado em**: 2026-03-30

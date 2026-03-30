@@ -328,3 +328,141 @@ class UpdateStudentLearningStatusUseCase:
         ):
             profile.learning_status = LearningStatus.COMPLETED
             profile.save()
+
+
+# ─── Lesson Progress by Access (ISSUE-011-F) ─────────────────────────────────
+
+
+@dataclass
+class MarkLessonStartedInput:
+    student_profile_id: str
+    lesson_id: str
+
+
+class MarkLessonStartedUseCase:
+    """Marca aula como IN_PROGRESS ao acessar/visualizar conteúdo.
+
+    ISSUE-011-F: Registra progresso de aula independente de submissão.
+    BR-019: Aula deve estar publicada.
+    Cascata: cria StudentModuleProgress IN_PROGRESS + atualiza learning_status.
+    Idempotente: não altera se progresso já existe (IN_PROGRESS ou COMPLETED).
+    """
+
+    def execute(self, *, input: MarkLessonStartedInput) -> None:
+        from src.curriculum.enums import ContentStatus
+        from src.curriculum.models import Lesson
+        from src.progress.enums import ProgressStatus
+        from src.progress.models import StudentLessonProgress
+
+        now = timezone.now()
+
+        # Validar que aula existe e está publicada (BR-019)
+        try:
+            lesson = Lesson.objects.get(
+                id=input.lesson_id,
+                publication_status=ContentStatus.PUBLISHED,
+            )
+        except Lesson.DoesNotExist:
+            from core.errors import NotFoundError
+
+            raise NotFoundError("Aula não encontrada ou não publicada.")
+
+        # Criar progresso IN_PROGRESS se não existir (idempotente)
+        progress, created = StudentLessonProgress.objects.get_or_create(
+            student_profile_id=input.student_profile_id,
+            lesson_id=input.lesson_id,
+            defaults={
+                "progress_status": ProgressStatus.IN_PROGRESS,
+                "started_at": now,
+            },
+        )
+
+        # Se já existia com NOT_STARTED, atualizar para IN_PROGRESS
+        if not created and progress.progress_status == ProgressStatus.NOT_STARTED:
+            progress.progress_status = ProgressStatus.IN_PROGRESS
+            progress.started_at = now
+            progress.save()
+
+        # Cascata: criar/atualizar progresso do módulo
+        UpdateModuleProgressUseCase().execute(
+            input=UpdateModuleProgressInput(
+                student_profile_id=input.student_profile_id,
+                module_id=str(lesson.module_id),
+            )
+        )
+
+
+@dataclass
+class MarkLessonCompletedInput:
+    student_profile_id: str
+    lesson_id: str
+
+
+class MarkLessonCompletedUseCase:
+    """Marca aula como COMPLETED — apenas para aulas sem exercícios publicados.
+
+    ISSUE-011-F: Permite conclusão explícita pelo aluno.
+    BR-019: Aula deve estar publicada.
+    Rejeita aulas com exercícios publicados (nesses casos, a conclusão
+    continua via cascata de submissão no UpdateLessonProgressUseCase).
+    Cascata: module → profile.
+    """
+
+    def execute(self, *, input: MarkLessonCompletedInput) -> None:
+        from src.curriculum.enums import ContentStatus
+        from src.curriculum.models import Exercise, Lesson
+        from src.progress.enums import ProgressStatus
+        from src.progress.models import StudentLessonProgress
+
+        now = timezone.now()
+
+        # Validar que aula existe e está publicada (BR-019)
+        try:
+            lesson = Lesson.objects.get(
+                id=input.lesson_id,
+                publication_status=ContentStatus.PUBLISHED,
+            )
+        except Lesson.DoesNotExist:
+            from core.errors import NotFoundError
+
+            raise NotFoundError("Aula não encontrada ou não publicada.")
+
+        # Rejeitar se aula tem exercícios publicados
+        has_published_exercises = Exercise.objects.filter(
+            lesson_id=input.lesson_id,
+            publication_status=ContentStatus.PUBLISHED,
+        ).exists()
+
+        if has_published_exercises:
+            from core.errors import ApplicationError
+
+            raise ApplicationError(
+                "Aulas com exercícios publicados não podem ser marcadas "
+                "como concluídas manualmente. Complete os exercícios."
+            )
+
+        # Criar ou atualizar progresso
+        progress, created = StudentLessonProgress.objects.get_or_create(
+            student_profile_id=input.student_profile_id,
+            lesson_id=input.lesson_id,
+            defaults={
+                "progress_status": ProgressStatus.COMPLETED,
+                "started_at": now,
+                "completed_at": now,
+            },
+        )
+
+        if not created and progress.progress_status != ProgressStatus.COMPLETED:
+            progress.progress_status = ProgressStatus.COMPLETED
+            if progress.started_at is None:
+                progress.started_at = now
+            progress.completed_at = now
+            progress.save()
+
+        # Cascata: atualizar progresso do módulo → perfil
+        UpdateModuleProgressUseCase().execute(
+            input=UpdateModuleProgressInput(
+                student_profile_id=input.student_profile_id,
+                module_id=str(lesson.module_id),
+            )
+        )

@@ -644,3 +644,306 @@ class FullCascadeIntegrationTest(TestCase):
             student_profile=student, exercise=exercise
         )
         self.assertEqual(progress.progress_status, ProgressStatus.COMPLETED)
+
+
+class MarkLessonStartedUseCaseTest(TestCase):
+    """Testes do MarkLessonStartedUseCase — ISSUE-011-F."""
+
+    def setUp(self):
+        from src.progress.services import (
+            MarkLessonStartedInput,
+            MarkLessonStartedUseCase,
+        )
+
+        self.UseCase = MarkLessonStartedUseCase
+        self.Input = MarkLessonStartedInput
+
+        self.module = ModuleFactory(publication_status=ContentStatus.PUBLISHED)
+        self.lesson = LessonFactory(
+            module=self.module, publication_status=ContentStatus.PUBLISHED
+        )
+        self.student = StudentProfileFactory()
+
+    def test_marks_lesson_in_progress(self):
+        """Primeira chamada cria StudentLessonProgress IN_PROGRESS."""
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson.id),
+            )
+        )
+
+        progress = StudentLessonProgress.objects.get(
+            student_profile=self.student, lesson=self.lesson
+        )
+        self.assertEqual(progress.progress_status, ProgressStatus.IN_PROGRESS)
+        self.assertIsNotNone(progress.started_at)
+
+    def test_idempotent_does_not_duplicate(self):
+        """Chamar duas vezes não duplica progresso."""
+        use_case = self.UseCase()
+        inp = self.Input(
+            student_profile_id=str(self.student.id),
+            lesson_id=str(self.lesson.id),
+        )
+
+        use_case.execute(input=inp)
+        use_case.execute(input=inp)
+
+        count = StudentLessonProgress.objects.filter(
+            student_profile=self.student, lesson=self.lesson
+        ).count()
+        self.assertEqual(count, 1)
+
+    def test_does_not_overwrite_completed(self):
+        """Não regride progresso COMPLETED para IN_PROGRESS."""
+        from django.utils import timezone
+
+        StudentLessonProgress.objects.create(
+            student_profile=self.student,
+            lesson=self.lesson,
+            progress_status=ProgressStatus.COMPLETED,
+            started_at=timezone.now(),
+            completed_at=timezone.now(),
+        )
+
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson.id),
+            )
+        )
+
+        progress = StudentLessonProgress.objects.get(
+            student_profile=self.student, lesson=self.lesson
+        )
+        self.assertEqual(progress.progress_status, ProgressStatus.COMPLETED)
+
+    def test_creates_module_progress_in_progress(self):
+        """Cascata: cria StudentModuleProgress IN_PROGRESS."""
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson.id),
+            )
+        )
+
+        module_progress = StudentModuleProgress.objects.get(
+            student_profile=self.student, module=self.module
+        )
+        self.assertEqual(module_progress.progress_status, ProgressStatus.IN_PROGRESS)
+        self.assertIsNotNone(module_progress.started_at)
+
+    def test_updates_learning_status(self):
+        """Cascata: atualiza learning_status para IN_PROGRESS."""
+        from src.accounts.enums import LearningStatus
+
+        self.assertEqual(self.student.learning_status, LearningStatus.NOT_STARTED)
+
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson.id),
+            )
+        )
+
+        self.student.refresh_from_db()
+        self.assertEqual(self.student.learning_status, LearningStatus.IN_PROGRESS)
+
+    def test_rejects_draft_lesson(self):
+        """BR-019: Aula DRAFT gera NotFoundError."""
+        from core.errors import NotFoundError
+
+        draft_lesson = LessonFactory(
+            module=self.module, publication_status=ContentStatus.DRAFT
+        )
+
+        with self.assertRaises(NotFoundError):
+            self.UseCase().execute(
+                input=self.Input(
+                    student_profile_id=str(self.student.id),
+                    lesson_id=str(draft_lesson.id),
+                )
+            )
+
+    def test_rejects_nonexistent_lesson(self):
+        """Aula inexistente gera NotFoundError."""
+        import uuid
+
+        from core.errors import NotFoundError
+
+        with self.assertRaises(NotFoundError):
+            self.UseCase().execute(
+                input=self.Input(
+                    student_profile_id=str(self.student.id),
+                    lesson_id=str(uuid.uuid4()),
+                )
+            )
+
+
+class MarkLessonCompletedUseCaseTest(TestCase):
+    """Testes do MarkLessonCompletedUseCase — ISSUE-011-F."""
+
+    def setUp(self):
+        from src.progress.services import (
+            MarkLessonCompletedInput,
+            MarkLessonCompletedUseCase,
+        )
+
+        self.UseCase = MarkLessonCompletedUseCase
+        self.Input = MarkLessonCompletedInput
+
+        self.module = ModuleFactory(publication_status=ContentStatus.PUBLISHED)
+        self.lesson_no_exercises = LessonFactory(
+            module=self.module, publication_status=ContentStatus.PUBLISHED
+        )
+        self.student = StudentProfileFactory()
+
+    def test_marks_lesson_completed(self):
+        """Aula sem exercícios pode ser marcada COMPLETED."""
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson_no_exercises.id),
+            )
+        )
+
+        progress = StudentLessonProgress.objects.get(
+            student_profile=self.student, lesson=self.lesson_no_exercises
+        )
+        self.assertEqual(progress.progress_status, ProgressStatus.COMPLETED)
+        self.assertIsNotNone(progress.started_at)
+        self.assertIsNotNone(progress.completed_at)
+
+    def test_rejects_lesson_with_published_exercises(self):
+        """Aula com exercícios publicados gera ApplicationError."""
+        from core.errors import ApplicationError
+        from src.curriculum.tests.factories import ExerciseFactory
+
+        lesson_with_ex = LessonFactory(
+            module=self.module, publication_status=ContentStatus.PUBLISHED
+        )
+        ExerciseFactory(
+            lesson=lesson_with_ex, publication_status=ContentStatus.PUBLISHED
+        )
+
+        with self.assertRaises(ApplicationError):
+            self.UseCase().execute(
+                input=self.Input(
+                    student_profile_id=str(self.student.id),
+                    lesson_id=str(lesson_with_ex.id),
+                )
+            )
+
+    def test_allows_lesson_with_only_draft_exercises(self):
+        """Aula com exercícios DRAFT (mas nenhum publicado) pode ser completada."""
+        from src.curriculum.tests.factories import ExerciseFactory
+
+        lesson_draft_ex = LessonFactory(
+            module=self.module, publication_status=ContentStatus.PUBLISHED
+        )
+        ExerciseFactory(lesson=lesson_draft_ex, publication_status=ContentStatus.DRAFT)
+
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(lesson_draft_ex.id),
+            )
+        )
+
+        progress = StudentLessonProgress.objects.get(
+            student_profile=self.student, lesson=lesson_draft_ex
+        )
+        self.assertEqual(progress.progress_status, ProgressStatus.COMPLETED)
+
+    def test_creates_progress_if_not_exists(self):
+        """Cria progresso direto como COMPLETED se não existia."""
+        count_before = StudentLessonProgress.objects.filter(
+            student_profile=self.student, lesson=self.lesson_no_exercises
+        ).count()
+        self.assertEqual(count_before, 0)
+
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson_no_exercises.id),
+            )
+        )
+
+        progress = StudentLessonProgress.objects.get(
+            student_profile=self.student, lesson=self.lesson_no_exercises
+        )
+        self.assertEqual(progress.progress_status, ProgressStatus.COMPLETED)
+
+    def test_upgrades_in_progress_to_completed(self):
+        """Atualiza IN_PROGRESS para COMPLETED."""
+        from django.utils import timezone
+
+        StudentLessonProgress.objects.create(
+            student_profile=self.student,
+            lesson=self.lesson_no_exercises,
+            progress_status=ProgressStatus.IN_PROGRESS,
+            started_at=timezone.now(),
+        )
+
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson_no_exercises.id),
+            )
+        )
+
+        progress = StudentLessonProgress.objects.get(
+            student_profile=self.student, lesson=self.lesson_no_exercises
+        )
+        self.assertEqual(progress.progress_status, ProgressStatus.COMPLETED)
+        self.assertIsNotNone(progress.completed_at)
+
+    def test_idempotent_for_completed(self):
+        """Chamar duas vezes para aula já COMPLETED não causa erro."""
+        use_case = self.UseCase()
+        inp = self.Input(
+            student_profile_id=str(self.student.id),
+            lesson_id=str(self.lesson_no_exercises.id),
+        )
+
+        use_case.execute(input=inp)
+        use_case.execute(input=inp)
+
+        count = StudentLessonProgress.objects.filter(
+            student_profile=self.student, lesson=self.lesson_no_exercises
+        ).count()
+        self.assertEqual(count, 1)
+
+    def test_cascade_updates_module_progress(self):
+        """Cascata: atualiza progresso do módulo."""
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson_no_exercises.id),
+            )
+        )
+
+        module_progress = StudentModuleProgress.objects.get(
+            student_profile=self.student, module=self.module
+        )
+        self.assertIn(
+            module_progress.progress_status,
+            [ProgressStatus.IN_PROGRESS, ProgressStatus.COMPLETED],
+        )
+
+    def test_cascade_completes_module_when_only_lesson(self):
+        """Se módulo tem apenas essa aula sem exercícios, módulo fica COMPLETED."""
+        # O módulo já tem self.lesson_no_exercises como única aula publicada,
+        # e não tem exercícios publicados → completar aula deve completar módulo
+        self.UseCase().execute(
+            input=self.Input(
+                student_profile_id=str(self.student.id),
+                lesson_id=str(self.lesson_no_exercises.id),
+            )
+        )
+
+        module_progress = StudentModuleProgress.objects.get(
+            student_profile=self.student, module=self.module
+        )
+        self.assertEqual(module_progress.progress_status, ProgressStatus.COMPLETED)

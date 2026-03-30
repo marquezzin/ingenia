@@ -1,11 +1,12 @@
 """Progress app — Views."""
 
+from rest_framework import status as http_status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.errors import NotFoundError
+from core.errors import ApplicationError, NotFoundError
 from core.permissions import IsStudent
 from src.curriculum.enums import ContentStatus
 from src.curriculum.models import Lesson, Module
@@ -21,6 +22,12 @@ from .selectors import (
     list_module_progress_for_student,
 )
 from .serializers import ModuleProgressDetailSerializer, ModuleProgressListSerializer
+from .services import (
+    MarkLessonCompletedInput,
+    MarkLessonCompletedUseCase,
+    MarkLessonStartedInput,
+    MarkLessonStartedUseCase,
+)
 
 
 class StudentProgressListView(ListAPIView):
@@ -171,3 +178,60 @@ class StudentProgressModuleDetailView(APIView):
 
         serializer = ModuleProgressDetailSerializer(detail_data)
         return Response(serializer.data)
+
+
+# ─── Lesson Progress by Access (ISSUE-011-F) ─────────────────────────────────
+
+
+class MarkLessonStartedView(APIView):
+    """Marca aula como IN_PROGRESS ao acessar.
+
+    POST /api/v1/student/lessons/<uuid:pk>/mark-started/
+    ISSUE-011-F: Registra progresso de aula independente de submissão.
+    """
+
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request, pk):
+        try:
+            MarkLessonStartedUseCase().execute(
+                input=MarkLessonStartedInput(
+                    student_profile_id=str(request.user.student_profile.id),
+                    lesson_id=str(pk),
+                )
+            )
+        except NotFoundError as e:
+            return Response({"detail": str(e)}, status=http_status.HTTP_404_NOT_FOUND)
+
+        return Response(
+            {"detail": "Aula marcada como iniciada."},
+            status=http_status.HTTP_200_OK,
+        )
+
+
+class MarkLessonCompletedView(APIView):
+    """Marca aula como COMPLETED — apenas aulas sem exercícios publicados.
+
+    POST /api/v1/student/lessons/<uuid:pk>/mark-completed/
+    ISSUE-011-F: Permite conclusão explícita pelo aluno.
+    """
+
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def post(self, request, pk):
+        try:
+            MarkLessonCompletedUseCase().execute(
+                input=MarkLessonCompletedInput(
+                    student_profile_id=str(request.user.student_profile.id),
+                    lesson_id=str(pk),
+                )
+            )
+        except NotFoundError as e:
+            return Response({"detail": str(e)}, status=http_status.HTTP_404_NOT_FOUND)
+        except ApplicationError as e:
+            return Response({"detail": str(e)}, status=http_status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {"detail": "Aula marcada como concluída."},
+            status=http_status.HTTP_200_OK,
+        )

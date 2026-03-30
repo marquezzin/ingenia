@@ -99,7 +99,7 @@
 | ISSUE-011-B | Service de submissão de código + endpoint (recebe resultado do Skulpt) | feature | 🟢 | 003, 004, 007-C |
 | ISSUE-011-C | Service de progresso automático (lesson, exercise, module) | feature | 🟢 | 003, 004, 005, 011-B |
 | ISSUE-011-D | Endpoints de histórico + progresso consolidado | feature | 🟢 | 004, 005, 007-C, 011-B, 011-C |
-| ISSUE-011-F | Progresso de aula por acesso (trigger de visualização) | feature | 🟡 | 011-A, 011-C |
+| ISSUE-011-F | Progresso de aula por acesso (trigger de visualização) | feature | 🟢 | 011-A, 011-C |
 | ISSUE-011-E | Testes unitários (progress + submission) | chore | 🟡 | 011-A a 011-D, 011-F |
 
 ### ISSUE-012 — Motor de Correção Skulpt — Client-Side (M)
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 32 |
+| Concluídas | 33 |
 | Em andamento | 0 |
-| Pendentes | 30 |
+| Pendentes | 29 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

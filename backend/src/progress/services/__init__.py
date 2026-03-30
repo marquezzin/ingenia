@@ -1,6 +1,10 @@
 """Progress services — exports."""
 
 from .progress import (
+    MarkLessonCompletedInput,
+    MarkLessonCompletedUseCase,
+    MarkLessonStartedInput,
+    MarkLessonStartedUseCase,
     UpdateExerciseProgressInput,
     UpdateExerciseProgressResult,
     UpdateExerciseProgressUseCase,
@@ -13,6 +17,10 @@ from .progress import (
 )
 
 __all__ = [
+    "MarkLessonCompletedInput",
+    "MarkLessonCompletedUseCase",
+    "MarkLessonStartedInput",
+    "MarkLessonStartedUseCase",
     "UpdateExerciseProgressInput",
     "UpdateExerciseProgressResult",
     "UpdateExerciseProgressUseCase",
