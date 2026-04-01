@@ -106,7 +106,7 @@
 
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
-| ISSUE-012-A | Endpoint síncrono de submissão (recebe resultado avaliado + persiste) | feature | 🟡 | 004 |
+| ISSUE-012-A | Endpoint síncrono de submissão (recebe resultado avaliado + persiste) | feature | 🟢 | 004 |
 | ISSUE-012-B | ~~Executor de sandbox~~ | feature | ⚪ | — (cancelada — Skulpt substitui) |
 | ISSUE-012-C | Avaliação no frontend: hook/service Skulpt por test case | feature | 🟡 | 003 |
 | ISSUE-012-D | Resultado no frontend: score, feedback + envio ao backend | feature | 🟡 | 004, 012-A, 012-C |
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 34 |
+| Concluídas | 35 |
 | Em andamento | 0 |
-| Pendentes | 28 |
+| Pendentes | 27 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

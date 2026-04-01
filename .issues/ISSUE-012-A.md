@@ -27,11 +27,11 @@ O frontend avalia o código via Skulpt e envia o resultado consolidado. O backen
 
 ## Critérios de Aceite
 
-- [ ] Endpoint aceita resultado avaliado do frontend
-- [ ] Submission + SubmissionResult criados em transação atômica
-- [ ] BR-012: Cada submissão gera exatamente um resultado
-- [ ] BR-011: Submissão apenas por aluno autenticado para exercício publicado
-- [ ] Validações de input (score entre 0-100, counts >= 0)
+- [x] Endpoint aceita resultado avaliado do frontend
+- [x] Submission + SubmissionResult criados em transação atômica
+- [x] BR-012: Cada submissão gera exatamente um resultado
+- [x] BR-011: Submissão apenas por aluno autenticado para exercício publicado
+- [x] Validações de input (score entre 0-100, counts >= 0)
 
 ## Arquivos Afetados
 
