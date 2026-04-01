@@ -35,13 +35,13 @@ Criar a camada de avaliação no frontend que usa o Skulpt para interpretar o c�
 
 ## Critérios de Aceite
 
-- [ ] Skulpt executa código Python no browser
-- [ ] Cada test case avaliado individualmente
-- [ ] input_data fornecido como stdin via `Sk.inputfun`
-- [ ] stdout capturado via `Sk.output`
-- [ ] Comparação output × expected_output (whitespace trimmed)
-- [ ] Score calculado corretamente
-- [ ] Hook gerencia estados (idle/running/complete/error)
+- [x] Skulpt executa código Python no browser
+- [x] Cada test case avaliado individualmente
+- [x] input_data fornecido como stdin via `Sk.inputfun`
+- [x] stdout capturado via `Sk.output`
+- [x] Comparação output × expected_output (whitespace trimmed)
+- [x] Score calculado corretamente
+- [x] Hook gerencia estados (idle/running/complete/error)
 
 ## Arquivos Afetados
 
@@ -68,5 +68,6 @@ Criar a camada de avaliação no frontend que usa o Skulpt para interpretar o c�
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída 🟢
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-26
+- **Atualizado em**: 2026-04-01
