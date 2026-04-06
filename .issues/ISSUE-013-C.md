@@ -20,16 +20,26 @@ Criar a tela de consumo de aula com player de vídeo, renderização de conteúd
 
 ## Critérios de Aceite
 
-- [ ] Vídeo embed funcional
-- [ ] Conteúdo markdown renderizado
-- [ ] Lista de exercícios com status de progresso
-- [ ] Navegação entre aulas
+- [x] Vídeo embed funcional
+- [x] Conteúdo markdown renderizado
+- [x] Lista de exercícios com status de progresso
+- [x] Navegação entre aulas
 
 ## Arquivos Afetados
 
 - `frontend/src/domains/student/pages/lessons/LessonPage.tsx`
-- `frontend/src/domains/student/components/VideoPlayer.tsx`
-- `frontend/src/domains/student/components/MarkdownContent.tsx`
+- `frontend/src/domains/student/ui/VideoPlayer.tsx`
+- `frontend/src/domains/student/ui/VideoPlayer.module.css`
+- `frontend/src/domains/student/ui/MarkdownContent.tsx`
+- `frontend/src/domains/student/ui/MarkdownContent.module.css`
+- `frontend/src/domains/student/ui/ExerciseListItem.tsx`
+- `frontend/src/domains/student/ui/ExerciseListItem.module.css`
+- `frontend/src/domains/student/ui/LessonPageSkeleton.tsx`
+- `frontend/src/domains/student/hooks/useStudentLesson.ts`
+- `frontend/src/domains/student/api/curriculum.ts`
+- `frontend/src/domains/student/types.ts`
+- `frontend/src/app/routes.tsx`
+- `frontend/src/domains/student/.context.md`
 
 ## Notas Técnicas
 
@@ -44,4 +54,5 @@ Criar a tela de consumo de aula com player de vídeo, renderização de conteúd
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-06
+- **Status**: Concluída

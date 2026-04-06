@@ -119,7 +119,7 @@
 |---|--------|------|--------|------------|
 | ISSUE-013-A | Layout aluno + Dashboard/Trilha | feature | 🟢 | 008-D, 008-E, 011-A |
 | ISSUE-013-B | Lista de módulos + Detalhe do módulo | feature | 🟢 | 011-A, 011-D, 013-A |
-| ISSUE-013-C | Tela de aula (vídeo + conteúdo + exercícios) | feature | 🟡 | 011-A, 011-F, 013-B |
+| ISSUE-013-C | Tela de aula (vídeo + conteúdo + exercícios) | feature | 🟢 | 011-A, 011-F, 013-B |
 | ISSUE-013-D | Tela de exercício com Editor de Código (Monaco) + Motor Skulpt + submissão | feature | 🟡 | 011-B, 012-C, 012-D, 012-E, 013-C |
 | ISSUE-013-E | Painel de resultado + histórico de tentativas | feature | 🟡 | 011-D, 012-D, 013-D |
 | ISSUE-013-F | Tela de progresso + Tela de histórico de submissões | feature | 🟡 | 011-D, 013-A |
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 41 |
+| Concluídas | 42 |
 | Em andamento | 0 |
-| Pendentes | 21 |
+| Pendentes | 20 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

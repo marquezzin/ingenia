@@ -6,7 +6,7 @@
 
 import { httpClient } from "@/shared/http/client";
 import type { PaginatedResponse } from "@/shared/http/types";
-import type { StudentModule, StudentModuleDetail } from "../types";
+import type { StudentModule, StudentModuleDetail, StudentLessonDetail } from "../types";
 
 // ─── Modules ────────────────────────────────────────────────────────────────
 
@@ -34,5 +34,44 @@ export const getStudentModuleApi = async (
     `/api/v1/student/modules/${moduleId}/`,
   );
   return data;
+};
+
+// ─── Lessons ────────────────────────────────────────────────────────────────
+
+/**
+ * Get detail of a single published lesson (with video, exercises, and progress).
+ *
+ * GET /api/v1/student/modules/:moduleId/lessons/:lessonId/
+ */
+export const getStudentLessonApi = async (
+  moduleId: string,
+  lessonId: string,
+): Promise<StudentLessonDetail> => {
+  const { data } = await httpClient.get(
+    `/api/v1/student/modules/${moduleId}/lessons/${lessonId}/`,
+  );
+  return data;
+};
+
+/**
+ * Mark a lesson as started (IN_PROGRESS) — triggers on page access.
+ *
+ * POST /api/v1/student/lessons/:lessonId/mark-started/
+ */
+export const markLessonStartedApi = async (
+  lessonId: string,
+): Promise<void> => {
+  await httpClient.post(`/api/v1/student/lessons/${lessonId}/mark-started/`);
+};
+
+/**
+ * Mark a lesson as completed — only for lessons without exercises.
+ *
+ * POST /api/v1/student/lessons/:lessonId/mark-completed/
+ */
+export const markLessonCompletedApi = async (
+  lessonId: string,
+): Promise<void> => {
+  await httpClient.post(`/api/v1/student/lessons/${lessonId}/mark-completed/`);
 };
 

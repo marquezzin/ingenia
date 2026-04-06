@@ -141,3 +141,45 @@ export interface ModuleProgressSummary {
   total_exercises: number;
   completed_exercises: number;
 }
+
+// ─── Video (nested in lesson detail) ────────────────────────────────────────
+
+/** Video data nested inside a lesson detail response. */
+export interface StudentVideo {
+  id: string;
+  title: string;
+  video_url: string;
+  duration_seconds: number | null;
+}
+
+// ─── Exercise Progress ──────────────────────────────────────────────────────
+
+/** Progress data for an exercise (from student endpoints). */
+export interface StudentExerciseProgress {
+  progress_status: ProgressStatus;
+  attempts_count: number;
+  first_attempt_at: string | null;
+  completed_at: string | null;
+}
+
+/** A published exercise within a lesson as seen by the student (list view). */
+export interface StudentExerciseListItem {
+  id: string;
+  title: string;
+  sequence_order: number;
+  progress: StudentExerciseProgress | null;
+}
+
+// ─── Student Lesson Detail ──────────────────────────────────────────────────
+
+/** Detailed lesson view — includes video, written content, exercises with progress. */
+export interface StudentLessonDetail {
+  id: string;
+  title: string;
+  written_content: string;
+  sequence_order: number;
+  video: StudentVideo | null;
+  exercises: StudentExerciseListItem[];
+  progress: StudentLessonProgress | null;
+}
+
