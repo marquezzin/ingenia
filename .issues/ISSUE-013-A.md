@@ -22,10 +22,10 @@ Criar o domain frontend `student` com layout dedicado e dashboard exibindo a tri
 
 ## Critérios de Aceite
 
-- [ ] Domain `student` criado
-- [ ] Layout com navegação funcional
-- [ ] Dashboard com trilha de módulos e progresso
-- [ ] "Continuar de onde parei" funcional
+- [x] Domain `student` criado
+- [x] Layout com navegação funcional
+- [x] Dashboard com trilha de módulos e progresso
+- [x] "Continuar de onde parei" funcional
 
 ## Arquivos Afetados
 
@@ -48,5 +48,6 @@ Criar o domain frontend `student` com layout dedicado e dashboard exibindo a tri
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-06

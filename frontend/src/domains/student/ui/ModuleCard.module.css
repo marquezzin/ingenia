@@ -1,0 +1,24 @@
+.root {
+  display: block;
+  width: 100%;
+}
+
+.card {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+}
+
+.description {
+  min-height: 2.6em;
+}

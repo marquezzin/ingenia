@@ -72,3 +72,61 @@ export interface EvaluationResult {
 // ─── Execution State (hook lifecycle) ────────────────────────────────────────
 
 export type ExecutionState = "idle" | "running" | "complete" | "error";
+
+// ─── Progress Status ────────────────────────────────────────────────────────
+
+export type ProgressStatus =
+  | "NOT_STARTED"
+  | "IN_PROGRESS"
+  | "COMPLETED";
+
+// ─── Student Module (read — from curriculum API) ────────────────────────────
+
+/** Progress data attached to a module for the current student. */
+export interface StudentModuleProgress {
+  progress_status: ProgressStatus;
+  started_at: string | null;
+  completed_at: string | null;
+}
+
+/** A published module as seen by the student. */
+export interface StudentModule {
+  id: string;
+  title: string;
+  description: string;
+  sequence_order: number;
+  lesson_count: number;
+  progress: StudentModuleProgress | null;
+}
+
+/** Lesson progress attached to a module listing. */
+export interface StudentLessonProgress {
+  progress_status: ProgressStatus;
+  started_at: string | null;
+  completed_at: string | null;
+}
+
+/** A published lesson within a module as seen by the student. */
+export interface StudentLesson {
+  id: string;
+  title: string;
+  sequence_order: number;
+  has_video: boolean;
+  exercise_count: number;
+  progress: StudentLessonProgress | null;
+}
+
+// ─── Progress API Types (from progress endpoints) ───────────────────────────
+
+/** Module progress summary — from GET /api/v1/student/progress/. */
+export interface ModuleProgressSummary {
+  module_id: string;
+  module_title: string;
+  progress_status: ProgressStatus;
+  started_at: string | null;
+  completed_at: string | null;
+  total_lessons: number;
+  completed_lessons: number;
+  total_exercises: number;
+  completed_exercises: number;
+}

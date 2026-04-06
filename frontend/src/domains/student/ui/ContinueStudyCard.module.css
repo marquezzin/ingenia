@@ -1,0 +1,9 @@
+.card {
+  background: var(--mantine-color-body);
+  border-color: var(--mantine-color-brand-light);
+  transition: box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-sm);
+}
