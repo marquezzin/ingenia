@@ -10,6 +10,7 @@
  */
 
 import { runCode } from "@/domains/student/services/skulptRunner";
+import { generateFeedback } from "@/domains/student/services/feedbackGenerator";
 
 import type {
   TestCase,
@@ -171,32 +172,3 @@ function determineResultStatus(results: TestCaseResult[]): ResultStatus {
   return allPassed ? "PASSED" : "FAILED";
 }
 
-/**
- * Generate a pedagogical feedback message.
- *
- * BR-013: Must guide the student without exposing the expected answer.
- */
-function generateFeedback(
-  passedCount: number,
-  totalCount: number,
-  status: ResultStatus,
-): string {
-  if (totalCount === 0) {
-    return "Nenhum teste encontrado para este exercício.";
-  }
-
-  if (status === "ERROR") {
-    return `Ocorreu um erro durante a execução. ${passedCount} de ${totalCount} testes puderam ser avaliados.`;
-  }
-
-  if (status === "PASSED") {
-    return `Parabéns! Todos os ${totalCount} testes passaram. 🎉`;
-  }
-
-  // FAILED
-  if (passedCount === 0) {
-    return `Nenhum teste passou (0 de ${totalCount}). Revise seu código e tente novamente.`;
-  }
-
-  return `${passedCount} de ${totalCount} testes passaram. Continue ajustando seu código!`;
-}

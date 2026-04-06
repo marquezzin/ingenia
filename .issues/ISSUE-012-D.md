@@ -32,11 +32,11 @@ Após a avaliação dos test cases (012-C), montar o resultado consolidado com f
 
 ## Critérios de Aceite
 
-- [ ] result_status correto (PASSED/FAILED/ERROR)
-- [ ] score_percentage calculado
-- [ ] BR-013: Feedback não expõe resposta completa
-- [ ] Resultado enviado e aceito pelo backend
-- [ ] Feedback exibido imediatamente ao aluno
+- [x] result_status correto (PASSED/FAILED/ERROR)
+- [x] score_percentage calculado
+- [x] BR-013: Feedback não expõe resposta completa
+- [x] Resultado enviado e aceito pelo backend
+- [x] Feedback exibido imediatamente ao aluno
 
 ## Arquivos Afetados
 
@@ -59,4 +59,5 @@ Após a avaliação dos test cases (012-C), montar o resultado consolidado com f
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-26
+- **Status**: Concluída
+- **Atualizado em**: 2026-04-06
