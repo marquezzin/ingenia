@@ -116,6 +116,17 @@ export interface StudentLesson {
   progress: StudentLessonProgress | null;
 }
 
+/** Detailed module view — includes nested published lessons with progress. */
+export interface StudentModuleDetail {
+  id: string;
+  title: string;
+  description: string;
+  sequence_order: number;
+  lesson_count: number;
+  lessons: StudentLesson[];
+  progress: StudentModuleProgress | null;
+}
+
 // ─── Progress API Types (from progress endpoints) ───────────────────────────
 
 /** Module progress summary — from GET /api/v1/student/progress/. */

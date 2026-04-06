@@ -6,7 +6,7 @@
 
 import { httpClient } from "@/shared/http/client";
 import type { PaginatedResponse } from "@/shared/http/types";
-import type { StudentModule } from "../types";
+import type { StudentModule, StudentModuleDetail } from "../types";
 
 // ─── Modules ────────────────────────────────────────────────────────────────
 
@@ -29,9 +29,10 @@ export const listStudentModulesApi = async (): Promise<
  */
 export const getStudentModuleApi = async (
   moduleId: string,
-): Promise<StudentModule> => {
+): Promise<StudentModuleDetail> => {
   const { data } = await httpClient.get(
     `/api/v1/student/modules/${moduleId}/`,
   );
   return data;
 };
+

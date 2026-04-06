@@ -17,14 +17,24 @@ Criar as telas de listagem e detalhe de módulos para o aluno.
 
 ## Critérios de Aceite
 
-- [ ] Lista de módulos publicados com progresso
-- [ ] Detalhe com aulas e indicadores
-- [ ] Navegação para aula funcional
-- [ ] States loading/empty/error
+- [x] Lista de módulos publicados com progresso
+- [x] Detalhe com aulas e indicadores
+- [x] Navegação para aula funcional
+- [x] States loading/empty/error
 
 ## Arquivos Afetados
 
-- `frontend/src/domains/student/pages/modules/`
+- `frontend/src/domains/student/pages/modules/ModulesListPage.tsx`
+- `frontend/src/domains/student/pages/modules/ModuleDetailPage.tsx`
+- `frontend/src/domains/student/ui/LessonItem.tsx`
+- `frontend/src/domains/student/ui/LessonItem.module.css`
+- `frontend/src/domains/student/ui/ModulesListSkeleton.tsx`
+- `frontend/src/domains/student/ui/ModuleDetailSkeleton.tsx`
+- `frontend/src/domains/student/types.ts`
+- `frontend/src/domains/student/api/curriculum.ts`
+- `frontend/src/domains/student/hooks/useStudentModules.ts`
+- `frontend/src/app/routes.tsx`
+- `frontend/src/domains/student/.context.md`
 
 ## Notas Técnicas
 
@@ -38,4 +48,5 @@ Criar as telas de listagem e detalhe de módulos para o aluno.
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Status atual**: Concluída
+- **Atualizado em**: 2026-04-06

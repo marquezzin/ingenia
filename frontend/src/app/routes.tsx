@@ -47,6 +47,8 @@ const ClassDetailPage = lazy(() => import("@/domains/admin/pages/classes/ClassDe
 
 // Student domain
 const StudentDashboardPage = lazy(() => import("@/domains/student/pages/DashboardPage"));
+const StudentModulesListPage = lazy(() => import("@/domains/student/pages/modules/ModulesListPage"));
+const StudentModuleDetailPage = lazy(() => import("@/domains/student/pages/modules/ModuleDetailPage"));
 
 // Dev tools (removível em produção)
 const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/ComponentCatalogPage"));
@@ -130,6 +132,22 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<Spinner />}>
                         <StudentDashboardPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <StudentModulesListPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "modules/:moduleId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <StudentModuleDetailPage />
                     </Suspense>
                 ),
             },

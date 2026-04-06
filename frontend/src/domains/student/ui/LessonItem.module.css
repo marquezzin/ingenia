@@ -1,0 +1,33 @@
+.root {
+  display: block;
+  width: 100%;
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
+  cursor: pointer;
+}
+
+.root:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--mantine-color-brand-light);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.meta {
+  flex-shrink: 0;
+}
+
+@media (max-width: 36em) {
+  .meta {
+    display: none;
+  }
+}
