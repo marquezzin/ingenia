@@ -49,6 +49,7 @@ from .services.user_admin import (
 
 
 class RegisterView(APIView):
+    authentication_classes = ()
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
 
@@ -80,6 +81,7 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
+    authentication_classes = ()
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
@@ -118,6 +120,7 @@ class MeView(APIView):
 
 
 class ForgotPasswordView(APIView):
+    authentication_classes = ()
     permission_classes = [AllowAny]
     serializer_class = ForgotPasswordSerializer
 
@@ -134,6 +137,7 @@ class ForgotPasswordView(APIView):
 
 
 class ResetPasswordView(APIView):
+    authentication_classes = ()
     permission_classes = [AllowAny]
     serializer_class = ResetPasswordSerializer
 
