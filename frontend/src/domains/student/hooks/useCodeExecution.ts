@@ -9,6 +9,7 @@
 import { useState, useCallback, useRef } from "react";
 
 import { evaluateCode } from "@/domains/student/services/evaluator";
+import { formatSkulptError } from "@/domains/student/services/errorHandler";
 
 import type {
   TestCase,
@@ -92,11 +93,8 @@ export function useCodeExecution(): UseCodeExecutionReturn {
         // Only update state if this is still the current execution
         if (currentExecutionId !== executionIdRef.current) return;
 
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "Ocorreu um erro inesperado durante a avaliação.";
-        setError(errorMessage);
+        const formatted = formatSkulptError(err);
+        setError(formatted.message);
         setState("error");
       }
     },

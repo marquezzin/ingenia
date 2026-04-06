@@ -2,13 +2,19 @@
  * Skulpt Runner — Low-level Python code execution via Skulpt.
  *
  * Executes arbitrary Python source code in the browser using the Skulpt
- * interpreter. Provides stdin injection, stdout capture, timeout support,
- * and simplified error reporting.
+ * interpreter. Provides stdin injection, stdout capture, timeout support
+ * (via Sk.execLimit + setTimeout fallback), and delegates error formatting
+ * to errorHandler.ts.
  */
 
 import Sk from "skulpt";
 
 import type { CodeExecutionResult } from "@/domains/student/types";
+import {
+  formatSkulptError,
+  formatTimeoutError,
+  TIMEOUT_SENTINEL,
+} from "@/domains/student/services/errorHandler";
 
 /** Default execution timeout in milliseconds. */
 const DEFAULT_TIMEOUT_MS = 10_000;
@@ -59,6 +65,9 @@ export async function runCode(
 
     // Use Python 3 syntax
     __future__: Sk.python3,
+
+    // Native Skulpt execution limit (milliseconds)
+    execLimit: timeoutMs,
   });
 
   // ── Build execution promise ───────────────────────────────────────────
@@ -66,12 +75,14 @@ export async function runCode(
     Sk.importMainWithBody("<stdin>", false, sourceCode, true),
   );
 
-  // ── Build timeout promise ─────────────────────────────────────────────
+  // ── Build timeout fallback promise ────────────────────────────────────
+  // Sk.execLimit should handle most timeouts natively, but we keep a
+  // setTimeout fallback in case the native limit doesn't trigger.
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   const timeoutPromise = new Promise<never>((_resolve, reject) => {
     timeoutId = setTimeout(() => {
-      reject(new Error("__TIMEOUT__"));
-    }, timeoutMs);
+      reject(new Error(TIMEOUT_SENTINEL));
+    }, timeoutMs + 500); // +500ms grace period for Sk.execLimit
   });
 
   try {
@@ -84,20 +95,35 @@ export async function runCode(
       timedOut: false,
     };
   } catch (error: unknown) {
-    // ── Timeout ───────────────────────────────────────────────────────
-    if (error instanceof Error && error.message === "__TIMEOUT__") {
+    // ── Timeout (sentinel from fallback) ──────────────────────────────
+    if (error instanceof Error && error.message === TIMEOUT_SENTINEL) {
+      const formatted = formatTimeoutError();
       return {
         stdout: stdoutParts.join(""),
-        stderr: "O código excedeu o tempo limite de execução.",
+        stderr: formatted.message,
+        timedOut: true,
+      };
+    }
+
+    // ── Skulpt native timeout (TimeLimitError) ────────────────────────
+    const rawMessage = String(error);
+    if (
+      rawMessage.includes("TimeLimitError") ||
+      rawMessage.includes("Program exceeded run time limit")
+    ) {
+      const formatted = formatTimeoutError();
+      return {
+        stdout: stdoutParts.join(""),
+        stderr: formatted.message,
         timedOut: true,
       };
     }
 
     // ── Skulpt error (syntax, runtime, etc.) ─────────────────────────
-    const errorMessage = simplifyError(error);
+    const formatted = formatSkulptError(error);
     return {
       stdout: stdoutParts.join(""),
-      stderr: errorMessage,
+      stderr: formatted.message,
       timedOut: false,
     };
   } finally {
@@ -105,67 +131,4 @@ export async function runCode(
       clearTimeout(timeoutId);
     }
   }
-}
-
-/**
- * Simplify a Skulpt error message into a student-friendly string.
- *
- * Strips internal Skulpt details and presents the core error in a
- * readable format.
- */
-function simplifyError(error: unknown): string {
-  if (error === null || error === undefined) {
-    return "Erro desconhecido durante a execução.";
-  }
-
-  // Skulpt errors typically have a .toString() that includes the traceback
-  const raw = String(error);
-
-  // Check for common error types and simplify
-  if (raw.includes("SyntaxError")) {
-    const match = raw.match(/SyntaxError:\s*(.+)/);
-    return match
-      ? `Erro de sintaxe: ${match[1]}`
-      : "Erro de sintaxe no código.";
-  }
-
-  if (raw.includes("NameError")) {
-    const match = raw.match(/NameError:\s*(.+)/);
-    return match
-      ? `Erro de nome: ${match[1]}`
-      : "Uma variável ou função não foi definida.";
-  }
-
-  if (raw.includes("TypeError")) {
-    const match = raw.match(/TypeError:\s*(.+)/);
-    return match
-      ? `Erro de tipo: ${match[1]}`
-      : "Operação incompatível com o tipo de dado.";
-  }
-
-  if (raw.includes("IndexError")) {
-    const match = raw.match(/IndexError:\s*(.+)/);
-    return match
-      ? `Erro de índice: ${match[1]}`
-      : "Acesso a um índice fora dos limites.";
-  }
-
-  if (raw.includes("ValueError")) {
-    const match = raw.match(/ValueError:\s*(.+)/);
-    return match
-      ? `Erro de valor: ${match[1]}`
-      : "Valor inválido fornecido.";
-  }
-
-  if (raw.includes("ZeroDivisionError")) {
-    return "Erro: divisão por zero.";
-  }
-
-  if (raw.includes("IndentationError")) {
-    return "Erro de indentação: verifique os espaços no início das linhas.";
-  }
-
-  // Fallback: return a truncated version of the error
-  const truncated = raw.length > 200 ? raw.slice(0, 200) + "…" : raw;
-  return `Erro durante a execução: ${truncated}`;
 }

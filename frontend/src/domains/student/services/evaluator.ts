@@ -11,6 +11,7 @@
 
 import { runCode } from "@/domains/student/services/skulptRunner";
 import { generateFeedback } from "@/domains/student/services/feedbackGenerator";
+import { formatSkulptError } from "@/domains/student/services/errorHandler";
 
 import type {
   TestCase,
@@ -133,17 +134,15 @@ async function evaluateSingleTestCase(
       errorMessage: null,
     };
   } catch (error: unknown) {
-    // Unexpected error (should not happen — runCode catches errors)
+    // Unexpected error — delegate to errorHandler for safe formatting
+    const formatted = formatSkulptError(error);
     return {
       testCaseId: testCase.id,
       testCaseName: testCase.name,
       expectedOutput: testCase.expected_output.trim(),
       actualOutput: "",
       verdict: "ERROR",
-      errorMessage:
-        error instanceof Error
-          ? error.message
-          : "Erro inesperado durante a avaliação.",
+      errorMessage: formatted.message,
     };
   }
 }

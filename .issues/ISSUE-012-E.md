@@ -34,11 +34,11 @@ Garantir que o motor Skulpt no frontend lida com timeout, erros de sintaxe, runt
 
 ## Critérios de Aceite
 
-- [ ] Timeout → resultado ERROR com mensagem amigável
-- [ ] Erro de sintaxe → capturado com número da linha
-- [ ] Runtime error → capturado e simplificado
-- [ ] Erro inesperado → mensagem genérica sem expor internals
-- [ ] Nenhum erro interno do Skulpt exposto ao aluno
+- [x] Timeout → resultado ERROR com mensagem amigável
+- [x] Erro de sintaxe → capturado com número da linha
+- [x] Runtime error → capturado e simplificado
+- [x] Erro inesperado → mensagem genérica sem expor internals
+- [x] Nenhum erro interno do Skulpt exposto ao aluno
 
 ## Arquivos Afetados
 
@@ -63,5 +63,6 @@ Garantir que o motor Skulpt no frontend lida com timeout, erros de sintaxe, runt
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-26
+- **Atualizado em**: 2026-04-06

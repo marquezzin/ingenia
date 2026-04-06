@@ -110,7 +110,7 @@
 | ISSUE-012-B | ~~Executor de sandbox~~ | feature | ⚪ | — (cancelada — Skulpt substitui) |
 | ISSUE-012-C | Avaliação no frontend: hook/service Skulpt por test case | feature | 🟢 | 003 |
 | ISSUE-012-D | Resultado no frontend: score, feedback + envio ao backend | feature | 🟢 | 004, 012-A, 012-C |
-| ISSUE-012-E | Tratamento de erros e timeout no frontend (Skulpt) | feature | 🟡 | 012-C |
+| ISSUE-012-E | Tratamento de erros e timeout no frontend (Skulpt) | feature | 🟢 | 012-C |
 | ISSUE-012-F | Testes: vitest (avaliação Skulpt) + pytest (persistência) | chore | 🟡 | 012-A, 012-C, 012-D, 012-E |
 
 ### ISSUE-013 — Frontend Aluno (GG)
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 37 |
+| Concluídas | 38 |
 | Em andamento | 0 |
-| Pendentes | 25 |
+| Pendentes | 24 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->
