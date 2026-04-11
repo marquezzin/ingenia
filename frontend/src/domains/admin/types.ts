@@ -148,6 +148,8 @@ export interface TestCaseListItem {
   [key: string]: unknown;
   id: string;
   name: string;
+  input_data: string | null;
+  expected_output: string;
   sequence_order: number;
   is_hidden: boolean;
 }

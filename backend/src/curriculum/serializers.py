@@ -196,7 +196,14 @@ class ExerciseTestCaseListSerializer(BaseModelSerializer):
 
     class Meta:
         model = ExerciseTestCase
-        fields = ["id", "name", "sequence_order", "is_hidden"]
+        fields = [
+            "id",
+            "name",
+            "input_data",
+            "expected_output",
+            "sequence_order",
+            "is_hidden",
+        ]
 
 
 class ExerciseTestCaseDetailSerializer(BaseModelSerializer):

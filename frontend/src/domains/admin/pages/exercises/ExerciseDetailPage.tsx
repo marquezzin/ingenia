@@ -155,8 +155,8 @@ export default function ExerciseDetailPage() {
     setEditingTestCase(tc);
     tcForm.reset({
       name: tc.name,
-      input_data: "",
-      expected_output: "",
+      input_data: tc.input_data ?? "",
+      expected_output: tc.expected_output,
       sequence_order: tc.sequence_order,
       is_hidden: tc.is_hidden,
     });
