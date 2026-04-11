@@ -18,14 +18,19 @@ Criar domain frontend `teacher` com layout e dashboard do professor.
 
 ## Critérios de Aceite
 
-- [ ] Domain criado
-- [ ] Layout com navegação funcional
-- [ ] Dashboard com cards de resumo
+- [x] Domain criado
+- [x] Layout com navegação funcional
+- [x] Dashboard com cards de resumo
 
 ## Arquivos Afetados
 
 - `frontend/src/domains/teacher/` — novo domain
+- `frontend/src/domains/teacher/types.ts`
+- `frontend/src/domains/teacher/api.ts`
+- `frontend/src/domains/teacher/hooks.ts`
+- `frontend/src/domains/teacher/model.ts`
 - `frontend/src/domains/teacher/pages/DashboardPage.tsx`
+- `frontend/src/domains/teacher/.context.md`
 - `frontend/src/app/routes.tsx`
 
 ## Notas Técnicas
@@ -40,5 +45,6 @@ Criar domain frontend `teacher` com layout e dashboard do professor.
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-11
