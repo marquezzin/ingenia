@@ -63,3 +63,28 @@ export const listExerciseSubmissionsApi = async (
   return data;
 };
 
+// ─── Global Submissions Listing ─────────────────────────────────────────────
+
+/** Filters for listing all submissions. */
+export interface SubmissionListFilters {
+  result_status?: string;
+  page?: number;
+}
+
+/**
+ * List all submissions for the current student (global history).
+ *
+ * GET /api/v1/student/submissions/
+ *
+ * @param filters - Optional filters (evaluation_status, page).
+ * @returns Paginated list of all submissions with results.
+ */
+export const listAllSubmissionsApi = async (
+  filters?: SubmissionListFilters,
+): Promise<PaginatedResponse<SubmissionHistoryItem>> => {
+  const { data } = await httpClient.get("/api/v1/student/submissions/", {
+    params: filters,
+  });
+  return data;
+};
+

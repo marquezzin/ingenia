@@ -17,14 +17,22 @@ Criar telas de acompanhamento de progresso consolidado e histórico geral de sub
 
 ## Critérios de Aceite
 
-- [ ] Progresso consolidado exibido
-- [ ] Histórico com filtros funcionais
-- [ ] Detalhe do feedback acessível
+- [x] Progresso consolidado exibido
+- [x] Histórico com filtros funcionais
+- [x] Detalhe do feedback acessível
 
 ## Arquivos Afetados
 
 - `frontend/src/domains/student/pages/ProgressPage.tsx`
 - `frontend/src/domains/student/pages/SubmissionsPage.tsx`
+- `frontend/src/domains/student/ui/ProgressModuleCard.tsx`
+- `frontend/src/domains/student/ui/ProgressModuleCard.module.css`
+- `frontend/src/domains/student/ui/ProgressPageSkeleton.tsx`
+- `frontend/src/domains/student/ui/SubmissionDetailModal.tsx`
+- `frontend/src/domains/student/hooks/useSubmissionHistory.ts`
+- `frontend/src/domains/student/api/submissions.ts`
+- `frontend/src/app/routes.tsx`
+- `frontend/src/domains/student/.context.md`
 
 ## Notas Técnicas
 
@@ -38,5 +46,6 @@ Criar telas de acompanhamento de progresso consolidado e histórico geral de sub
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-10

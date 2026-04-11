@@ -10,6 +10,7 @@ def list_submissions_for_student(
     student_profile_id: str,
     exercise_id: str | None = None,
     evaluation_status: str | None = None,
+    result_status: str | None = None,
 ) -> models.QuerySet[Submission]:
     """Retorna submissões do aluno com resultado, ordenadas por data.
 
@@ -26,5 +27,8 @@ def list_submissions_for_student(
 
     if evaluation_status is not None:
         qs = qs.filter(evaluation_status=evaluation_status)
+
+    if result_status is not None:
+        qs = qs.filter(result__result_status=result_status)
 
     return qs
