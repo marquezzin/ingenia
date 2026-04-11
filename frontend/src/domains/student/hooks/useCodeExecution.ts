@@ -24,7 +24,7 @@ export interface UseCodeExecutionReturn {
     sourceCode: string,
     testCases: TestCase[],
     timeoutMs?: number,
-  ) => Promise<void>;
+  ) => Promise<EvaluationResult | void>;
 
   /** Current state of the execution lifecycle. */
   state: ExecutionState;
@@ -68,7 +68,7 @@ export function useCodeExecution(): UseCodeExecutionReturn {
       sourceCode: string,
       testCases: TestCase[],
       timeoutMs?: number,
-    ): Promise<void> => {
+    ): Promise<EvaluationResult | void> => {
       // Increment execution ID to invalidate previous runs
       const currentExecutionId = ++executionIdRef.current;
 
@@ -85,10 +85,11 @@ export function useCodeExecution(): UseCodeExecutionReturn {
         );
 
         // Only update state if this is still the current execution
-        if (currentExecutionId !== executionIdRef.current) return;
+        if (currentExecutionId !== executionIdRef.current) return evaluationResult;
 
         setResult(evaluationResult);
         setState("complete");
+        return evaluationResult;
       } catch (err: unknown) {
         // Only update state if this is still the current execution
         if (currentExecutionId !== executionIdRef.current) return;

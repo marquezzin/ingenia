@@ -146,22 +146,21 @@ export default function ExercisePage() {
 
   const handleSubmit = useCallback(async () => {
     if (!exercise) return;
-    await execute(code, exercise.test_cases);
-  }, [code, exercise, execute]);
-
-  const handleSubmitAfterExec = useCallback(async () => {
-    if (!exercise || !execResult) return;
-    const response = await submit(exercise.id, code, execResult);
+    const result = await execute(code, exercise.test_cases);
+    if (!result) return;
+    
+    // Submit the newly acquired result to the backend
+    const response = await submit(exercise.id, code, result);
     if (response) {
       notifications.show({
         title: "Submissão enviada!",
-        message: `Sua nota: ${Math.round(execResult.scorePercentage)}%`,
-        color: execResult.scorePercentage === 100 ? "teal" : "yellow",
+        message: `Sua nota: ${Math.round(result.scorePercentage)}%`,
+        color: result.scorePercentage === 100 ? "teal" : "yellow",
       });
     }
     setActiveTab("results");
     setIsBottomOpen(true);
-  }, [exercise, execResult, code, submit]);
+  }, [code, exercise, execute, submit]);
 
   const handleClear = useCallback(() => {
     setCode(DEFAULT_CODE);
@@ -324,13 +323,11 @@ export default function ExercisePage() {
                   Executar
                 </Button>
               </Tooltip>
-              {!isCompleted && (
-                <Tooltip label="Submeter resposta">
-                  <Button className={classes.actionButton} leftSection={<Send size={14} />} onClick={async () => { await handleSubmit(); setTimeout(() => handleSubmitAfterExec(), 100); }} loading={subState === "submitting"} disabled={isBusy || !code.trim()} color="teal" size="sm">
-                    Submeter
-                  </Button>
-                </Tooltip>
-              )}
+              <Tooltip label="Submeter resposta">
+                <Button className={classes.actionButton} leftSection={<Send size={14} />} onClick={handleSubmit} loading={subState === "submitting"} disabled={isBusy || !code.trim()} color="teal" size="sm">
+                  Submeter
+                </Button>
+              </Tooltip>
               <Tooltip label="Restaurar código padrão">
                 <ActionIcon variant="subtle" color="red" size="lg" onClick={openClear} disabled={isBusy} aria-label="Restaurar código padrão">
                   <Trash2 size={16} />

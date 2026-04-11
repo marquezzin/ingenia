@@ -123,7 +123,7 @@
 | ISSUE-013-D | Tela de exercício com Editor de Código (Monaco) + Motor Skulpt + submissão | feature | 🟢 | 011-B, 012-C, 012-D, 012-E, 013-C |
 | ISSUE-013-E | Painel de resultado + histórico de tentativas | feature | 🟢 | 011-D, 012-D, 013-D |
 | ISSUE-013-F | Tela de progresso + Tela de histórico de submissões | feature | 🟢 | 011-D, 013-A |
-| ISSUE-013-G | Testes E2E (J-002, J-003, J-004) | chore | 🟡 | 011-E, 012-F, 013-A a 013-F |
+| ISSUE-013-G | Testes E2E (J-002, J-003, J-004) | chore | 🟢 | 011-E, 012-F, 013-A a 013-F |
 
 ---
 
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 44 |
+| Concluídas | 45 |
 | Em andamento | 0 |
-| Pendentes | 18 |
+| Pendentes | 17 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->
