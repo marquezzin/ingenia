@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   Alert,
+  Badge,
   Box,
   Group,
   Stack,
@@ -70,15 +71,24 @@ export function ResultPanel({ result, hiddenMap }: ResultPanelProps) {
 
   const statusColor = getStatusColor(result.resultStatus);
   const statusText = getStatusText(result.resultStatus);
+  const score = Math.round(result.scorePercentage);
 
   return (
     <Box className={classes.root} style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       {/* ── Header with Status ─────────────────────────────────────── */}
       <Group justify="space-between" align="center" mb="md" style={{ flexShrink: 0 }}>
-        <Group gap="xs">
+        <Group gap="sm">
           <Title order={4} c={`${statusColor}.6`}>
             {statusText}
           </Title>
+          <Badge
+            size="lg"
+            variant="light"
+            color={statusColor}
+            radius="md"
+          >
+            {score}%  ·  {result.passedCount}/{result.passedCount + result.failedCount} testes
+          </Badge>
         </Group>
       </Group>
 
@@ -182,9 +192,19 @@ export function ResultPanel({ result, hiddenMap }: ResultPanelProps) {
             </Stack>
           )}
 
-          {/* Feedback message (if any globally applied to result) */}
+          {/* Feedback message (pedagogical guidance) */}
           {result.feedbackMessage && (
-            <Alert color="brand" variant="light" mt="xl" title="Feedback">
+            <Alert
+              color="brand"
+              variant="light"
+              mt="xl"
+              title="💡 Feedback pedagógico"
+              radius="md"
+              styles={{
+                title: { fontSize: "var(--mantine-font-size-sm)" },
+                message: { fontSize: "var(--mantine-font-size-sm)" },
+              }}
+            >
               {result.feedbackMessage}
             </Alert>
           )}

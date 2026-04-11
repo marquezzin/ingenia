@@ -41,14 +41,18 @@ import {
   ChevronDown,
   ChevronUp,
   CheckCircle2,
+  History,
+  Loader2,
 } from "lucide-react";
 
 import { useStudentExerciseDetail } from "@/domains/student/hooks/useStudentExercise";
 import { useCodeExecution } from "@/domains/student/hooks/useCodeExecution";
 import { useSubmission } from "@/domains/student/hooks/useSubmission";
+import { useExerciseHistory } from "@/domains/student/hooks/useExerciseHistory";
 import { CodeEditor } from "@/domains/student/ui/CodeEditor";
 import { OutputConsole } from "@/domains/student/ui/OutputConsole";
 import { ResultPanel } from "@/domains/student/ui/ResultPanel";
+import { SubmissionHistory } from "@/domains/student/ui/SubmissionHistory";
 import { ExercisePageSkeleton } from "@/domains/student/ui/ExercisePageSkeleton";
 import { MarkdownContent } from "@/domains/student/ui/MarkdownContent";
 import { ConfirmModal } from "@/shared/ui/components";
@@ -101,6 +105,7 @@ export default function ExercisePage() {
   // ─── Hooks ──────────────────────────────────────────────────────────────
   const { execute, state: execState, result: execResult, error: execError, reset: resetExec } = useCodeExecution();
   const { submit, state: subState, error: subError } = useSubmission();
+  const { data: historyData, isLoading: historyLoading } = useExerciseHistory(exerciseId!);
 
   const hiddenMap = useMemo(() => {
     if (!exercise) return {};
@@ -362,12 +367,26 @@ export default function ExercisePage() {
               size="sm"
               radius={0}
               style={{ borderBottom: activeTab === "results" && isBottomOpen ? "2px solid var(--mantine-color-brand-6)" : "2px solid transparent" }}
-              leftSection={<ClipboardCheck size={14} />}
+              leftSection={execState === "running" ? <Loader2 size={14} className={classes.spinIcon} /> : <ClipboardCheck size={14} />}
               color={activeTab === "results" && isBottomOpen ? "brand" : "gray"}
             >
               Resultado
               {activeTab !== "results" && execResult && (
                 <Badge size="xs" circle color={execResult.scorePercentage === 100 ? "teal" : "red"} ml={4}>!</Badge>
+              )}
+            </Button>
+            <Button
+              variant="subtle"
+              onClick={() => toggleBottomPanel("history")}
+              size="sm"
+              radius={0}
+              style={{ borderBottom: activeTab === "history" && isBottomOpen ? "2px solid var(--mantine-color-brand-6)" : "2px solid transparent" }}
+              leftSection={<History size={14} />}
+              color={activeTab === "history" && isBottomOpen ? "brand" : "gray"}
+            >
+              Histórico
+              {historyData && historyData.results.length > 0 && (
+                <Badge size="xs" variant="light" color="gray" ml={4}>{historyData.results.length}</Badge>
               )}
             </Button>
             <div style={{ flex: 1 }} />
@@ -383,7 +402,12 @@ export default function ExercisePage() {
               )}
               {activeTab === "results" && (
                 <>
-                  {execResult ? (
+                  {execState === "running" ? (
+                    <Stack align="center" gap="sm" py="xl">
+                      <Loader2 size={32} color="var(--mantine-color-brand-6)" className={classes.spinIcon} />
+                      <Text size="sm" c="dimmed" fw={500}>Executando código...</Text>
+                    </Stack>
+                  ) : execResult ? (
                     <ResultPanel result={execResult} hiddenMap={hiddenMap} />
                   ) : isCompleted && hasLastSubmission ? (
                     <Stack align="center" gap="sm" py="xl">
@@ -395,6 +419,12 @@ export default function ExercisePage() {
                     <Text size="sm" c="dimmed" ta="center" py="xl">Execute seu código para ver os resultados.</Text>
                   )}
                 </>
+              )}
+              {activeTab === "history" && (
+                <SubmissionHistory
+                  submissions={historyData?.results ?? []}
+                  isLoading={historyLoading}
+                />
               )}
             </ScrollArea>
           )}

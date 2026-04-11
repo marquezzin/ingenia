@@ -1,13 +1,7 @@
-/**
- * Student Domain — Submissions API Contract.
- *
- * HTTP calls for submitting evaluated code results to the backend.
- * The frontend evaluates via Skulpt and sends the consolidated result.
- */
-
 import { httpClient } from "@/shared/http/client";
+import type { PaginatedResponse } from "@/shared/http/types";
 
-import type { ResultStatus } from "@/domains/student/types";
+import type { ResultStatus, SubmissionHistoryItem } from "@/domains/student/types";
 
 // ─── Payload (what we send) ─────────────────────────────────────────────────
 
@@ -32,7 +26,7 @@ export interface SubmissionResponse {
   submitted_at: string;
 }
 
-// ─── API Call ────────────────────────────────────────────────────────────────
+// ─── API Calls ───────────────────────────────────────────────────────────────
 
 /**
  * Submit an evaluated code result to the backend for persistence.
@@ -51,3 +45,21 @@ export const createSubmissionApi = async (
   );
   return data;
 };
+
+/**
+ * List submission history for a specific exercise.
+ *
+ * GET /api/v1/student/submissions/?exercise_id=X
+ *
+ * @param exerciseId - The exercise to fetch submissions for.
+ * @returns Paginated list of submissions with results.
+ */
+export const listExerciseSubmissionsApi = async (
+  exerciseId: string,
+): Promise<PaginatedResponse<SubmissionHistoryItem>> => {
+  const { data } = await httpClient.get("/api/v1/student/submissions/", {
+    params: { exercise_id: exerciseId },
+  });
+  return data;
+};
+

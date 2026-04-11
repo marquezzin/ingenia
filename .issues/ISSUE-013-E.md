@@ -17,15 +17,22 @@ Implementar o painel de resultado de submissão e histórico de tentativas no co
 
 ## Critérios de Aceite
 
-- [ ] Painel de resultado com todos os states
-- [ ] Feedback pedagógico exibido
-- [ ] Histórico de tentativas recentes
-- [ ] Score exibido por tentativa
+- [x] Painel de resultado com todos os states
+- [x] Feedback pedagógico exibido
+- [x] Histórico de tentativas recentes
+- [x] Score exibido por tentativa
 
 ## Arquivos Afetados
 
-- `frontend/src/domains/student/components/ResultPanel.tsx`
-- `frontend/src/domains/student/components/SubmissionHistory.tsx`
+- `frontend/src/domains/student/ui/ResultPanel.tsx`
+- `frontend/src/domains/student/ui/SubmissionHistory.tsx`
+- `frontend/src/domains/student/ui/SubmissionHistory.module.css`
+- `frontend/src/domains/student/pages/exercises/ExercisePage.tsx`
+- `frontend/src/domains/student/pages/exercises/ExercisePage.module.css`
+- `frontend/src/domains/student/hooks/useExerciseHistory.ts`
+- `frontend/src/domains/student/api/submissions.ts`
+- `frontend/src/domains/student/types.ts`
+- `frontend/src/domains/student/.context.md`
 
 ## Notas Técnicas
 
@@ -38,5 +45,6 @@ Implementar o painel de resultado de submissão e histórico de tentativas no co
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-11

@@ -213,3 +213,25 @@ export interface StudentExerciseDetail {
   last_submission: LastSubmission | null;
 }
 
+// ─── Submission History (from submissions API) ──────────────────────────────
+
+/** Result nested inside a submission history item. */
+export interface SubmissionHistoryResult {
+  result_status: ResultStatus;
+  passed_tests_count: number;
+  failed_tests_count: number;
+  feedback_message: string;
+}
+
+/** A single submission as returned by GET /api/v1/student/submissions/?exercise_id=X. */
+export interface SubmissionHistoryItem {
+  id: string;
+  exercise_id: string;
+  exercise_title: string;
+  source_code: string;
+  evaluation_status: string;
+  score_percentage: string;
+  submitted_at: string;
+  result: SubmissionHistoryResult | null;
+}
+
