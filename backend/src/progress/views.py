@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.errors import ApplicationError, NotFoundError
-from core.permissions import IsStudent
+from core.permissions import IsStudent, IsTeacher
 from src.curriculum.enums import ContentStatus
 from src.curriculum.models import Lesson, Module
 
@@ -235,3 +235,119 @@ class MarkLessonCompletedView(APIView):
             {"detail": "Aula marcada como concluída."},
             status=http_status.HTTP_200_OK,
         )
+
+
+# ─── Teacher Progress Views (ISSUE-014-C) ────────────────────────────────────
+
+
+class TeacherClassProgressView(APIView):
+    """Progresso coletivo da turma.
+
+    GET /api/v1/teacher/classes/:class_pk/progress/
+    BR-016: Professor vê apenas alunos das suas turmas.
+    """
+
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def get(self, request, class_pk):
+        from src.classes.models import ClassGroup
+        from src.classes.selectors import get_class_group_for_teacher
+
+        teacher_profile_id = str(request.user.teacher_profile.id)
+
+        # BR-016 / BR-004: Verificar que a turma pertence ao professor
+        try:
+            class_group = get_class_group_for_teacher(
+                class_group_id=str(class_pk),
+                teacher_profile_id=teacher_profile_id,
+            )
+        except ClassGroup.DoesNotExist:
+            raise NotFoundError("Turma não encontrada.")
+
+        # Progresso agregado de cada aluno na turma
+        from .selectors import list_student_progress_summaries_for_class
+
+        summaries = list_student_progress_summaries_for_class(
+            class_group_id=str(class_pk),
+        )
+
+        total_students = len(summaries)
+        students_started = sum(
+            1 for s in summaries if s["learning_status"] != "NOT_STARTED"
+        )
+        students_completed = sum(
+            1 for s in summaries if s["learning_status"] == "COMPLETED"
+        )
+
+        data = {
+            "class_group_id": class_group.id,
+            "class_name": class_group.name,
+            "total_students": total_students,
+            "students_started": students_started,
+            "students_completed": students_completed,
+            "students": summaries,
+        }
+
+        from .serializers import ClassProgressSerializer
+
+        serializer = ClassProgressSerializer(data)
+        return Response(serializer.data)
+
+
+class TeacherStudentProgressView(APIView):
+    """Progresso individual detalhado de um aluno na turma.
+
+    GET /api/v1/teacher/classes/:class_pk/students/:student_pk/progress/
+    BR-016: Professor vê apenas alunos das suas turmas.
+    """
+
+    permission_classes = [IsAuthenticated, IsTeacher]
+
+    def get(self, request, class_pk, student_pk):
+        from src.classes.models import ClassEnrollment, ClassGroup
+        from src.classes.selectors import get_class_group_for_teacher
+
+        teacher_profile_id = str(request.user.teacher_profile.id)
+
+        # BR-016 / BR-004: Verificar que a turma pertence ao professor
+        try:
+            get_class_group_for_teacher(
+                class_group_id=str(class_pk),
+                teacher_profile_id=teacher_profile_id,
+            )
+        except ClassGroup.DoesNotExist:
+            raise NotFoundError("Turma não encontrada.")
+
+        # Verificar que o aluno está matriculado (ativo) na turma
+        try:
+            enrollment = ClassEnrollment.objects.select_related(
+                "student_profile__user"
+            ).get(
+                class_group_id=class_pk,
+                student_profile_id=student_pk,
+                enrollment_status="ACTIVE",
+            )
+        except ClassEnrollment.DoesNotExist:
+            raise NotFoundError("Aluno não encontrado nesta turma.")
+
+        student_profile = enrollment.student_profile
+
+        # Progresso detalhado por módulo → aula → exercício
+        from .selectors import get_student_detail_progress
+
+        modules = get_student_detail_progress(
+            student_profile_id=str(student_profile.id),
+        )
+
+        data = {
+            "student_profile_id": student_profile.id,
+            "student_name": student_profile.user.full_name,
+            "student_email": student_profile.user.email,
+            "learning_status": student_profile.learning_status,
+            "modules": modules,
+        }
+
+        from .serializers import StudentDetailProgressSerializer
+
+        serializer = StudentDetailProgressSerializer(data)
+        return Response(serializer.data)

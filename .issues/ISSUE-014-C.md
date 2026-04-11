@@ -18,13 +18,19 @@ Implementar endpoints de consulta de progresso coletivo da turma e individual do
 
 ## Critérios de Aceite
 
-- [ ] Progresso coletivo com indicadores agregados
-- [ ] Progresso individual detalhado por módulo/aula/exercício
-- [ ] BR-016: Acesso restrito às próprias turmas
+- [x] Progresso coletivo com indicadores agregados
+- [x] Progresso individual detalhado por módulo/aula/exercício
+- [x] BR-016: Acesso restrito às próprias turmas
 
 ## Arquivos Afetados
 
-- `backend/src/progress/serializers.py`, `views.py`
+- `backend/src/progress/selectors.py` — `list_student_progress_summaries_for_class`, `get_student_detail_progress`
+- `backend/src/progress/serializers.py` — `ClassProgressSerializer`, `StudentDetailProgressSerializer`, etc.
+- `backend/src/progress/views.py` — `TeacherClassProgressView`, `TeacherStudentProgressView`
+- `backend/src/classes/urls.py` — Rotas teacher progress
+- `backend/src/progress/tests/test_teacher_progress_api.py` — 20+ testes
+- `backend/src/progress/.context.md` — Atualizado
+- `backend/src/classes/.context.md` — Atualizado
 
 ## Notas Técnicas
 
@@ -38,5 +44,7 @@ Implementar endpoints de consulta de progresso coletivo da turma e individual do
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-11
+
