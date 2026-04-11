@@ -134,6 +134,9 @@ export default function ExercisePage() {
     await execute(code, exercise.test_cases);
     setActiveTab("results");
     setIsBottomOpen(true);
+    setTimeout(() => {
+      document.getElementById("results-panel")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 50);
   }, [code, exercise, execute]);
 
   const handleSubmit = useCallback(async () => {
@@ -339,7 +342,7 @@ export default function ExercisePage() {
         </Card>
 
         {/* Results */}
-        <Card withBorder padding={0} radius="md" className={`${classes.resultsCard} ${isBottomOpen ? classes.resultsCardOpen : ""}`}>
+        <Card id="results-panel" withBorder padding={0} radius="md" className={`${classes.resultsCard} ${isBottomOpen ? classes.resultsCardOpen : ""}`}>
 
           <Group gap={0} className={classes.resultsHeader} style={{ borderBottom: isBottomOpen ? "1px solid var(--mantine-color-default-border)" : "none" }}>
             <Button
