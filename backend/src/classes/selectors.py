@@ -26,6 +26,37 @@ def get_class_group_by_id(*, class_group_id: str) -> ClassGroup:
     )
 
 
+def list_class_groups_for_teacher(*, teacher_profile_id: str) -> QuerySet[ClassGroup]:
+    """Lista turmas de um professor com contagem de alunos ativos."""
+    return (
+        ClassGroup.objects.filter(teacher_profile_id=teacher_profile_id)
+        .select_related("teacher_profile__user")
+        .annotate(
+            student_count=Count(
+                "enrollments",
+                filter=Q(enrollments__enrollment_status="ACTIVE"),
+            )
+        )
+        .order_by("-created_at")
+    )
+
+
+def get_class_group_for_teacher(
+    *, class_group_id: str, teacher_profile_id: str
+) -> ClassGroup:
+    """Retorna uma turma do professor, com alunos. Lança DoesNotExist se não pertence ao professor."""
+    return (
+        ClassGroup.objects.select_related("teacher_profile__user")
+        .annotate(
+            student_count=Count(
+                "enrollments",
+                filter=Q(enrollments__enrollment_status="ACTIVE"),
+            )
+        )
+        .get(id=class_group_id, teacher_profile_id=teacher_profile_id)
+    )
+
+
 def list_enrollments_for_class_group(
     *, class_group_id: str
 ) -> QuerySet[ClassEnrollment]:

@@ -21,13 +21,19 @@ Implementar o CRUD de turmas acessível pelo professor, restrito às suas própr
 
 ## Critérios de Aceite
 
-- [ ] CRUD funcional para professor
-- [ ] BR-004: Professor só acessa turmas próprias
-- [ ] Protegido por `IsTeacher`
+- [x] CRUD funcional para professor
+- [x] BR-004: Professor só acessa turmas próprias
+- [x] Protegido por `IsTeacher`
 
 ## Arquivos Afetados
 
-- `backend/src/classes/serializers.py`, `services/`, `views.py`, `urls.py`
+- `backend/src/classes/services/class_group.py` — UseCases de criação e edição
+- `backend/src/classes/services/__init__.py` — Exportação dos UseCases
+- `backend/src/classes/selectors.py` — Selectors scoped por professor
+- `backend/src/classes/serializers.py` — Serializers de escrita e detalhe para professor
+- `backend/src/classes/views.py` — ClassGroupTeacherViewSet
+- `backend/src/classes/urls.py` — Rotas teacher
+- `backend/src/classes/tests/test_class_group_teacher.py` — Testes
 
 ## Notas Técnicas
 
@@ -42,4 +48,4 @@ Implementar o CRUD de turmas acessível pelo professor, restrito às suas própr
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-11

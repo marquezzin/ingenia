@@ -81,3 +81,44 @@ class ClassGroupDetailSerializer(serializers.ModelSerializer):
 
         enrollments = list_enrollments_for_class_group(class_group_id=str(obj.id))
         return EnrolledStudentSerializer(enrollments, many=True).data
+
+
+class ClassGroupCreateUpdateSerializer(serializers.ModelSerializer):
+    """Serializer de escrita para professor criar/editar turmas."""
+
+    class Meta:
+        model = ClassGroup
+        fields = [
+            "name",
+            "description",
+            "class_status",
+        ]
+        extra_kwargs = {
+            "class_status": {"required": False},
+        }
+
+
+class TeacherClassGroupDetailSerializer(serializers.ModelSerializer):
+    """Serializer de detalhe de turma para o professor."""
+
+    student_count = serializers.IntegerField(read_only=True)
+    students = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ClassGroup
+        fields = [
+            "id",
+            "name",
+            "description",
+            "class_status",
+            "student_count",
+            "students",
+            "created_at",
+            "updated_at",
+        ]
+
+    def get_students(self, obj: ClassGroup) -> list:
+        from .selectors import list_enrollments_for_class_group
+
+        enrollments = list_enrollments_for_class_group(class_group_id=str(obj.id))
+        return EnrolledStudentSerializer(enrollments, many=True).data
