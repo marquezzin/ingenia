@@ -1,0 +1,189 @@
+.page {
+  width: 100%;
+  max-width: 1280px;
+  min-height: calc(100vh - 92px);
+  margin: 0 auto;
+  padding-bottom: var(--mantine-spacing-xl);
+}
+
+.header {
+  flex-shrink: 0;
+  gap: var(--mantine-spacing-sm);
+}
+
+.breadcrumbs {
+  min-width: 0;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--mantine-spacing-xl) + var(--mantine-spacing-sm));
+  width: 100%;
+}
+
+.statementCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.completedBanner {
+  flex-shrink: 0;
+}
+
+.statementHeader {
+  flex-shrink: 0;
+  padding: var(--mantine-spacing-lg);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-body);
+}
+
+.statementTitle {
+  min-width: 0;
+}
+
+.statementTitle h4 {
+  overflow-wrap: anywhere;
+}
+
+.statementBody {
+  padding: var(--mantine-spacing-xl);
+}
+
+.supportBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-md);
+  padding-top: var(--mantine-spacing-md);
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.supportBlock > button {
+  align-self: flex-start;
+}
+
+.supportAlert {
+  overflow: visible;
+}
+
+.editorCard {
+  display: flex;
+  flex-direction: column;
+  height: clamp(540px, 62vh, 760px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editorToolbar {
+  flex-shrink: 0;
+  gap: var(--mantine-spacing-md);
+  min-height: 60px;
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-dark-7);
+}
+
+.editorActions {
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.actionButton {
+  flex-shrink: 0;
+}
+
+.errorText {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editorShell {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #1e1e1e;
+}
+
+.editorFill {
+  position: absolute;
+  inset: 0;
+}
+
+.resultsCard {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: min-height 160ms ease;
+}
+
+.resultsCardOpen {
+  min-height: clamp(560px, 68vh, 820px);
+}
+
+.resultsHeader {
+  flex-shrink: 0;
+  background: var(--mantine-color-default-hover);
+}
+
+.resultsScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: min(760px, 75vh);
+}
+
+@media (max-width: 992px) {
+  .page {
+    min-height: auto;
+  }
+
+  .workspace {
+    gap: var(--mantine-spacing-xl);
+  }
+
+  .editorCard {
+    height: 520px;
+  }
+
+  .resultsCardOpen {
+    min-height: 460px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-bottom: var(--mantine-spacing-lg);
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .statementBody {
+    padding: var(--mantine-spacing-lg);
+  }
+
+  .editorToolbar {
+    align-items: stretch;
+  }
+
+  .editorActions {
+    width: 100%;
+  }
+
+  .actionButton {
+    flex: 1 1 140px;
+  }
+
+  .editorCard {
+    height: 430px;
+  }
+
+  .resultsCardOpen {
+    min-height: 420px;
+  }
+}

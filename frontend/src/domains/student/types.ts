@@ -183,3 +183,33 @@ export interface StudentLessonDetail {
   progress: StudentLessonProgress | null;
 }
 
+// ─── Student Exercise Detail ────────────────────────────────────────────────
+
+/** Result data of the last approved submission. */
+export interface LastSubmissionResult {
+  result_status: ResultStatus;
+  passed_tests_count: number;
+  failed_tests_count: number;
+  feedback_message: string;
+}
+
+/** Last approved submission — returned when exercise is COMPLETED. */
+export interface LastSubmission {
+  source_code: string;
+  score_percentage: string;
+  submitted_at: string;
+  result: LastSubmissionResult | null;
+}
+
+/** Detailed exercise view — includes statement, support message, test cases for Skulpt evaluation, and progress. */
+export interface StudentExerciseDetail {
+  id: string;
+  title: string;
+  statement: string;
+  support_message: string | null;
+  sequence_order: number;
+  test_cases: TestCase[];
+  progress: StudentExerciseProgress | null;
+  last_submission: LastSubmission | null;
+}
+

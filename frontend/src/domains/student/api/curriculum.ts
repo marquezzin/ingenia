@@ -6,7 +6,7 @@
 
 import { httpClient } from "@/shared/http/client";
 import type { PaginatedResponse } from "@/shared/http/types";
-import type { StudentModule, StudentModuleDetail, StudentLessonDetail } from "../types";
+import type { StudentModule, StudentModuleDetail, StudentLessonDetail, StudentExerciseDetail } from "../types";
 
 // ─── Modules ────────────────────────────────────────────────────────────────
 
@@ -73,5 +73,23 @@ export const markLessonCompletedApi = async (
   lessonId: string,
 ): Promise<void> => {
   await httpClient.post(`/api/v1/student/lessons/${lessonId}/mark-completed/`);
+};
+
+// ─── Exercises ──────────────────────────────────────────────────────────────
+
+/**
+ * Get detail of a single published exercise (with test cases and progress).
+ *
+ * GET /api/v1/student/modules/:moduleId/lessons/:lessonId/exercises/:exerciseId/
+ */
+export const getStudentExerciseApi = async (
+  moduleId: string,
+  lessonId: string,
+  exerciseId: string,
+): Promise<StudentExerciseDetail> => {
+  const { data } = await httpClient.get(
+    `/api/v1/student/modules/${moduleId}/lessons/${lessonId}/exercises/${exerciseId}/`,
+  );
+  return data;
 };
 

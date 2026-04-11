@@ -1,0 +1,23 @@
+.root {
+  transition: box-shadow 0.2s ease;
+}
+
+.testCase {
+  padding: 8px 12px;
+  border-radius: var(--mantine-radius-sm);
+  background-color: var(--mantine-color-default-hover);
+  border: 1px solid var(--mantine-color-default-border);
+}
+
+.testDetails {
+  margin-top: 6px;
+  padding-left: 30px;
+}
+
+.testDetails code {
+  background-color: var(--mantine-color-default);
+  border: 1px solid var(--mantine-color-default-border);
+  padding: 2px 6px;
+  border-radius: var(--mantine-radius-xs);
+  font-size: 12px;
+}

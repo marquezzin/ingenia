@@ -581,4 +581,25 @@ class StudentExerciseViewSet(viewsets.ReadOnlyModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         self._validate_parents_published()
-        return super().retrieve(request, *args, **kwargs)
+        instance = self.get_object()
+        # Attach test cases for the detail serializer (Skulpt evaluation)
+        test_cases = list(instance.test_cases.all().order_by("sequence_order"))
+        instance.published_test_cases = test_cases
+
+        # Attach last PASSED submission for showing approved code
+        from src.submissions.models import Submission
+
+        last_submission = (
+            Submission.objects.filter(
+                exercise_id=instance.id,
+                student_profile_id=self._get_student_profile_id(),
+                result__result_status="PASSED",
+            )
+            .select_related("result")
+            .order_by("-submitted_at")
+            .first()
+        )
+        instance._last_submission = last_submission
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

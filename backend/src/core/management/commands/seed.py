@@ -236,14 +236,7 @@ class Command(BaseCommand):
                                         "name": "Saída padrão",
                                         "input": "",
                                         "output": "Olá, Mundo!",
-                                    },
-                                    {
-                                        "order": 2,
-                                        "name": "Sem entrada",
-                                        "input": "",
-                                        "output": "Olá, Mundo!",
-                                        "hidden": True,
-                                    },
+                                    }
                                 ],
                             },
                             {

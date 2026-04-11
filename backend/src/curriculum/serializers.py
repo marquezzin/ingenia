@@ -289,10 +289,57 @@ class StudentExerciseListSerializer(BaseModelSerializer):
         return _get_student_progress(obj, StudentExerciseProgressSerializer)
 
 
+class StudentTestCaseSerializer(BaseModelSerializer):
+    """Test case para avaliação Skulpt no frontend do aluno.
+
+    Retorna todos os campos necessários para avaliação client-side,
+    incluindo expected_output (necessário para comparação no Skulpt).
+    O campo is_hidden indica ao frontend que os detalhes (input/expected)
+    devem ser ocultados na UI, mas os dados são enviados para avaliação.
+    """
+
+    class Meta:
+        model = ExerciseTestCase
+        fields = [
+            "id",
+            "name",
+            "input_data",
+            "expected_output",
+            "sequence_order",
+            "is_hidden",
+        ]
+
+
+class LastSubmissionResultSerializer(serializers.Serializer):
+    """Resultado aninhado da última submissão aprovada."""
+
+    result_status = serializers.CharField()
+    passed_tests_count = serializers.IntegerField()
+    failed_tests_count = serializers.IntegerField()
+    feedback_message = serializers.CharField()
+
+
+class LastSubmissionSerializer(serializers.Serializer):
+    """Última submissão aprovada do aluno para exibir código submetido."""
+
+    source_code = serializers.CharField()
+    score_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+    submitted_at = serializers.DateTimeField()
+    result = serializers.SerializerMethodField()
+
+    def get_result(self, obj) -> dict | None:
+        result = getattr(obj, "result", None)
+        if result is not None:
+            return LastSubmissionResultSerializer(result).data
+        return None
+
+
 class StudentExerciseDetailSerializer(BaseModelSerializer):
-    """Detalhe do exercício para aluno (sem test cases, com progresso)."""
+    """Detalhe do exercício para aluno (com test cases para avaliação Skulpt e progresso)."""
 
     progress = serializers.SerializerMethodField()
+    test_cases = serializers.SerializerMethodField()
+    last_submission = serializers.SerializerMethodField()
 
     class Meta:
         model = Exercise
@@ -302,11 +349,25 @@ class StudentExerciseDetailSerializer(BaseModelSerializer):
             "statement",
             "support_message",
             "sequence_order",
+            "test_cases",
             "progress",
+            "last_submission",
         ]
+
+    def get_test_cases(self, obj):
+        """Retorna test cases do exercício (prefetched na view)."""
+        test_cases = getattr(obj, "published_test_cases", obj.test_cases.all())
+        return StudentTestCaseSerializer(test_cases, many=True).data
 
     def get_progress(self, obj):
         return _get_student_progress(obj, StudentExerciseProgressSerializer)
+
+    def get_last_submission(self, obj) -> dict | None:
+        """Retorna a última submissão aprovada (PASSED), se existir."""
+        submission = getattr(obj, "_last_submission", None)
+        if submission is not None:
+            return LastSubmissionSerializer(submission).data
+        return None
 
 
 class StudentLessonListSerializer(BaseModelSerializer):

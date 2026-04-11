@@ -40,22 +40,39 @@ Criar a tela de exercício com editor de código Monaco, motor de correção Sku
    - Exibir stdout/stderr do Skulpt
    - Exibir erros de sintaxe com número da linha
 
+6. **UX pós-conclusão — exibir código aprovado**:
+   - Backend retorna `last_submission` (código-fonte, nota, data, resultado) no detalhe do exercício quando há submissão PASSED
+   - Frontend pré-popula o editor com o código aprovado ao revisitar exercício concluído
+   - Banner de "Exercício concluído" com nota e data da submissão
+   - Editor em modo somente-leitura para exercício concluído (até o aluno clicar "Executar")
+   - Botão "Submeter" oculto em exercícios já concluídos
+   - Painel de resultado mostra estado de conclusão ao invés de "Execute seu código"
+   - Testes backend: `last_submission` nulo sem submissão, retorna código PASSED, ignora FAILED, não vaza dados de outro aluno
+
 ## Critérios de Aceite
 
-- [ ] Editor de código funcional (Monaco) com syntax highlighting Python
-- [ ] Código executado via Skulpt no browser
-- [ ] Resultado exibido instantaneamente (sem waiting para servidor)
-- [ ] Resultado: passed/failed + score + feedback por test case
-- [ ] Submissão persiste resultado no backend
-- [ ] Erros de sintaxe/runtime exibidos de forma amigável
-- [ ] Confirmação antes de limpar editor
+- [x] Editor de código funcional (Monaco) com syntax highlighting Python
+- [x] Código executado via Skulpt no browser
+- [x] Resultado exibido instantaneamente (sem waiting para servidor)
+- [x] Resultado: passed/failed + score + feedback por test case
+- [x] Submissão persiste resultado no backend
+- [x] Erros de sintaxe/runtime exibidos de forma amigável
+- [x] Confirmação antes de limpar editor
+- [x] Ao revisitar exercício concluído, editor exibe código da submissão aprovada
+- [x] Banner de conclusão com nota e data da submissão
+- [x] Testes backend cobrindo `last_submission` (null, PASSED, FAILED ignorado, isolamento entre alunos)
 
 ## Arquivos Afetados
 
 - `frontend/src/domains/student/pages/exercises/ExercisePage.tsx`
-- `frontend/src/domains/student/components/CodeEditor.tsx`
-- `frontend/src/domains/student/components/ResultPanel.tsx`
-- `frontend/src/domains/student/components/OutputConsole.tsx`
+- `frontend/src/domains/student/pages/exercises/ExercisePage.module.css`
+- `frontend/src/domains/student/ui/CodeEditor.tsx`
+- `frontend/src/domains/student/ui/ResultPanel.tsx`
+- `frontend/src/domains/student/ui/OutputConsole.tsx`
+- `frontend/src/domains/student/types.ts`
+- `backend/src/curriculum/serializers.py` — `LastSubmissionSerializer`, `StudentExerciseDetailSerializer.last_submission`
+- `backend/src/curriculum/views.py` — `StudentExerciseViewSet.retrieve()` busca última submissão PASSED
+- `backend/src/curriculum/tests/test_student_modules.py` — 4 novos testes para `last_submission`
 
 ## Notas Técnicas
 
@@ -71,4 +88,4 @@ Criar a tela de exercício com editor de código Monaco, motor de correção Sku
 - **Prioridade**: alta
 - **Tipo**: feature
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-26
+- **Atualizado em**: 2026-04-10

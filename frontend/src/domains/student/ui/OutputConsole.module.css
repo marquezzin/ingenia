@@ -1,0 +1,25 @@
+.root {
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-dark-4);
+  background-color: var(--mantine-color-dark-8);
+  overflow: hidden;
+}
+
+.header {
+  padding: 8px 12px;
+  background-color: var(--mantine-color-dark-7);
+  border-bottom: 1px solid var(--mantine-color-dark-4);
+}
+
+.content {
+  padding: 12px;
+  margin: 0;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--mantine-color-green-4);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
