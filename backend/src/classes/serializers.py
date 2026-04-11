@@ -122,3 +122,9 @@ class TeacherClassGroupDetailSerializer(serializers.ModelSerializer):
 
         enrollments = list_enrollments_for_class_group(class_group_id=str(obj.id))
         return EnrolledStudentSerializer(enrollments, many=True).data
+
+
+class EnrollStudentSerializer(serializers.Serializer):
+    """Serializer de escrita para associar aluno a uma turma."""
+
+    student_profile_id = serializers.UUIDField()

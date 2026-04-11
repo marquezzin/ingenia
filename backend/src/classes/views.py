@@ -1,7 +1,12 @@
 """Classes app — Views."""
 
 from rest_framework import status, viewsets
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -9,22 +14,29 @@ from rest_framework.viewsets import GenericViewSet
 from core.errors import NotFoundError
 from core.permissions import IsAdmin, IsTeacher
 
-from .models import ClassGroup
+from .models import ClassEnrollment, ClassGroup
 from .selectors import (
     get_class_group_by_id,
     get_class_group_for_teacher,
     list_class_groups,
     list_class_groups_for_teacher,
+    list_enrollments_for_class_group,
 )
 from .serializers import (
     ClassGroupCreateUpdateSerializer,
     ClassGroupDetailSerializer,
     ClassGroupListSerializer,
+    EnrolledStudentSerializer,
+    EnrollStudentSerializer,
     TeacherClassGroupDetailSerializer,
 )
 from .services import (
     CreateClassGroupInput,
     CreateClassGroupUseCase,
+    EnrollStudentInput,
+    EnrollStudentUseCase,
+    RemoveStudentInput,
+    RemoveStudentUseCase,
     UpdateClassGroupInput,
     UpdateClassGroupUseCase,
 )
@@ -141,3 +153,81 @@ class ClassGroupTeacherViewSet(viewsets.ModelViewSet):
                 self.get_queryset().get(id=class_group.id)
             ).data,
         )
+
+
+class ClassEnrollmentTeacherViewSet(
+    ListModelMixin, CreateModelMixin, DestroyModelMixin, GenericViewSet
+):
+    """
+    Gestão de matrículas (enrollment) de alunos em uma turma do professor.
+    BR-004: Professor só gerencia alunos das próprias turmas.
+    BR-005: Sem matrícula duplicada.
+
+    Nested sob /teacher/classes/:class_pk/enrollments/
+    """
+
+    permission_classes = [IsAuthenticated, IsTeacher]
+    serializer_class = EnrolledStudentSerializer
+
+    def _get_teacher_profile_id(self) -> str:
+        return str(self.request.user.teacher_profile.id)
+
+    def _get_class_group_id(self) -> str:
+        return self.kwargs["class_pk"]
+
+    def _verify_class_ownership(self) -> None:
+        """Verifica se a turma pertence ao professor autenticado."""
+        try:
+            get_class_group_for_teacher(
+                class_group_id=self._get_class_group_id(),
+                teacher_profile_id=self._get_teacher_profile_id(),
+            )
+        except ClassGroup.DoesNotExist:
+            raise NotFoundError("Turma não encontrada.")
+
+    def get_queryset(self):
+        return list_enrollments_for_class_group(
+            class_group_id=self._get_class_group_id()
+        )
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return EnrollStudentSerializer
+        return EnrolledStudentSerializer
+
+    def list(self, request, *args, **kwargs):
+        self._verify_class_ownership()
+        return super().list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = EnrollStudentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        enrollment = EnrollStudentUseCase().execute(
+            input=EnrollStudentInput(
+                class_group_id=self._get_class_group_id(),
+                teacher_profile_id=self._get_teacher_profile_id(),
+                student_profile_id=str(serializer.validated_data["student_profile_id"]),
+            )
+        )
+
+        # Re-fetch with select_related for serialization
+        enrollment = ClassEnrollment.objects.select_related(
+            "student_profile__user"
+        ).get(id=enrollment.id)
+
+        return Response(
+            EnrolledStudentSerializer(enrollment).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        RemoveStudentUseCase().execute(
+            input=RemoveStudentInput(
+                enrollment_id=self.kwargs["pk"],
+                class_group_id=self._get_class_group_id(),
+                teacher_profile_id=self._get_teacher_profile_id(),
+            )
+        )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -20,14 +20,20 @@ Implementar a gestão de alunos na turma: associar e remover.
 
 ## Critérios de Aceite
 
-- [ ] Associar aluno à turma
-- [ ] Remover aluno da turma
-- [ ] BR-005: Matrícula duplicada impedida
-- [ ] Professor só gerencia alunos das próprias turmas
+- [x] Associar aluno à turma
+- [x] Remover aluno da turma
+- [x] BR-005: Matrícula duplicada impedida
+- [x] Professor só gerencia alunos das próprias turmas
 
 ## Arquivos Afetados
 
-- `backend/src/classes/serializers.py`, `services/`, `views.py`
+- `backend/src/classes/serializers.py` — EnrollStudentSerializer
+- `backend/src/classes/services/enrollment.py` — EnrollStudentUseCase, RemoveStudentUseCase
+- `backend/src/classes/views.py` — ClassEnrollmentTeacherViewSet
+- `backend/src/classes/selectors.py` — get_enrollment_for_class_group
+- `backend/src/classes/urls.py` — nested enrollment routes
+- `backend/src/classes/tests/test_enrollment_teacher.py` — 15 testes
+- `backend/src/classes/.context.md` — Atualizado
 
 ## Notas Técnicas
 
@@ -40,5 +46,6 @@ Implementar a gestão de alunos na turma: associar e remover.
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-11

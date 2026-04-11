@@ -134,7 +134,7 @@
 | ID | Título | Tipo | Status | Depende de |
 |---|--------|------|--------|------------|
 | ISSUE-014-A | CRUD ClassGroup (professor cria/edita turmas) | feature | 🟢 | 002, 007-C |
-| ISSUE-014-B | CRUD ClassEnrollment (associar/remover alunos) | feature | 🟡 | 001, 002, 014-A |
+| ISSUE-014-B | CRUD ClassEnrollment (associar/remover alunos) | feature | 🟢 | 001, 002, 014-A |
 | ISSUE-014-C | Progresso coletivo + individual do aluno na turma | feature | 🟡 | 005, 011-C, 014-A, 014-B |
 | ISSUE-014-D | Testes unitários de autorização (BR-016, BR-004, BR-005) | chore | 🟡 | 014-A, 014-B, 014-C |
 
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 46 |
+| Concluídas | 47 |
 | Em andamento | 0 |
-| Pendentes | 16 |
+| Pendentes | 15 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->

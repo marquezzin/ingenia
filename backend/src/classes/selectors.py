@@ -66,3 +66,12 @@ def list_enrollments_for_class_group(
         .select_related("student_profile__user")
         .order_by("-enrolled_at")
     )
+
+
+def get_enrollment_for_class_group(
+    *, enrollment_id: str, class_group_id: str
+) -> ClassEnrollment:
+    """Retorna uma matrícula específica de uma turma."""
+    return ClassEnrollment.objects.select_related("student_profile__user").get(
+        id=enrollment_id, class_group_id=class_group_id
+    )

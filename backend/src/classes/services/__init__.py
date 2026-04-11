@@ -6,10 +6,20 @@ from .class_group import (
     UpdateClassGroupInput,
     UpdateClassGroupUseCase,
 )
+from .enrollment import (
+    EnrollStudentInput,
+    EnrollStudentUseCase,
+    RemoveStudentInput,
+    RemoveStudentUseCase,
+)
 
 __all__ = [
     "CreateClassGroupInput",
     "CreateClassGroupUseCase",
     "UpdateClassGroupInput",
     "UpdateClassGroupUseCase",
+    "EnrollStudentInput",
+    "EnrollStudentUseCase",
+    "RemoveStudentInput",
+    "RemoveStudentUseCase",
 ]
