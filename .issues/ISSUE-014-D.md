@@ -19,12 +19,14 @@ Cobertura de testes de autorização do professor.
 
 ## Critérios de Aceite
 
-- [ ] Testes de BR-004, BR-005, BR-016 passando
-- [ ] Testes de cross-role access passando
+- [x] Testes de BR-004, BR-005, BR-016 passando
+- [x] Testes de cross-role access passando
 
 ## Arquivos Afetados
 
-- `backend/src/classes/tests/`, `backend/src/progress/tests/`
+- `backend/src/classes/tests/test_class_group_teacher.py` (BR-004, cross-role)
+- `backend/src/classes/tests/test_enrollment_teacher.py` (BR-004, BR-005, cross-role)
+- `backend/src/progress/tests/test_teacher_progress_api.py` (BR-016, cross-role)
 
 ## Notas Técnicas
 
@@ -36,5 +38,6 @@ Cobertura de testes de autorização do professor.
 
 - **Prioridade**: alta
 - **Tipo**: chore
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-11

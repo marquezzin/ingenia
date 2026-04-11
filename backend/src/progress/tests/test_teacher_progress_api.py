@@ -132,7 +132,7 @@ class TeacherClassProgressViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_unauthenticated_returns_401(self):
-        self.client.credentials()
+        self.deauthenticate()
         response = self.client.get(class_progress_url(str(self.class_group.id)))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -313,7 +313,7 @@ class TeacherStudentProgressViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_unauthenticated_returns_401(self):
-        self.client.credentials()
+        self.deauthenticate()
         response = self.client.get(
             student_progress_url(str(self.class_group.id), str(self.student_profile.id))
         )
