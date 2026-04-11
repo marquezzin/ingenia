@@ -197,7 +197,7 @@
 .cardSoft {
   background: #ffffff;
   border: 1px solid #E0E7F1;
-  border-radius: 0.75rem;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(11, 19, 43, 0.05);
   transition: all 0.3s ease;
   padding: 1.5rem;
@@ -356,8 +356,312 @@
 
 /* ─── Landing Image ─────────────────────────────────────────────────── */
 .landingImage {
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   box-shadow: var(--shadow-lg);
   width: 100%;
   height: auto;
+}
+
+/* ─── Modern sections below hero ───────────────────────────────────── */
+.sectionContainer {
+  position: relative;
+  z-index: 1;
+}
+
+.sectionHeader {
+  max-width: 760px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.sectionEyebrow {
+  width: fit-content;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(58, 134, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #2E6FE8;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.challengeSection,
+.processSection,
+.audienceSection,
+.whySection {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(58, 134, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, #ffffff 0%, #F7FAFE 100%);
+  background-size: 48px 48px, auto;
+}
+
+.challengeSection::before,
+.processSection::before,
+.audienceSection::before,
+.whySection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 18% 12%, rgba(76, 201, 240, 0.18), transparent 32rem);
+}
+
+.modernBand,
+.discoverySection,
+.modulesSection,
+.finalCtaSection {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(58, 134, 255, 0.09), transparent 32%),
+    linear-gradient(180deg, #F5F7FB 0%, #EAF1F8 100%);
+}
+
+.modernBand::before,
+.discoverySection::before,
+.modulesSection::before {
+  content: "";
+  position: absolute;
+  inset: 1.25rem;
+  border: 1px solid rgba(58, 134, 255, 0.08);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.sectionCopy {
+  align-self: center;
+}
+
+.sectionCopy .sectionEyebrow {
+  margin-bottom: 1rem;
+}
+
+.textLink {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(58, 134, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(58, 134, 255, 0.07);
+  color: #2E6FE8;
+}
+
+.imagePanel {
+  position: relative;
+  min-height: 22rem;
+  overflow: hidden;
+  border: 1px solid rgba(58, 134, 255, 0.16);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 22px 52px rgba(11, 19, 43, 0.12);
+}
+
+.imagePanel .landingImage {
+  width: 100%;
+  height: 100%;
+  min-height: 22rem;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.illustrationPanel {
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(235, 246, 255, 0.94)),
+    linear-gradient(90deg, rgba(58, 134, 255, 0.08) 1px, transparent 1px);
+  background-size: auto, 42px 42px;
+}
+
+.illustrationPanel .landingImage {
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.imageCaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.imageCaption p:last-child {
+  color: var(--color-text-muted);
+}
+
+.conceptGrid {
+  position: relative;
+}
+
+.conceptCard,
+.audienceCard,
+.moduleCard,
+.whyCard {
+  position: relative;
+  overflow: hidden;
+  min-height: 100%;
+  border-color: rgba(58, 134, 255, 0.14);
+  box-shadow: 0 16px 40px rgba(11, 19, 43, 0.08);
+}
+
+.conceptCard::before,
+.moduleCard::before,
+.whyCard::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, #3A86FF, #4CC9F0, #20c997);
+}
+
+.conceptCard:hover,
+.audienceCard:hover,
+.moduleCard:hover,
+.whyCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(58, 134, 255, 0.3);
+  box-shadow: 0 22px 52px rgba(11, 19, 43, 0.12);
+}
+
+.conceptNumber {
+  width: 2.65rem;
+  height: 2.65rem;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(58, 134, 255, 0.1);
+  color: #2E6FE8;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.stepGrid {
+  align-items: stretch;
+}
+
+.learningStep {
+  height: 100%;
+  padding: 1.35rem 1rem;
+  border: 1px solid rgba(224, 231, 241, 0.9);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 34px rgba(11, 19, 43, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.learningStep:hover {
+  transform: translateY(-4px);
+  border-color: rgba(76, 201, 240, 0.5);
+  box-shadow: 0 20px 44px rgba(58, 134, 255, 0.12);
+}
+
+.learningStep .stepCircle {
+  width: 5rem;
+  height: 5rem;
+  margin-bottom: 1.15rem;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 8px rgba(58, 134, 255, 0.08);
+}
+
+.benefitList {
+  max-width: 34rem;
+}
+
+.benefitItem {
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(224, 231, 241, 0.9);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.audienceGrid {
+  align-items: stretch;
+}
+
+.audienceCard {
+  padding: 2rem !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 254, 0.96)),
+    #ffffff;
+}
+
+.audienceCard:nth-child(2) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(237, 250, 255, 0.96)),
+    #ffffff;
+}
+
+.audienceCard .iconBox {
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(58, 134, 255, 0.18);
+}
+
+.moduleGrid {
+  align-items: stretch;
+}
+
+.moduleCard {
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem;
+}
+
+.moduleIcon {
+  width: 3.4rem;
+  height: 3.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(58, 134, 255, 0.09);
+  font-size: 1.7rem;
+}
+
+.moduleLabel {
+  color: #2E6FE8;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.whyGrid {
+  align-items: stretch;
+}
+
+.whyCard {
+  padding: 1.35rem;
+}
+
+.finalCtaSection {
+  background:
+    linear-gradient(135deg, rgba(58, 134, 255, 0.12), rgba(76, 201, 240, 0.08)),
+    #F5F7FB;
+}
+
+.finalCtaCard {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.finalCtaCard .sectionEyebrow {
+  margin-bottom: 0.25rem;
+}
+
+.finalCtaCard .btnPrimary {
+  border-radius: 8px !important;
+}
+
+.modernFooter {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #F7FAFE 100%);
 }

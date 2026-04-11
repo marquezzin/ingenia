@@ -108,10 +108,11 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── THE PROBLEM SECTION ───────────────────────────────────── */}
-            <section className={styles.section}>
-                <Container size="lg">
+            <section className={`${styles.section} ${styles.challengeSection}`}>
+                <Container size="lg" className={styles.sectionContainer}>
                     <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" verticalSpacing="xl">
-                        <div className={styles.slideInLeft}>
+                        <div className={`${styles.slideInLeft} ${styles.sectionCopy}`}>
+                            <Text className={styles.sectionEyebrow}>Primeiro passo</Text>
                             <Title order={2} fz={{ base: "2rem", md: "2.75rem" }} lh={1.2} mb="md">
                                 O Desafio de <span className={styles.accentHighlight}>Começar</span>
                             </Title>
@@ -124,18 +125,22 @@ export default function LandingPage() {
                                 foi criada para tornar os primeiros passos simples, estruturados e
                                 envolventes.
                             </Text>
-                            <Group gap="sm" c="#3A86FF" fw={600}>
+                            <Group gap="sm" className={styles.textLink}>
                                 <ArrowRight size={18} />
-                                <Text fw={600} c="#3A86FF">Vamos transformar isso juntos</Text>
+                                <Text fw={700}>Vamos transformar isso juntos</Text>
                             </Group>
                         </div>
 
-                        <div className={styles.slideInRight}>
+                        <div className={`${styles.slideInRight} ${styles.imagePanel}`}>
                             <img
                                 src="https://d2xsxph8kpxj0f.cloudfront.net/310519663395806361/ccwWuLoC7LaBbvf8CqYNGN/ingenia-learning-concept-iAmLFaEv73n2NmrQrYzZG8.webp"
                                 alt="Desafio de começar"
                                 className={styles.landingImage}
                             />
+                            <div className={styles.imageCaption}>
+                                <Text fw={800}>Aulas, prática e progresso no mesmo fluxo</Text>
+                                <Text size="sm">Uma entrada mais clara para quem está começando.</Text>
+                            </div>
                         </div>
                     </SimpleGrid>
                 </Container>
@@ -144,9 +149,10 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── THE INGENIA APPROACH ───────────────────────────────────── */}
-            <section className={styles.sectionAlt}>
-                <Container size="xl">
-                    <Stack align="center" mb="xl" className={styles.fadeInUp}>
+            <section className={`${styles.sectionAlt} ${styles.modernBand}`}>
+                <Container size="xl" className={styles.sectionContainer}>
+                    <Stack align="center" mb="xl" className={`${styles.fadeInUp} ${styles.sectionHeader}`}>
+                        <Text className={styles.sectionEyebrow}>Como a trilha respira</Text>
                         <Title order={2} fz={{ base: "2rem", md: "2.75rem" }} ta="center">
                             A Abordagem <span className={styles.accentHighlight}>Ingenia</span>
                         </Title>
@@ -156,15 +162,15 @@ export default function LandingPage() {
                         </Text>
                     </Stack>
 
-                    <SimpleGrid cols={{ base: 2, sm: 3, lg: 5 }} spacing="md">
+                    <SimpleGrid cols={{ base: 2, sm: 3, lg: 5 }} spacing="md" className={styles.conceptGrid}>
                         {["Variáveis", "Lógica", "Condições", "Loops", "Funções"].map(
                             (concept, idx) => (
                                 <div
                                     key={idx}
-                                    className={`${styles.cardSoft} ${styles.fadeInUp}`}
+                                    className={`${styles.cardSoft} ${styles.fadeInUp} ${styles.conceptCard}`}
                                     style={{ animationDelay: `${idx * 0.1}s` }}
                                 >
-                                    <Text fz="1.75rem" fw={700} className={styles.gradientText} mb="xs">
+                                    <Text className={styles.conceptNumber} mb="xs">
                                         {idx + 1}
                                     </Text>
                                     <Text fw={600} fz="lg">{concept}</Text>
@@ -186,19 +192,20 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── HOW STUDENTS LEARN ────────────────────────────────────── */}
-            <section className={styles.section}>
-                <Container size="lg">
-                    <Title
-                        order={2}
-                        fz={{ base: "2rem", md: "2.75rem" }}
-                        ta="center"
-                        mb={48}
-                        className={styles.fadeInUp}
-                    >
-                        Como os Estudantes <span className={styles.accentHighlight}>Aprendem</span>
-                    </Title>
+            <section className={`${styles.section} ${styles.processSection}`}>
+                <Container size="lg" className={styles.sectionContainer}>
+                    <Stack align="center" gap="sm" mb={48} className={`${styles.fadeInUp} ${styles.sectionHeader}`}>
+                        <Text className={styles.sectionEyebrow}>Ritmo de aprendizagem</Text>
+                        <Title
+                            order={2}
+                            fz={{ base: "2rem", md: "2.75rem" }}
+                            ta="center"
+                        >
+                            Como os Estudantes <span className={styles.accentHighlight}>Aprendem</span>
+                        </Title>
+                    </Stack>
 
-                    <SimpleGrid cols={{ base: 2, md: 4 }} spacing="xl">
+                    <SimpleGrid cols={{ base: 2, md: 4 }} spacing="xl" className={styles.stepGrid}>
                         {[
                             { title: "Assista", description: "Explicações em vídeo curtas e focadas", icon: "📹" },
                             { title: "Entenda", description: "Orientação escrita e exemplos práticos", icon: "📖" },
@@ -207,7 +214,7 @@ export default function LandingPage() {
                         ].map((item, idx) => (
                             <div
                                 key={idx}
-                                className={styles.fadeInUp}
+                                className={`${styles.fadeInUp} ${styles.learningStep}`}
                                 style={{ animationDelay: `${idx * 0.15}s`, position: "relative" }}
                             >
                                 {idx < 3 && (
@@ -232,18 +239,19 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── LEARNING THROUGH DISCOVERY ────────────────────────────── */}
-            <section className={styles.sectionAlt}>
-                <Container size="lg">
+            <section className={`${styles.sectionAlt} ${styles.discoverySection}`}>
+                <Container size="lg" className={styles.sectionContainer}>
                     <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" verticalSpacing="xl">
-                        <div className={styles.slideInLeft}>
+                        <div className={`${styles.slideInLeft} ${styles.imagePanel} ${styles.illustrationPanel}`}>
                             <img
-                                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663395806361/ccwWuLoC7LaBbvf8CqYNGN/ingenia-hero-clean-kpKHy99xLG7Mm3Y25hL8a4.webp"
-                                alt="Jornada de Aprendizado"
+                                src="/assets/undraw_coding_joxb.svg"
+                                alt="Estudante programando em um laptop"
                                 className={styles.landingImage}
                             />
                         </div>
 
-                        <div className={styles.slideInRight}>
+                        <div className={`${styles.slideInRight} ${styles.sectionCopy}`}>
+                            <Text className={styles.sectionEyebrow}>Exploração guiada</Text>
                             <Title order={2} fz={{ base: "2rem", md: "2.75rem" }} lh={1.2} mb="md">
                                 Aprender através da{" "}
                                 <span className={styles.accentHighlight}>Descoberta</span>
@@ -254,14 +262,14 @@ export default function LandingPage() {
                                 enquanto constroem confiança ao progredir.
                             </Text>
 
-                            <Stack gap="sm">
+                            <Stack gap="sm" className={styles.benefitList}>
                                 {[
                                     "Ambiente seguro para experimentar",
                                     "Desafios que aumentam gradualmente",
                                     "Feedback imediato e construtivo",
                                     "Progresso visível e motivador",
                                 ].map((benefit, idx) => (
-                                    <Group key={idx} gap="sm" align="flex-start" wrap="nowrap">
+                                    <Group key={idx} gap="sm" align="flex-start" wrap="nowrap" className={styles.benefitItem}>
                                         <div className={styles.checkCircle}>
                                             <Check size={14} color="#fff" />
                                         </div>
@@ -277,22 +285,23 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── FOR STUDENTS AND TEACHERS ─────────────────────────────── */}
-            <section className={styles.section}>
-                <Container size="lg">
-                    <Title
-                        order={2}
-                        fz={{ base: "2rem", md: "2.75rem" }}
-                        ta="center"
-                        mb={48}
-                        className={styles.fadeInUp}
-                    >
-                        Para <span className={styles.accentHighlight}>Estudantes</span> e{" "}
-                        <span className={styles.accentHighlight}>Professores</span>
-                    </Title>
+            <section className={`${styles.section} ${styles.audienceSection}`}>
+                <Container size="lg" className={styles.sectionContainer}>
+                    <Stack align="center" gap="sm" mb={48} className={`${styles.fadeInUp} ${styles.sectionHeader}`}>
+                        <Text className={styles.sectionEyebrow}>Dois lados da sala</Text>
+                        <Title
+                            order={2}
+                            fz={{ base: "2rem", md: "2.75rem" }}
+                            ta="center"
+                        >
+                            Para <span className={styles.accentHighlight}>Estudantes</span> e{" "}
+                            <span className={styles.accentHighlight}>Professores</span>
+                        </Title>
+                    </Stack>
 
-                    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
+                    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl" className={styles.audienceGrid}>
                         {/* Students */}
-                        <div className={`${styles.cardSoft} ${styles.slideInLeft}`} style={{ padding: "2rem" }}>
+                        <div className={`${styles.cardSoft} ${styles.slideInLeft} ${styles.audienceCard}`}>
                             <Group gap="sm" mb="lg">
                                 <div className={styles.iconBox}>
                                     <BookOpen size={22} color="#3A86FF" />
@@ -318,7 +327,7 @@ export default function LandingPage() {
                         </div>
 
                         {/* Teachers */}
-                        <div className={`${styles.cardSoft} ${styles.slideInRight}`} style={{ padding: "2rem" }}>
+                        <div className={`${styles.cardSoft} ${styles.slideInRight} ${styles.audienceCard}`}>
                             <Group gap="sm" mb="lg">
                                 <div className={styles.iconBox}>
                                     <Users size={22} color="#4CC9F0" />
@@ -349,23 +358,25 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── LEARNING JOURNEY MODULES ──────────────────────────────── */}
-            <section className={styles.sectionAlt}>
-                <Container size="xl">
-                    <Title
-                        order={2}
-                        fz={{ base: "2rem", md: "2.75rem" }}
-                        ta="center"
-                        mb="sm"
-                        className={styles.fadeInUp}
-                    >
-                        Jornada de <span className={styles.accentHighlight}>Aprendizado</span>
-                    </Title>
-                    <Text ta="center" c="var(--color-text-muted)" size="lg" mb={48} maw={640} mx="auto">
-                        Cada módulo desbloqueia conforme o estudante progride, criando uma
-                        progressão natural
-                    </Text>
+            <section className={`${styles.sectionAlt} ${styles.modulesSection}`}>
+                <Container size="xl" className={styles.sectionContainer}>
+                    <Stack align="center" gap="sm" mb={48} className={`${styles.fadeInUp} ${styles.sectionHeader}`}>
+                        <Text className={styles.sectionEyebrow}>Mapa da trilha</Text>
+                        <Title
+                            order={2}
+                            fz={{ base: "2rem", md: "2.75rem" }}
+                            ta="center"
+                            mb="sm"
+                        >
+                            Jornada de <span className={styles.accentHighlight}>Aprendizado</span>
+                        </Title>
+                        <Text ta="center" c="var(--color-text-muted)" size="lg" maw={640} mx="auto">
+                            Cada módulo desbloqueia conforme o estudante progride, criando uma
+                            progressão natural
+                        </Text>
+                    </Stack>
 
-                    <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
+                    <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md" className={styles.moduleGrid}>
                         {[
                             { module: "Módulo 1", title: "Primeiros Passos na Programação", description: "Conceitos fundamentais e seu primeiro código", icon: "🚀" },
                             { module: "Módulo 2", title: "Lógica e Decisões", description: "Condições e tomada de decisão em código", icon: "🧠" },
@@ -374,11 +385,11 @@ export default function LandingPage() {
                         ].map((item, idx) => (
                             <div
                                 key={idx}
-                                className={`${styles.cardSoft} ${styles.fadeInUp}`}
+                                className={`${styles.cardSoft} ${styles.fadeInUp} ${styles.moduleCard}`}
                                 style={{ animationDelay: `${idx * 0.1}s` }}
                             >
-                                <Text fz="2.5rem" mb="sm">{item.icon}</Text>
-                                <Text fz="sm" fw={600} c="#3A86FF" mb="xs">{item.module}</Text>
+                                <Text className={styles.moduleIcon} mb="sm">{item.icon}</Text>
+                                <Text className={styles.moduleLabel} mb="xs">{item.module}</Text>
                                 <Title order={4} fz="lg" mb="xs">{item.title}</Title>
                                 <Text fz="sm" c="var(--color-text-muted)">{item.description}</Text>
                                 {idx === 0 && <div className={styles.badgePrimary}>Disponível agora</div>}
@@ -392,19 +403,20 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── WHY INGENIA ───────────────────────────────────────────── */}
-            <section className={styles.section}>
-                <Container size="lg">
-                    <Title
-                        order={2}
-                        fz={{ base: "2rem", md: "2.75rem" }}
-                        ta="center"
-                        mb={48}
-                        className={styles.fadeInUp}
-                    >
-                        Por que <span className={styles.accentHighlight}>Ingenia</span>
-                    </Title>
+            <section className={`${styles.section} ${styles.whySection}`}>
+                <Container size="lg" className={styles.sectionContainer}>
+                    <Stack align="center" gap="sm" mb={48} className={`${styles.fadeInUp} ${styles.sectionHeader}`}>
+                        <Text className={styles.sectionEyebrow}>Por que funciona</Text>
+                        <Title
+                            order={2}
+                            fz={{ base: "2rem", md: "2.75rem" }}
+                            ta="center"
+                        >
+                            Por que <span className={styles.accentHighlight}>Ingenia</span>
+                        </Title>
+                    </Stack>
 
-                    <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
+                    <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg" className={styles.whyGrid}>
                         {[
                             { title: "Aprender Fazendo", description: "Educação prática que desenvolve habilidades reais de programação", icon: "💡" },
                             { title: "Feedback Imediato", description: "Saiba instantaneamente se seu código está correto e por quê", icon: "⚡" },
@@ -415,7 +427,7 @@ export default function LandingPage() {
                         ].map((item, idx) => (
                             <div
                                 key={idx}
-                                className={`${styles.cardSoft} ${styles.fadeInUp}`}
+                                className={`${styles.cardSoft} ${styles.fadeInUp} ${styles.whyCard}`}
                                 style={{ animationDelay: `${idx * 0.08}s` }}
                             >
                                 <Text fz="1.75rem" mb="xs">{item.icon}</Text>
@@ -432,12 +444,13 @@ export default function LandingPage() {
             <div className={styles.softDivider} />
 
             {/* ─── FINAL CTA ─────────────────────────────────────────────── */}
-            <section className={styles.sectionAlt} style={{ position: "relative", overflow: "hidden" }}>
+            <section className={`${styles.sectionAlt} ${styles.finalCtaSection}`} style={{ position: "relative", overflow: "hidden" }}>
                 <div className={styles.ctaBgCircleRight} />
                 <div className={styles.ctaBgCircleLeft} />
 
-                <Container size="sm" style={{ position: "relative", zIndex: 10 }}>
-                    <Stack align="center" className={styles.fadeInUp}>
+                <Container size="sm" className={styles.finalCtaInner} style={{ position: "relative", zIndex: 10 }}>
+                    <Stack align="center" className={`${styles.fadeInUp} ${styles.finalCtaCard}`}>
+                        <Text className={styles.sectionEyebrow}>Pronto para começar</Text>
                         <Title order={2} fz={{ base: "2rem", md: "2.75rem" }} ta="center" lh={1.2}>
                             Programação é uma{" "}
                             <span className={styles.accentHighlight}>linguagem</span> de
@@ -464,7 +477,7 @@ export default function LandingPage() {
             </section>
 
             {/* ─── FOOTER ────────────────────────────────────────────────── */}
-            <footer className={styles.footer}>
+            <footer className={`${styles.footer} ${styles.modernFooter}`}>
                 <Container size="lg">
                     <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="xl" mb="xl">
                         <div>
