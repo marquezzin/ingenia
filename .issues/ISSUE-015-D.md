@@ -17,12 +17,13 @@ Testes E2E dos fluxos do professor.
 
 ## Critérios de Aceite
 
-- [ ] J-005 passando
-- [ ] J-006 passando
+- [x] J-005 passando
+- [x] J-006 passando
 
 ## Arquivos Afetados
 
-- `frontend/src/domains/teacher/e2e/`
+- `frontend/src/domains/teacher/e2e/classes.spec.ts` — J-005: criação de turma e progresso coletivo
+- `frontend/src/domains/teacher/e2e/progress.spec.ts` — J-006: progresso individual do aluno
 
 ## Notas Técnicas
 
@@ -35,5 +36,6 @@ Testes E2E dos fluxos do professor.
 
 - **Prioridade**: alta
 - **Tipo**: chore
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-12

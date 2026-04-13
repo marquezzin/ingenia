@@ -145,7 +145,7 @@
 | ISSUE-015-A | Layout professor + Dashboard | feature | 🟢 | 008-D, 008-E |
 | ISSUE-015-B | CRUD de turmas (list, new, detail, edit) | feature | 🟢 | 014-A, 014-B, 015-A |
 | ISSUE-015-C | Lista de alunos + progresso individual | feature | 🟢 | 014-C, 015-B |
-| ISSUE-015-D | Testes E2E (J-005, J-006) | chore | 🟡 | 014-D, 015-A, 015-B, 015-C |
+| ISSUE-015-D | Testes E2E (J-005, J-006) | chore | 🟢 | 014-D, 015-A, 015-B, 015-C |
 
 ---
 
@@ -185,9 +185,9 @@
 | Sub-issues | 58 |
 | Issues que não foram quebradas | 7 (001, 002, 003, 004, 005, 006, 017) |
 | Total de itens rastreáveis | 65 |
-| Concluídas | 52 |
+| Concluídas | 53 |
 | Em andamento | 0 |
-| Pendentes | 10 |
+| Pendentes | 9 |
 | Canceladas | 3 (012-B, 016-C, 018-B) |
 
 <!-- Ao criar uma nova issue, adicione uma linha na tabela acima e crie o arquivo correspondente em .issues/ISSUE-XXX.md -->
