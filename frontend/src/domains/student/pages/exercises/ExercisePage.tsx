@@ -9,6 +9,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
   Badge,
@@ -67,6 +68,7 @@ export default function ExercisePage() {
     exerciseId: string;
   }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // ─── Data ───────────────────────────────────────────────────────────────
   const { data: exercise, isLoading, isError } = useStudentExerciseDetail(
@@ -157,10 +159,14 @@ export default function ExercisePage() {
         message: `Sua nota: ${Math.round(result.scorePercentage)}%`,
         color: result.scorePercentage === 100 ? "teal" : "yellow",
       });
+
+      // Invalidate caches to update history and completion status without page reload
+      void queryClient.invalidateQueries({ queryKey: ["exercise-history", exerciseId] });
+      void queryClient.invalidateQueries({ queryKey: ["student-exercises"] });
     }
     setActiveTab("results");
     setIsBottomOpen(true);
-  }, [code, exercise, execute, submit]);
+  }, [code, exercise, exerciseId, execute, submit, queryClient]);
 
   const handleClear = useCallback(() => {
     setCode(DEFAULT_CODE);
