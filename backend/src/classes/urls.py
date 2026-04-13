@@ -9,6 +9,7 @@ from .views import (
     ClassEnrollmentTeacherViewSet,
     ClassGroupAdminViewSet,
     ClassGroupTeacherViewSet,
+    StudentMyClassesView,
     StudentSearchView,
 )
 
@@ -45,5 +46,11 @@ urlpatterns = router.urls + [
         "teacher/students/search/",
         StudentSearchView.as_view(),
         name="teacher-student-search",
+    ),
+    # ─── Student My Classes ───────────────────────────────────────────────
+    path(
+        "student/my-classes/",
+        StudentMyClassesView.as_view(),
+        name="student-my-classes",
     ),
 ]

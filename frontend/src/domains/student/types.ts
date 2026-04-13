@@ -235,3 +235,12 @@ export interface SubmissionHistoryItem {
   result: SubmissionHistoryResult | null;
 }
 
+// ─── Student My Classes ─────────────────────────────────────────────────────
+
+/** A class enrollment as seen by the student (from GET /api/v1/student/my-classes/). */
+export interface StudentMyClass {
+  class_group_id: string;
+  class_name: string;
+  teacher_name: string;
+  enrolled_at: string;
+}

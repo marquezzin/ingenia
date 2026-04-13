@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from core.errors import NotFoundError
-from core.permissions import IsAdmin, IsTeacher
+from core.permissions import IsAdmin, IsStudent, IsTeacher
 from src.accounts.selectors import list_student_profiles
 
 from .models import ClassEnrollment, ClassGroup
@@ -22,6 +22,7 @@ from .selectors import (
     list_class_groups,
     list_class_groups_for_teacher,
     list_enrollments_for_class_group,
+    list_enrollments_for_student,
 )
 from .serializers import (
     ClassGroupCreateUpdateSerializer,
@@ -29,6 +30,7 @@ from .serializers import (
     ClassGroupListSerializer,
     EnrolledStudentSerializer,
     EnrollStudentSerializer,
+    StudentMyClassSerializer,
     StudentSearchSerializer,
     TeacherClassGroupDetailSerializer,
 )
@@ -249,3 +251,18 @@ class StudentSearchView(generics.ListAPIView):
     def get_queryset(self):
         search = self.request.query_params.get("search", "").strip()
         return list_student_profiles(search=search or None)
+
+
+class StudentMyClassesView(generics.ListAPIView):
+    """
+    Lista as turmas em que o aluno está matriculado.
+    GET /api/v1/student/my-classes/
+    """
+
+    permission_classes = [IsAuthenticated, IsStudent]
+    serializer_class = StudentMyClassSerializer
+    pagination_class = None  # Aluno geralmente tem poucas turmas
+
+    def get_queryset(self):
+        student_profile_id = str(self.request.user.student_profile.id)
+        return list_enrollments_for_student(student_profile_id=student_profile_id)

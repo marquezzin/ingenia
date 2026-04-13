@@ -75,3 +75,17 @@ def get_enrollment_for_class_group(
     return ClassEnrollment.objects.select_related("student_profile__user").get(
         id=enrollment_id, class_group_id=class_group_id
     )
+
+
+def list_enrollments_for_student(
+    *, student_profile_id: str
+) -> QuerySet[ClassEnrollment]:
+    """Lista matrículas ativas de um aluno com turma e professor."""
+    return (
+        ClassEnrollment.objects.filter(
+            student_profile_id=student_profile_id,
+            enrollment_status="ACTIVE",
+        )
+        .select_related("class_group__teacher_profile__user")
+        .order_by("-enrolled_at")
+    )

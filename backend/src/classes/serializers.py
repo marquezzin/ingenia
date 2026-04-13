@@ -145,3 +145,21 @@ class StudentSearchSerializer(serializers.Serializer):
 
     def get_email(self, obj) -> str:
         return obj.user.email
+
+
+class StudentMyClassSerializer(serializers.Serializer):
+    """Serializer de leitura para o aluno ver suas turmas."""
+
+    class_group_id = serializers.SerializerMethodField()
+    class_name = serializers.SerializerMethodField()
+    teacher_name = serializers.SerializerMethodField()
+    enrolled_at = serializers.DateTimeField()
+
+    def get_class_group_id(self, obj) -> str:
+        return str(obj.class_group.id)
+
+    def get_class_name(self, obj) -> str:
+        return obj.class_group.name
+
+    def get_teacher_name(self, obj) -> str:
+        return obj.class_group.teacher_profile.user.full_name

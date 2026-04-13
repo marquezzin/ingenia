@@ -5,12 +5,13 @@
  * e a grade de módulos com progresso visual.
  */
 import { useMemo } from "react";
-import { Alert, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { Alert, Badge, Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import {
   AlertCircle,
   BookOpen,
   CheckCircle2,
   FileCode2,
+  School,
   TrendingUp,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ import { PageHeader, StatCard } from "@/shared/ui/components";
 import { EmptyState } from "@/shared/ui/components";
 import { useMe } from "@/domains/auth/hooks";
 import { useStudentModules } from "../hooks/useStudentModules";
+import { useStudentMyClasses } from "../hooks/useStudentMyClasses";
 import { useStudentProgress } from "../hooks/useStudentProgress";
 import {
   computeOverallProgress,
@@ -48,6 +50,8 @@ export default function DashboardPage() {
     isLoading: progressLoading,
     isError: progressError,
   } = useStudentProgress();
+
+  const { data: myClasses } = useStudentMyClasses();
 
   const isLoading = modulesLoading || progressLoading;
   const isError = modulesError || progressError;
@@ -182,6 +186,44 @@ export default function DashboardPage() {
           color="orange"
         />
       </SimpleGrid>
+
+      {/* ── My Classes ────────────────────────────────────────────────── */}
+      {myClasses && myClasses.length > 0 && (
+        <Card withBorder radius="md" padding="lg">
+          <Group gap="sm" mb="sm">
+            <School size={20} strokeWidth={1.5} style={{ color: "hsl(var(--brand-primary))" }} />
+            <Text fw={600} size="md">
+              {myClasses.length === 1 ? "Minha Turma" : "Minhas Turmas"}
+            </Text>
+          </Group>
+          <Stack gap="xs">
+            {myClasses.map((cls) => (
+              <Group
+                key={cls.class_group_id}
+                justify="space-between"
+                px="sm"
+                py="xs"
+                style={{
+                  borderRadius: "var(--mantine-radius-sm)",
+                  background: "var(--mantine-color-blue-0)",
+                }}
+              >
+                <div>
+                  <Text size="sm" fw={500}>
+                    {cls.class_name}
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    Professor: {cls.teacher_name}
+                  </Text>
+                </div>
+                <Badge variant="light" color="blue" size="sm">
+                  Matriculado
+                </Badge>
+              </Group>
+            ))}
+          </Stack>
+        </Card>
+      )}
 
       {/* ── Continue where you left off ────────────────────────────────── */}
       <ContinueStudyCard
