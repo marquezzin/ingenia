@@ -63,6 +63,8 @@ const TeacherClassListPage = lazy(() => import("@/domains/teacher/pages/classes/
 const TeacherClassCreatePage = lazy(() => import("@/domains/teacher/pages/classes/ClassCreatePage"));
 const TeacherClassDetailPage = lazy(() => import("@/domains/teacher/pages/classes/ClassDetailPage"));
 const TeacherClassEditPage = lazy(() => import("@/domains/teacher/pages/classes/ClassEditPage"));
+const TeacherStudentListPage = lazy(() => import("@/domains/teacher/pages/students/StudentListPage"));
+const TeacherStudentProgressPage = lazy(() => import("@/domains/teacher/pages/students/StudentProgressPage"));
 
 // Adicione novos domínios aqui:
 // const MyEntityListPage = lazy(() => import("@/domains/my-domain/pages/MyEntityListPage"));
@@ -245,6 +247,22 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<Spinner />}>
                         <TeacherClassEditPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes/:classId/students/:studentId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <TeacherStudentProgressPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "students",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <TeacherStudentListPage />
                     </Suspense>
                 ),
             },

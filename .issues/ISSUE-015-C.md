@@ -17,13 +17,17 @@ Telas de acompanhamento de alunos e progresso individual.
 
 ## Critérios de Aceite
 
-- [ ] Lista consolidada com filtros
-- [ ] Progresso individual detalhado
-- [ ] Estado vazio para turma sem alunos (edge case)
+- [x] Lista consolidada com filtros
+- [x] Progresso individual detalhado
+- [x] Estado vazio para turma sem alunos (edge case)
 
 ## Arquivos Afetados
 
-- `frontend/src/domains/teacher/pages/students/`
+- `frontend/src/domains/teacher/pages/students/StudentListPage.tsx` — **[NEW]**
+- `frontend/src/domains/teacher/pages/students/StudentProgressPage.tsx` — **[NEW]**
+- `frontend/src/domains/teacher/pages/classes/ClassDetailPage.tsx` — Linhas de alunos clicáveis
+- `frontend/src/app/routes.tsx` — Rotas `/teacher/students` e `/teacher/classes/:classId/students/:studentId`
+- `frontend/src/domains/teacher/.context.md` — Atualizado com novas páginas
 
 ## Notas Técnicas
 
@@ -32,9 +36,16 @@ Telas de acompanhamento de alunos e progresso individual.
 | **ISSUE-015** | `.issues/ISSUE-015.md` | Edge cases; Contexto completo |
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-006 |
 
+### Decisões técnicas
+
+- **StudentListPage** usa `useQueries` do TanStack Query para buscar progresso de todas as turmas em paralelo, em vez de criar um endpoint novo de listagem consolidada.
+- **ClassDetailPage** agora tem linhas clicáveis que levam ao progresso individual (J-006 journey).
+- Ambas as páginas tratam corretamente os estados Loading, Empty, Error e Success.
+
 ## Status
 
 - **Prioridade**: alta
 - **Tipo**: feature
+- **Status**: Concluída
 - **Criado em**: 2026-03-12
-- **Atualizado em**: 2026-03-12
+- **Atualizado em**: 2026-04-12

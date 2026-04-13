@@ -211,9 +211,17 @@ export default function ClassDetailPage() {
             </Table.Thead>
             <Table.Tbody>
               {filteredStudents.map((student) => (
-                <Table.Tr key={student.student_profile_id}>
+                <Table.Tr
+                  key={student.student_profile_id}
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    navigate(
+                      `/teacher/classes/${classId}/students/${student.student_profile_id}`,
+                    )
+                  }
+                >
                   <Table.Td>
-                    <Text fw={500} size="sm">
+                    <Text fw={500} size="sm" td="underline" c="blue">
                       {student.student_name}
                     </Text>
                   </Table.Td>
