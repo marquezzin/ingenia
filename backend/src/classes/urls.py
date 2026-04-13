@@ -9,6 +9,7 @@ from .views import (
     ClassEnrollmentTeacherViewSet,
     ClassGroupAdminViewSet,
     ClassGroupTeacherViewSet,
+    StudentSearchView,
 )
 
 router = DefaultRouter()
@@ -38,5 +39,11 @@ urlpatterns = router.urls + [
         "teacher/classes/<uuid:class_pk>/students/<uuid:student_pk>/progress/",
         TeacherStudentProgressView.as_view(),
         name="teacher-student-progress",
+    ),
+    # ─── Teacher Student Search (ISSUE-015-B) ─────────────────────────────
+    path(
+        "teacher/students/search/",
+        StudentSearchView.as_view(),
+        name="teacher-student-search",
     ),
 ]

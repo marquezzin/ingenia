@@ -1,6 +1,6 @@
 """Classes app — Views."""
 
-from rest_framework import status, viewsets
+from rest_framework import generics, status, viewsets
 from rest_framework.mixins import (
     CreateModelMixin,
     DestroyModelMixin,
@@ -13,6 +13,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from core.errors import NotFoundError
 from core.permissions import IsAdmin, IsTeacher
+from src.accounts.selectors import list_student_profiles
 
 from .models import ClassEnrollment, ClassGroup
 from .selectors import (
@@ -28,6 +29,7 @@ from .serializers import (
     ClassGroupListSerializer,
     EnrolledStudentSerializer,
     EnrollStudentSerializer,
+    StudentSearchSerializer,
     TeacherClassGroupDetailSerializer,
 )
 from .services import (
@@ -231,3 +233,19 @@ class ClassEnrollmentTeacherViewSet(
         )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class StudentSearchView(generics.ListAPIView):
+    """
+    Busca de alunos para o professor matricular em turmas.
+    GET /api/v1/teacher/students/search/?search=<nome_ou_email>
+    Retorna apenas alunos ativos com dados mínimos.
+    """
+
+    permission_classes = [IsAuthenticated, IsTeacher]
+    serializer_class = StudentSearchSerializer
+    search_fields = ["user__first_name", "user__last_name", "user__email"]
+
+    def get_queryset(self):
+        search = self.request.query_params.get("search", "").strip()
+        return list_student_profiles(search=search or None)

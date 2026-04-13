@@ -11,6 +11,7 @@ import {
   listEnrollmentsApi,
   listTeacherClassesApi,
   removeStudentApi,
+  searchStudentsApi,
   updateTeacherClassApi,
 } from "./api";
 import type {
@@ -41,6 +42,10 @@ const TEACHER_KEYS = {
     [...TEACHER_KEYS.classes(), classId, "progress"] as const,
   studentProgress: (classId: string, studentId: string) =>
     [...TEACHER_KEYS.classes(), classId, "students", studentId, "progress"] as const,
+
+  // Student Search
+  studentSearch: (search?: string) =>
+    [...TEACHER_KEYS.all, "student-search", search] as const,
 };
 
 // ─── Class Queries ──────────────────────────────────────────────────────────
@@ -155,4 +160,13 @@ export const useStudentProgress = (classId: string, studentId: string) =>
     queryKey: TEACHER_KEYS.studentProgress(classId, studentId),
     queryFn: () => getStudentProgressApi(classId, studentId),
     enabled: !!classId && !!studentId,
+  });
+
+// ─── Student Search ─────────────────────────────────────────────────────────────────
+
+export const useSearchStudents = (search?: string) =>
+  useQuery({
+    queryKey: TEACHER_KEYS.studentSearch(search),
+    queryFn: () => searchStudentsApi({ search }),
+    enabled: !!search && search.length >= 2,
   });

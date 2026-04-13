@@ -11,7 +11,9 @@ import type {
   EnrolledStudent,
   EnrollStudentPayload,
   ListClassesParams,
+  SearchStudentsParams,
   StudentDetailProgress,
+  StudentSearchResult,
   TeacherClassDetail,
   TeacherClassListItem,
   UpdateClassPayload,
@@ -100,5 +102,16 @@ export const getStudentProgressApi = async (
   const { data } = await httpClient.get(
     `/api/v1/teacher/classes/${classId}/students/${studentId}/progress/`,
   );
+  return data;
+};
+
+// ─── Student Search (for enrollment) ─────────────────────────────────────────
+
+export const searchStudentsApi = async (
+  params?: SearchStudentsParams,
+): Promise<PaginatedResponse<StudentSearchResult>> => {
+  const { data } = await httpClient.get("/api/v1/teacher/students/search/", {
+    params,
+  });
   return data;
 };

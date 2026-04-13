@@ -59,6 +59,10 @@ const ComponentCatalogPage = lazy(() => import("@/shared/ui/components/Component
 
 // Teacher domain
 const TeacherDashboardPage = lazy(() => import("@/domains/teacher/pages/DashboardPage"));
+const TeacherClassListPage = lazy(() => import("@/domains/teacher/pages/classes/ClassListPage"));
+const TeacherClassCreatePage = lazy(() => import("@/domains/teacher/pages/classes/ClassCreatePage"));
+const TeacherClassDetailPage = lazy(() => import("@/domains/teacher/pages/classes/ClassDetailPage"));
+const TeacherClassEditPage = lazy(() => import("@/domains/teacher/pages/classes/ClassEditPage"));
 
 // Adicione novos domínios aqui:
 // const MyEntityListPage = lazy(() => import("@/domains/my-domain/pages/MyEntityListPage"));
@@ -209,6 +213,38 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<Spinner />}>
                         <TeacherDashboardPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <TeacherClassListPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes/new",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <TeacherClassCreatePage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes/:classId",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <TeacherClassDetailPage />
+                    </Suspense>
+                ),
+            },
+            {
+                path: "classes/:classId/edit",
+                element: (
+                    <Suspense fallback={<Spinner />}>
+                        <TeacherClassEditPage />
                     </Suspense>
                 ),
             },

@@ -128,3 +128,20 @@ class EnrollStudentSerializer(serializers.Serializer):
     """Serializer de escrita para associar aluno a uma turma."""
 
     student_profile_id = serializers.UUIDField()
+
+
+class StudentSearchSerializer(serializers.Serializer):
+    """Serializer de leitura para busca de alunos (usado pelo professor)."""
+
+    student_profile_id = serializers.SerializerMethodField()
+    full_name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
+    def get_student_profile_id(self, obj) -> str:
+        return str(obj.id)
+
+    def get_full_name(self, obj) -> str:
+        return obj.user.full_name
+
+    def get_email(self, obj) -> str:
+        return obj.user.email
