@@ -5,7 +5,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { RequireGuest } from "@/shared/auth/guards";
+import { RequireGuest, RedirectIfAuthenticated } from "@/shared/auth/guards";
 import { ProtectedRoute } from "@/shared/components/ProtectedRoute";
 import { StudentRoute, TeacherRoute, AdminRoute } from "@/shared/components/RoleRoute";
 import { AppLayout } from "@/shared/components/Layout";
@@ -80,9 +80,11 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: (
-            <Suspense fallback={<Spinner />}>
-                <LandingPage />
-            </Suspense>
+            <RedirectIfAuthenticated>
+                <Suspense fallback={<Spinner />}>
+                    <LandingPage />
+                </Suspense>
+            </RedirectIfAuthenticated>
         ),
     },
 
