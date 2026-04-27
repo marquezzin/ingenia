@@ -4,7 +4,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMeApi, loginApi, registerApi, forgotPasswordApi } from "./api";
 import type { LoginPayload, RegisterPayload, ForgotPasswordPayload } from "./types";
-import { setTokens, clearTokens } from "@/shared/auth/storage";
+import { setTokens, clearTokens, isAuthenticated } from "@/shared/auth/storage";
 
 const AUTH_KEYS = {
     me: ["auth", "me"] as const,
@@ -15,6 +15,7 @@ export const useMe = () =>
         queryKey: AUTH_KEYS.me,
         queryFn: getMeApi,
         retry: false,
+        enabled: isAuthenticated(),
     });
 
 export const useLogin = () => {
