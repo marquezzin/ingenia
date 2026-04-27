@@ -3,6 +3,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 
+const allowedHosts = process.env.VITE_ALLOWED_HOSTS?.split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+
 export default defineConfig({
     plugins: [react()],
     resolve: {
@@ -12,6 +16,7 @@ export default defineConfig({
     },
     server: {
         port: 5173,
+        allowedHosts: allowedHosts && allowedHosts.length > 0 ? allowedHosts : true,
         proxy: {
             "/api": {
                 target: "http://backend:8000",

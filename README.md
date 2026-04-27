@@ -109,6 +109,30 @@ Acesse `/dev/components` para visualizar todos os componentes da lib com exemplo
 
 **Para mudar o visual**, edite apenas `tokens.css`.
 
+## Deploy em Produção
+
+Stack atual: VPS com Traefik (TLS via Let's Encrypt) + `docker/compose.prod.yml`.
+O arquivo `.env.prod` fica **apenas no servidor** (contém secrets) — versionar é só `compose.prod.yml`.
+
+```bash
+# No servidor, na raiz do repo — deploy completo (pull + build + up + migrate):
+make prod-deploy
+
+# Outros comandos úteis em prod:
+make prod-logs       # tail dos logs
+make prod-status     # status dos containers
+make prod-restart    # reinicia tudo
+make prod-shell      # shell Django
+make prod-seed       # popula com dados iniciais (cuidado)
+```
+
+Pontos de atenção do deploy atual (a melhorar):
+
+- Backend roda `manage.py runserver` (dev server) — trocar por gunicorn/uvicorn.
+- Frontend roda `pnpm dev` (Vite dev server) — fazer build estático servido por nginx.
+- `DJANGO_SETTINGS_MODULE=config.settings.base` em prod — falta um `settings/prod.py` com hardening (DEBUG=False, SECURE_SSL_REDIRECT, etc).
+- Sem `migrate` / `collectstatic` automático no boot.
+
 ## Documentação Técnica
 
 | Área      | Local                   |

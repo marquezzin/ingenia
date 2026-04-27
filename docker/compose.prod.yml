@@ -1,0 +1,114 @@
+# Production compose - Traefik + letsencrypt
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: ingenia-db-prod
+    restart: unless-stopped
+    env_file: ../.env.prod
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [ingenia-internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ingenia-redis-prod
+    restart: unless-stopped
+    networks: [ingenia-internal]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: ingenia-api-prod
+    restart: unless-stopped
+    env_file: ../.env.prod
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.base
+    networks: [traefik-net, ingenia-internal]
+    expose: ["8000"]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    command: uv run python manage.py runserver 0.0.0.0:8000
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-net
+      - "traefik.http.routers.ingenia-api.rule=Host(`ingenia-api.synaptha.com`)"
+      - traefik.http.routers.ingenia-api.entrypoints=https
+      - traefik.http.routers.ingenia-api.tls=true
+      - traefik.http.routers.ingenia-api.tls.certresolver=letsencrypt
+      - traefik.http.services.ingenia-api.loadbalancer.server.port=8000
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: ingenia-web-prod
+    restart: unless-stopped
+    env_file: ../.env.prod
+    networks: [traefik-net]
+    expose: ["5173"]
+    depends_on: [backend]
+    command: sh -c "pnpm install && exec pnpm dev --host --port 5173"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-net
+      - "traefik.http.routers.ingenia-web.rule=Host(`ingenia.synaptha.com`)"
+      - traefik.http.routers.ingenia-web.entrypoints=https
+      - traefik.http.routers.ingenia-web.tls=true
+      - traefik.http.routers.ingenia-web.tls.certresolver=letsencrypt
+      - traefik.http.services.ingenia-web.loadbalancer.server.port=5173
+
+  celery_worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: ingenia-celery-worker-prod
+    restart: unless-stopped
+    env_file: ../.env.prod
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.base
+    networks: [ingenia-internal]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    command: uv run celery -A config worker -l info
+
+  celery_beat:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: ingenia-celery-beat-prod
+    restart: unless-stopped
+    env_file: ../.env.prod
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.base
+    networks: [ingenia-internal]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    command: uv run celery -A config beat -l info
+
+networks:
+  ingenia-internal:
+    name: ingenia-internal
+    driver: bridge
+    internal: true
+  traefik-net:
+    external: true
+
+volumes:
+  postgres_data:
+    name: ingenia-pgdata-prod

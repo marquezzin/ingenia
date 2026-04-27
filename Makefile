@@ -11,7 +11,9 @@ FRONTEND = $(COMPOSE) exec frontend
         test-up test-down test-seed test-reset \
         test-backend test-backend-cov test-frontend test-e2e test-e2e-ui test \
         lint-backend lint-frontend lint setup-hooks \
-        install-backend install-frontend
+        install-backend install-frontend \
+        prod-deploy prod-up prod-down prod-build prod-restart prod-logs \
+        prod-migrate prod-seed prod-shell prod-status
 
 # ─── Help ─────────────────────────────────────────────────────────────────────
 help: ## Mostra este menu de ajuda
@@ -168,3 +170,51 @@ celery-beat: ## Sobe o scheduler do Celery manualmente
 
 celery-logs: ## Tail dos logs do worker
 	$(COMPOSE) logs -f celery_worker
+
+# ─── Produção (rodar na VPS) ──────────────────────────────────────────────────
+#   Pré-requisitos no servidor:
+#     - .env.prod existe na raiz do repo (NÃO versionado)
+#     - rede traefik-net externa criada e Traefik rodando
+#   Use `make prod-deploy` para deploy completo (pull + build + migrate).
+
+COMPOSE_PROD = docker compose -f docker/compose.prod.yml --env-file .env.prod
+BACKEND_PROD = docker exec ingenia-api-prod
+
+prod-deploy: ## Deploy completo na VPS: git pull → build → up → migrate
+	@test -f .env.prod || (echo "✗ .env.prod não encontrado. Rode na VPS, na raiz do repo." && exit 1)
+	@echo "─── Pull ────────────────────────────────────"
+	git pull --ff-only
+	@echo "─── Build & Up ──────────────────────────────"
+	$(COMPOSE_PROD) up -d --build --wait
+	@echo "─── Migrate ─────────────────────────────────"
+	$(BACKEND_PROD) uv run python manage.py migrate --no-input
+	@echo ""
+	@echo "✓ Deploy concluído."
+	@$(COMPOSE_PROD) ps
+
+prod-up: ## Sobe os serviços de prod (sem pull, sem build)
+	$(COMPOSE_PROD) up -d
+
+prod-down: ## Derruba os serviços de prod (preserva volumes)
+	$(COMPOSE_PROD) down
+
+prod-build: ## Builda as imagens de prod
+	$(COMPOSE_PROD) build
+
+prod-restart: ## Reinicia todos os serviços de prod
+	$(COMPOSE_PROD) restart
+
+prod-logs: ## Tail dos logs de prod (todos os serviços)
+	$(COMPOSE_PROD) logs -f --tail=100
+
+prod-migrate: ## Aplica migrations em prod
+	$(BACKEND_PROD) uv run python manage.py migrate --no-input
+
+prod-seed: ## Popula prod com dados iniciais (cuidado — somente quando intencional)
+	$(BACKEND_PROD) uv run python manage.py seed
+
+prod-shell: ## Abre shell Django em prod
+	$(BACKEND_PROD) uv run python manage.py shell
+
+prod-status: ## Status dos containers de prod
+	$(COMPOSE_PROD) ps
