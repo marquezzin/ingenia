@@ -68,6 +68,7 @@ export const listExerciseSubmissionsApi = async (
 /** Filters for listing all submissions. */
 export interface SubmissionListFilters {
   result_status?: string;
+  module_id?: string;
   page?: number;
 }
 

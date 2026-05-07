@@ -13,11 +13,13 @@ import {
   Badge,
   Group,
   SegmentedControl,
+  Select,
   Stack,
   Text,
 } from "@mantine/core";
 import {
   AlertCircle,
+  BookOpen,
   Clock,
   FileCode2,
 } from "lucide-react";
@@ -27,6 +29,7 @@ import { EmptyState } from "@/shared/ui/components";
 import { DataTable, type DataTableColumn } from "@/shared/ui/components/DataTable";
 import type { SubmissionHistoryItem } from "../types";
 import { useSubmissionHistory } from "../hooks/useSubmissionHistory";
+import { useStudentModules } from "../hooks/useStudentModules";
 import { SubmissionDetailModal } from "../ui/SubmissionDetailModal";
 
 const BREADCRUMBS = [
@@ -48,6 +51,7 @@ const RESULT_STATUS_MAP: Record<string, { label: string; color: string }> = {
 
 export default function SubmissionsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
+  const [moduleFilter, setModuleFilter] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [selectedSubmission, setSelectedSubmission] =
     useState<SubmissionHistoryItem | null>(null);
@@ -55,12 +59,23 @@ export default function SubmissionsPage() {
   const filters = useMemo(
     () => ({
       ...(statusFilter !== "all" && { result_status: statusFilter }),
+      ...(moduleFilter && { module_id: moduleFilter }),
       page,
     }),
-    [statusFilter, page],
+    [statusFilter, moduleFilter, page],
   );
 
   const { data, isLoading, isError } = useSubmissionHistory(filters);
+  const { data: modulesData } = useStudentModules();
+
+  const moduleOptions = useMemo(
+    () =>
+      (modulesData?.results ?? []).map((m) => ({
+        value: m.id,
+        label: m.title,
+      })),
+    [modulesData],
+  );
 
   const submissions = useMemo(() => data?.results ?? [], [data]);
   const totalPages = useMemo(() => {
@@ -75,9 +90,17 @@ export default function SubmissionsPage() {
         key: "exercise_title",
         label: "Exercício",
         render: (row: SubmissionHistoryItem) => (
-          <Text size="sm" fw={500} lineClamp={1}>
-            {row.exercise_title}
-          </Text>
+          <Stack gap={2}>
+            <Text size="sm" fw={500} lineClamp={1}>
+              {row.exercise_title}
+            </Text>
+            <Group gap={6} wrap="nowrap">
+              <BookOpen size={12} color="var(--mantine-color-dimmed)" />
+              <Text size="xs" c="dimmed" lineClamp={1}>
+                {row.module_title} • {row.lesson_title}
+              </Text>
+            </Group>
+          </Stack>
         ),
       },
       {
@@ -172,12 +195,26 @@ export default function SubmissionsPage() {
       />
 
       {/* ── Filters ──────────────────────────────────────────────────── */}
-      <Group>
+      <Group gap="md" wrap="wrap">
         <SegmentedControl
           value={statusFilter}
           onChange={handleFilterChange}
           data={STATUS_FILTER_OPTIONS}
           size="sm"
+        />
+        <Select
+          placeholder="Todos os módulos"
+          value={moduleFilter}
+          onChange={(value) => {
+            setModuleFilter(value);
+            setPage(1);
+          }}
+          data={moduleOptions}
+          clearable
+          searchable
+          size="sm"
+          w={260}
+          leftSection={<BookOpen size={14} />}
         />
       </Group>
 
@@ -198,8 +235,8 @@ export default function SubmissionsPage() {
         emptyState={{
           title: "Nenhuma submissão encontrada",
           description:
-            statusFilter !== "all"
-              ? "Tente mudar o filtro para ver mais resultados."
+            statusFilter !== "all" || moduleFilter
+              ? "Tente mudar os filtros para ver mais resultados."
               : "Quando você resolver exercícios, suas submissões aparecerão aqui.",
           icon: <FileCode2 size={48} />,
         }}

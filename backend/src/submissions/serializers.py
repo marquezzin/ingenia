@@ -52,6 +52,10 @@ class SubmissionListSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     exercise_id = serializers.UUIDField()
     exercise_title = serializers.SerializerMethodField()
+    lesson_id = serializers.SerializerMethodField()
+    lesson_title = serializers.SerializerMethodField()
+    module_id = serializers.SerializerMethodField()
+    module_title = serializers.SerializerMethodField()
     source_code = serializers.CharField()
     evaluation_status = serializers.ChoiceField(choices=SubmissionStatus.choices)
     score_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
@@ -59,11 +63,21 @@ class SubmissionListSerializer(serializers.Serializer):
     result = serializers.SerializerMethodField()
 
     def get_exercise_title(self, obj) -> str:
-        """Retorna título do exercício via select_related."""
         return obj.exercise.title
 
+    def get_lesson_id(self, obj) -> str:
+        return str(obj.exercise.lesson_id)
+
+    def get_lesson_title(self, obj) -> str:
+        return obj.exercise.lesson.title
+
+    def get_module_id(self, obj) -> str:
+        return str(obj.exercise.lesson.module_id)
+
+    def get_module_title(self, obj) -> str:
+        return obj.exercise.lesson.module.title
+
     def get_result(self, obj) -> dict | None:
-        """Retorna resultado nested, se existir."""
         result = getattr(obj, "result", None)
         if result is not None:
             return SubmissionResultSerializer(result).data

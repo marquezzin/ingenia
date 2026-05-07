@@ -9,6 +9,7 @@ def list_submissions_for_student(
     *,
     student_profile_id: str,
     exercise_id: str | None = None,
+    module_id: str | None = None,
     evaluation_status: str | None = None,
     result_status: str | None = None,
 ) -> models.QuerySet[Submission]:
@@ -18,12 +19,20 @@ def list_submissions_for_student(
     """
     qs = (
         Submission.objects.filter(student_profile_id=student_profile_id)
-        .select_related("exercise", "result")
+        .select_related(
+            "exercise",
+            "exercise__lesson",
+            "exercise__lesson__module",
+            "result",
+        )
         .order_by("-submitted_at")
     )
 
     if exercise_id is not None:
         qs = qs.filter(exercise_id=exercise_id)
+
+    if module_id is not None:
+        qs = qs.filter(exercise__lesson__module_id=module_id)
 
     if evaluation_status is not None:
         qs = qs.filter(evaluation_status=evaluation_status)

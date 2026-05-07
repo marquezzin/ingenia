@@ -29,12 +29,14 @@ class StudentSubmissionView(APIView):
     def get(self, request):
         student_profile_id = str(request.user.student_profile.id)
         exercise_id = request.query_params.get("exercise_id")
+        module_id = request.query_params.get("module_id")
         evaluation_status = request.query_params.get("evaluation_status")
         result_status = request.query_params.get("result_status")
 
         queryset = list_submissions_for_student(
             student_profile_id=student_profile_id,
             exercise_id=exercise_id,
+            module_id=module_id,
             evaluation_status=evaluation_status,
             result_status=result_status,
         )

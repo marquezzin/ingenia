@@ -228,6 +228,10 @@ export interface SubmissionHistoryItem {
   id: string;
   exercise_id: string;
   exercise_title: string;
+  lesson_id: string;
+  lesson_title: string;
+  module_id: string;
+  module_title: string;
   source_code: string;
   evaluation_status: string;
   score_percentage: string;
