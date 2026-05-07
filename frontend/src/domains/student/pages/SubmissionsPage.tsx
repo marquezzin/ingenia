@@ -213,7 +213,9 @@ export default function SubmissionsPage() {
           clearable
           searchable
           size="sm"
-          w={260}
+          miw={260}
+          maw={420}
+          style={{ flex: 1 }}
           leftSection={<BookOpen size={14} />}
         />
       </Group>
