@@ -2,7 +2,7 @@
 
 > Plataforma de Ensino Introdutório de Programação para alunos do 8º e 9º ano.
 
-## Stack Definida (via `.context.md`)
+## Stack Definida (via `CLAUDE.md`)
 
 | Camada | Tecnologia |
 |--------|-----------|

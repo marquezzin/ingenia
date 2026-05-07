@@ -28,7 +28,7 @@ Criar testes E2E cobrindo os fluxos do aluno com Playwright.
 - `frontend/src/domains/student/e2e/exercise.spec.ts` — J-003 (7 testes)
 - `frontend/src/domains/student/e2e/progress.spec.ts` — J-004 (5 testes)
 - `backend/src/core/management/commands/seed_test.py` — seed curricular para E2E
-- `frontend/src/domains/student/.context.md` — documentação atualizada
+- `frontend/src/domains/student/CLAUDE.md` — documentação atualizada
 
 ## Notas Técnicas
 

@@ -67,7 +67,7 @@ Criar um novo app Django `submissions` contendo os models de submissão e result
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-003 (Aluno consome aula e resolve exercício) |
 | **Spec** | `docs/requirements/ingenia-documents/discover/spec.md` | Exercícios e submissões §6 |
 | **Backend Architecture** | `docs/backend/02-apps-pattern.md` | Padrão de apps Django |
-| **Workflow** | `.agent/workflows/add-backend-app.md` | Como criar novo app Django |
+| **Workflow** | `.claude/commands/add-backend-app.md` | Como criar novo app Django |
 
 ### Regras de Negócio Aplicáveis
 - **BR-011**: Submissão só pode ser realizada por aluno autenticado para exercício publicado.

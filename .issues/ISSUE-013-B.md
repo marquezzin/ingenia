@@ -34,7 +34,7 @@ Criar as telas de listagem e detalhe de módulos para o aluno.
 - `frontend/src/domains/student/api/curriculum.ts`
 - `frontend/src/domains/student/hooks/useStudentModules.ts`
 - `frontend/src/app/routes.tsx`
-- `frontend/src/domains/student/.context.md`
+- `frontend/src/domains/student/CLAUDE.md`
 
 ## Notas Técnicas
 

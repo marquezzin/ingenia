@@ -30,7 +30,7 @@ Criar domain frontend `teacher` com layout e dashboard do professor.
 - `frontend/src/domains/teacher/hooks.ts`
 - `frontend/src/domains/teacher/model.ts`
 - `frontend/src/domains/teacher/pages/DashboardPage.tsx`
-- `frontend/src/domains/teacher/.context.md`
+- `frontend/src/domains/teacher/CLAUDE.md`
 - `frontend/src/app/routes.tsx`
 
 ## Notas Técnicas
@@ -39,7 +39,7 @@ Criar domain frontend `teacher` com layout e dashboard do professor.
 |---|---|---|
 | **ISSUE-015** | `.issues/ISSUE-015.md` | Contexto completo |
 | **UX Flows** | `docs/requirements/ingenia-documents/design/ux_flows.md` | Sitemap /teacher/*; Dashboard Professor |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar domain |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar domain |
 
 ## Status
 

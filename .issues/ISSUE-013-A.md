@@ -42,7 +42,7 @@ Criar o domain frontend `student` com layout dedicado e dashboard exibindo a tri
 |---|---|---|
 | **ISSUE-013** | `.issues/ISSUE-013.md` | Contexto completo |
 | **UX Flows** | `docs/requirements/ingenia-documents/design/ux_flows.md` | Sitemap /student/*; Dashboard Aluno |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar domain |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar domain |
 
 ## Status
 

@@ -27,7 +27,7 @@ Telas de acompanhamento de alunos e progresso individual.
 - `frontend/src/domains/teacher/pages/students/StudentProgressPage.tsx` — **[NEW]**
 - `frontend/src/domains/teacher/pages/classes/ClassDetailPage.tsx` — Linhas de alunos clicáveis
 - `frontend/src/app/routes.tsx` — Rotas `/teacher/students` e `/teacher/classes/:classId/students/:studentId`
-- `frontend/src/domains/teacher/.context.md` — Atualizado com novas páginas
+- `frontend/src/domains/teacher/CLAUDE.md` — Atualizado com novas páginas
 
 ## Notas Técnicas
 

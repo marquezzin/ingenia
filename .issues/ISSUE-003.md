@@ -92,7 +92,7 @@ Criar um novo app Django `curriculum` contendo os models que representam a trilh
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-007 (Admin cria módulo com aula e exercício) |
 | **UX Flows** | `docs/requirements/ingenia-documents/design/ux_flows.md` | Telas Admin: CRUD Módulos, Aulas, Exercícios |
 | **Backend Architecture** | `docs/backend/02-apps-pattern.md` | Padrão de apps Django |
-| **Workflow** | `.agent/workflows/add-backend-app.md` | Como criar novo app Django |
+| **Workflow** | `.claude/commands/add-backend-app.md` | Como criar novo app Django |
 
 ### Regras de Negócio Aplicáveis
 - **BR-006**: Trilha respeita ordenação única de módulos.

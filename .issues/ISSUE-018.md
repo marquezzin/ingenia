@@ -69,7 +69,7 @@ Garantir a qualidade e segurança completa da plataforma antes do release, com t
 | **Spec** | `docs/requirements/ingenia-documents/discover/spec.md` | Security §9; Non-Functional §8 |
 | **Backend Testing** | `docs/backend/05-testing.md` | Padrão de testes |
 | **Frontend Testing** | `docs/frontend/04-testing.md` | Padrão E2E Playwright |
-| **Workflow** | `.agent/workflows/run-tests.md` | Como rodar testes |
+| **Workflow** | `.claude/commands/run-tests.md` | Como rodar testes |
 
 ## Status
 

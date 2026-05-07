@@ -48,7 +48,7 @@ Criar a página de login, integrar com a API de auth e implementar o redireciona
 - `frontend/src/domains/auth/pages/LoginPage.tsx` — reescrita com logo, links, redirect por role
 - `frontend/src/domains/auth/types.ts` — User alinhado com backend (role, accountStatus, fullName)
 - `frontend/src/domains/auth/model.ts` — **novo**: getRedirectPathByRole, extractApiError
-- `frontend/src/domains/auth/.context.md` — atualizado
+- `frontend/src/domains/auth/CLAUDE.md` — atualizado
 - `frontend/src/app/routes.tsx` — rotas placeholder `/register` e `/forgot-password`
 
 ## Notas Técnicas
@@ -61,7 +61,7 @@ Criar a página de login, integrar com a API de auth e implementar o redireciona
 | **UX Flows** | `docs/requirements/ingenia-documents/design/ux_flows.md` | Screen: Login |
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-001 |
 | **Frontend Architecture** | `docs/frontend/01-domain-architecture.md` | Padrão de domains |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar domain |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar domain |
 
 ## Status
 

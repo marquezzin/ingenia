@@ -65,7 +65,7 @@ Criar um novo app Django `classes` contendo os models de turma e matrícula, com
 | **Authorization** | `docs/requirements/ingenia-documents/design/authorization.md` | Protected Resources: Class, ClassMembership |
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-005 (Professor cria turma) |
 | **Backend Architecture** | `docs/backend/02-apps-pattern.md` | Padrão de apps Django |
-| **Workflow** | `.agent/workflows/add-backend-app.md` | Como criar novo app Django |
+| **Workflow** | `.claude/commands/add-backend-app.md` | Como criar novo app Django |
 
 ### Regras de Negócio Aplicáveis
 - **BR-004**: Apenas professores podem ser responsáveis por turmas.

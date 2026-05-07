@@ -39,7 +39,7 @@ Implementar permission classes do Django REST Framework para controlar acesso po
 
 - `backend/src/core/permissions.py` — todas as permission classes
 - `backend/src/core/tests/test_permissions.py` — testes unitários
-- `backend/src/core/.context.md` — contexto atualizado
+- `backend/src/core/CLAUDE.md` — contexto atualizado
 
 ## Notas Técnicas
 

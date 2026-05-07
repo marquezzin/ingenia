@@ -29,8 +29,8 @@ Implementar endpoints de consulta de progresso coletivo da turma e individual do
 - `backend/src/progress/views.py` — `TeacherClassProgressView`, `TeacherStudentProgressView`
 - `backend/src/classes/urls.py` — Rotas teacher progress
 - `backend/src/progress/tests/test_teacher_progress_api.py` — 20+ testes
-- `backend/src/progress/.context.md` — Atualizado
-- `backend/src/classes/.context.md` — Atualizado
+- `backend/src/progress/CLAUDE.md` — Atualizado
+- `backend/src/classes/CLAUDE.md` — Atualizado
 
 ## Notas Técnicas
 

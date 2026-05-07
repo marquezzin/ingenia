@@ -1,4 +1,4 @@
-# Admin Domain — .context.md
+# Admin Domain
 
 ## Propósito
 

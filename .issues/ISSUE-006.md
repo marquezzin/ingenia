@@ -59,10 +59,10 @@ Registrar todos os models criados nas ISSUE-001 a ISSUE-005 no Django Admin e cr
 | **Roadmap** | `docs/requirements/ingenia-documents/roadmap.md` | Seção "Fase 0", entregáveis |
 | **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | Todos os entities e enums para definir list_display/filters |
 | **Backend Architecture** | `docs/backend/02-apps-pattern.md` | Padrão de admin do projeto |
-| **Contexto do Projeto** | `.context.md` | Credenciais dev para seed |
+| **Contexto do Projeto** | `CLAUDE.md` | Credenciais dev para seed |
 
 ### Decisões de Design
-- Seed deve usar as credenciais dev padrão do `.context.md` (admin@hub.dev / admin123).
+- Seed deve usar as credenciais dev padrão do `CLAUDE.md` (admin@hub.dev / admin123).
 - Verificar se já existe um pattern de seed no projeto (em `core/management/commands/`).
 
 ## Status

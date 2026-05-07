@@ -58,4 +58,4 @@ path("api/meu-app/", include("src.meu_app.urls")),
 
 ## Workflow Completo
 
-Veja `.agent/workflows/add-backend-app.md` para o passo a passo completo.
+Veja `.claude/commands/add-backend-app.md` (slash command `/add-backend-app`) para o passo a passo completo.

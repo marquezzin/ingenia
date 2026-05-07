@@ -33,7 +33,7 @@ Implementar a gestão de alunos na turma: associar e remover.
 - `backend/src/classes/selectors.py` — get_enrollment_for_class_group
 - `backend/src/classes/urls.py` — nested enrollment routes
 - `backend/src/classes/tests/test_enrollment_teacher.py` — 15 testes
-- `backend/src/classes/.context.md` — Atualizado
+- `backend/src/classes/CLAUDE.md` — Atualizado
 
 ## Notas Técnicas
 

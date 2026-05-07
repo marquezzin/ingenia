@@ -67,7 +67,7 @@ Estender o `User` model existente no app `accounts` e criar os models de perfil 
 | **Spec** | `docs/requirements/ingenia-documents/discover/spec.md` | Data Model §5, Auth §7 |
 | **Backend Architecture** | `docs/backend/02-apps-pattern.md` | Padrão de apps Django do projeto |
 | **Backend Services** | `docs/backend/03-services-usecases.md` | Padrão de services/use cases |
-| **Contexto do Projeto** | `.context.md` | Stack e convenções |
+| **Contexto do Projeto** | `CLAUDE.md` | Stack e convenções |
 
 ### Regras de Negócio Aplicáveis
 - **BR-001**: Todo usuário deve possuir exatamente um papel principal entre aluno, professor e administrador.

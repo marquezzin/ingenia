@@ -32,7 +32,7 @@ Criar telas de acompanhamento de progresso consolidado e histórico geral de sub
 - `frontend/src/domains/student/hooks/useSubmissionHistory.ts`
 - `frontend/src/domains/student/api/submissions.ts`
 - `frontend/src/app/routes.tsx`
-- `frontend/src/domains/student/.context.md`
+- `frontend/src/domains/student/CLAUDE.md`
 
 ## Notas Técnicas
 

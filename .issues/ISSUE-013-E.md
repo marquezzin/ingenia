@@ -32,7 +32,7 @@ Implementar o painel de resultado de submissão e histórico de tentativas no co
 - `frontend/src/domains/student/hooks/useExerciseHistory.ts`
 - `frontend/src/domains/student/api/submissions.ts`
 - `frontend/src/domains/student/types.ts`
-- `frontend/src/domains/student/.context.md`
+- `frontend/src/domains/student/CLAUDE.md`
 
 ## Notas Técnicas
 

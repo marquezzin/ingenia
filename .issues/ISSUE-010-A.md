@@ -50,7 +50,7 @@ Criar o domain frontend `admin` com layout administrativo dedicado e dashboard c
 | **ISSUE-010** | `.issues/ISSUE-010.md` | Contexto completo |
 | **UX Flows** | `docs/requirements/ingenia-documents/design/ux_flows.md` | Sitemap /admin/*; Dashboard Admin |
 | **Design System** | `docs/frontend/05-design-system.md` | AppShell, NavLink |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar domain |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar domain |
 
 ## Status
 

@@ -44,7 +44,7 @@ Criar as páginas de gestão de aulas (com vídeo e conteúdo) e exercícios (co
 - `frontend/src/domains/admin/api.ts`
 - `frontend/src/domains/admin/hooks.ts`
 - `frontend/src/domains/admin/model.ts`
-- `frontend/src/domains/admin/.context.md`
+- `frontend/src/domains/admin/CLAUDE.md`
 - `frontend/src/domains/admin/pages/lessons/LessonDetailPage.tsx`
 - `frontend/src/domains/admin/pages/lessons/LessonCreatePage.tsx`
 - `frontend/src/domains/admin/pages/lessons/LessonEditPage.tsx`

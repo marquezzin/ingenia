@@ -42,4 +42,4 @@ frontend/src/
 
 ## Criando um Novo Domínio
 
-Veja `.agent/workflows/add-frontend-domain.md` para o passo a passo completo.
+Veja `.claude/commands/add-frontend-domain.md` (slash command `/add-frontend-domain`) para o passo a passo completo.

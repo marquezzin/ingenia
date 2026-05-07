@@ -92,7 +92,7 @@ Criar o domain frontend `auth` e implementar as telas de autenticação, guards 
 | **API Contracts** | `docs/frontend/02-api-contracts.md` | Padrão de chamadas API |
 | **Design System** | `docs/frontend/05-design-system.md` | Componentes Mantine v7 |
 | **Frontend Testing** | `docs/frontend/04-testing.md` | Padrão E2E Playwright |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar novo domain frontend |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar novo domain frontend |
 
 ### Decisões de UX
 - Mensagens de erro de login não devem confirmar se email existe ou não (referência journeys.md J-001).

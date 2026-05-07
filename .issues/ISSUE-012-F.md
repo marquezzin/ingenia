@@ -59,7 +59,7 @@ Criar testes cobrindo todos os cenários do motor: sucesso, falha, timeout, erro
 |---|---|---|
 | **ISSUE-012** | `.issues/ISSUE-012.md` | Contexto completo |
 | **Testing** | `docs/backend/05-testing.md` | Padrão de testes backend |
-| **Frontend Rules** | `.agent/rules/003-frontend.md` | Padrão de testes frontend |
+| **Frontend Rules** | `frontend/CLAUDE.md` | Padrão de testes frontend |
 
 ### Resultados
 

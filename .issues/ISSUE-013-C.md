@@ -39,7 +39,7 @@ Criar a tela de consumo de aula com player de vídeo, renderização de conteúd
 - `frontend/src/domains/student/api/curriculum.ts`
 - `frontend/src/domains/student/types.ts`
 - `frontend/src/app/routes.tsx`
-- `frontend/src/domains/student/.context.md`
+- `frontend/src/domains/student/CLAUDE.md`
 
 ## Notas Técnicas
 

@@ -74,7 +74,7 @@ Criar o domain frontend `teacher` com todas as telas da experiência do professo
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-005 (Professor cria turma e acompanha desempenho), J-006 (Progresso individual); Edge Cases |
 | **Frontend Architecture** | `docs/frontend/01-domain-architecture.md` | Padrão de domains |
 | **Design System** | `docs/frontend/05-design-system.md` | Mantine v7 components |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar novo domain |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar novo domain |
 
 ### Edge Cases Importantes
 - Professor com turma sem alunos: mostrar estado vazio claro, não erro (journeys.md Edge Cases).

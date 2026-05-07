@@ -76,7 +76,7 @@ Criar um novo app Django `progress` contendo os models de progresso acadêmico.
 | **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | Entities: StudentModuleProgress, StudentLessonProgress, StudentExerciseProgress; Enums §4 (ProgressStatus); Business Rules BR-014, BR-015, BR-020; Invariants §5 |
 | **Journeys** | `docs/requirements/ingenia-documents/design/journeys.md` | J-004 (Aluno acompanha progresso) |
 | **Backend Architecture** | `docs/backend/02-apps-pattern.md` | Padrão de apps Django |
-| **Workflow** | `.agent/workflows/add-backend-app.md` | Como criar novo app Django |
+| **Workflow** | `.claude/commands/add-backend-app.md` | Como criar novo app Django |
 
 ### Regras de Negócio Aplicáveis
 - **BR-014**: Progresso de exercício marcado como concluído apenas com submissão aprovada.

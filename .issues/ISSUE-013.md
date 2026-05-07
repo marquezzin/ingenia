@@ -94,7 +94,7 @@ Criar o domain frontend `student` com todas as telas da jornada do aluno, inclui
 | **Domain Model** | `docs/requirements/ingenia-documents/design/domain_model.md` | Relationships: module→lesson→exercise |
 | **Frontend Architecture** | `docs/frontend/01-domain-architecture.md` | Padrão de domains |
 | **Design System** | `docs/frontend/05-design-system.md` | Mantine v7 components |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar novo domain |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar novo domain |
 
 ### Decisões Técnicas
 - **Editor de código**: Monaco Editor (pacote `@monaco-editor/react`) é recomendado por ser o mesmo do VS Code.

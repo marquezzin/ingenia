@@ -89,7 +89,7 @@ Criar o domain frontend `admin` com layout administrativo, dashboard e telas de 
 | **Design System** | `docs/frontend/05-design-system.md` | Componentes Mantine v7 para Table, Form, Card, etc. |
 | **State Management** | `docs/frontend/03-state-management.md` | Padrão de gerenciamento de estado |
 | **Frontend Testing** | `docs/frontend/04-testing.md` | Padrão E2E Playwright |
-| **Workflow** | `.agent/workflows/add-frontend-domain.md` | Como criar novo domain frontend |
+| **Workflow** | `.claude/commands/add-frontend-domain.md` | Como criar novo domain frontend |
 
 ## Status
 
