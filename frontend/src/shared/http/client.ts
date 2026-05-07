@@ -12,6 +12,13 @@ export const httpClient = axios.create({
     },
 });
 
+const refreshClient = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL || "",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
 // ─── Request Interceptor — Anexa o token JWT ───────────────────────────────
 httpClient.interceptors.request.use((config) => {
     const token = getAccessToken();
@@ -46,6 +53,7 @@ httpClient.interceptors.response.use(
 
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
+                originalRequest._retry = true;
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 }).then((token) => {
@@ -67,7 +75,7 @@ httpClient.interceptors.response.use(
             }
 
             try {
-                const { data } = await axios.post("/api/auth/refresh/", {
+                const { data } = await refreshClient.post("/api/auth/refresh/", {
                     refresh: refreshToken,
                 });
                 setTokens({ access: data.access, refresh: data.refresh || refreshToken });
