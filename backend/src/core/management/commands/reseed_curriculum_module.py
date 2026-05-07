@@ -2,14 +2,17 @@
 
 Apaga todas as Lessons (e seus Exercises/TestCases por cascata) do módulo
 indicado e recria a partir dos dados do `seed.py`. Não toca em outros módulos,
-usuários, turmas ou submissões fora desse módulo.
+usuários, turmas ou submissões fora desse módulo. Preserva o
+`sequence_order` do módulo em produção (não usa o do seed).
 
 Uso:
-    python manage.py reseed_curriculum_module <module_id> --order <N>
+    python manage.py reseed_curriculum_module <module_id> --source-order <N>
 
-`<order>` é o `sequence_order` do módulo no `_get_curriculum_data()` do seed
-(ex.: 5 para o módulo de Funções). É exigido junto com o ID para evitar
-re-popular o módulo errado por engano.
+`<source-order>` é o `order` da entrada no `_get_curriculum_data()` do seed
+(ex.: 5 para a entrada de Funções). É exigido junto com o ID para evitar
+re-popular o módulo errado por engano. O command valida que o título do
+módulo de destino bate com o título dos dados do seed (a menos que
+`--force` seja passado).
 """
 
 import uuid
@@ -33,10 +36,15 @@ class Command(BaseCommand):
             help="UUID do Module a ser re-populado.",
         )
         parser.add_argument(
-            "--order",
+            "--source-order",
             type=int,
             required=True,
-            help="sequence_order do módulo no seed (ex.: 5 para Funções).",
+            help="`order` da entrada no _get_curriculum_data() do seed (ex.: 5 para Funções).",
+        )
+        parser.add_argument(
+            "--force",
+            action="store_true",
+            help="Pula a validação de igualdade de título entre módulo de destino e seed.",
         )
         parser.add_argument(
             "--yes",
@@ -55,7 +63,7 @@ class Command(BaseCommand):
         )
 
         module_id_raw: str = options["module_id"]
-        order: int = options["order"]
+        source_order: int = options["source_order"]
 
         try:
             module_id = uuid.UUID(module_id_raw)
@@ -69,16 +77,16 @@ class Command(BaseCommand):
         except Module.DoesNotExist as exc:
             raise CommandError(f"Module {module_id} não encontrado.") from exc
 
-        if module.sequence_order != order:
-            raise CommandError(
-                f"Módulo {module_id} tem sequence_order={module.sequence_order}, "
-                f"mas você passou --order {order}. Abortando para evitar erro."
-            )
-
         modules_data = SeedCommand()._get_curriculum_data()
-        match = next((m for m in modules_data if m["order"] == order), None)
+        match = next((m for m in modules_data if m["order"] == source_order), None)
         if match is None:
-            raise CommandError(f"Não há dados de seed para sequence_order={order}.")
+            raise CommandError(f"Não há dados de seed com order={source_order}.")
+
+        if module.title != match["title"] and not options["force"]:
+            raise CommandError(
+                f"Título do módulo de destino ({module.title!r}) é diferente do "
+                f"título no seed ({match['title']!r}). Use --force se for intencional."
+            )
 
         n_lessons = Lesson.objects.filter(module=module).count()
         n_exercises = Exercise.objects.filter(lesson__module=module).count()
