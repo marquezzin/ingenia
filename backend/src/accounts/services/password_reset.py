@@ -36,12 +36,30 @@ class ForgotPasswordUseCase:
             expires_at=expires_at,
         )
 
-        # In dev, log the token (no real email sending for MVP)
         logger.info(
             "Password reset token for %s: %s (expires at %s)",
             user.email,
             token,
             expires_at,
+        )
+
+        frontend_domain = getattr(
+            settings, "CORS_ALLOWED_ORIGINS", ["http://localhost:5173"]
+        )[0]
+        reset_link = f"{frontend_domain}/reset-password?token={token}"
+
+        from core.services.email import SendEmailInput, SendEmailUseCase
+
+        SendEmailUseCase().execute(
+            input=SendEmailInput(
+                subject="Recuperação de Senha - Ingenia",
+                template_name="emails/reset_password.html",
+                context={
+                    "user": user,
+                    "reset_link": reset_link,
+                },
+                to=[user.email],
+            )
         )
 
 

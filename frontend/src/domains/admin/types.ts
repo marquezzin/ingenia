@@ -187,6 +187,7 @@ export interface ListModulesParams {
   search?: string;
   publication_status?: PublicationStatus;
   page?: number;
+  page_size?: number;
   ordering?: string;
 }
 
@@ -233,6 +234,7 @@ export interface ListUsersParams {
   role?: UserRole;
   account_status?: AccountStatus;
   page?: number;
+  page_size?: number;
   ordering?: string;
 }
 
@@ -274,5 +276,6 @@ export interface ListClassGroupsParams {
   search?: string;
   class_status?: ClassStatus;
   page?: number;
+  page_size?: number;
 }
 

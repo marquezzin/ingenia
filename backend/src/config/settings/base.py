@@ -189,6 +189,18 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 300  # 5 min hard limit
 CELERY_TASK_SOFT_TIME_LIMIT = 240  # 4 min soft limit
 
+# ─── Email ───────────────────────────────────────────────────────────────────
+EMAIL_BACKEND = config(
+    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+)
+EMAIL_HOST = config("EMAIL_HOST", default="localhost")
+EMAIL_PORT = config("EMAIL_PORT", default=25, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=False, cast=bool)
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ingenia.com")
+
 # ─── AI Settings ──────────────────────────────────────────────────────────────
 OPENROUTER_API_KEY = config("OPENROUTER_API_KEY", default="")
 OPENROUTER_BASE_URL = config(

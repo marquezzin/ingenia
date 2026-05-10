@@ -40,3 +40,6 @@ SECRET_KEY = "test-secret-key-not-for-production"
 # Desabilita Celery em testes (executa tasks sincronamente)
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
+
+# Email em memória para testes (acessível via django.core.mail.outbox)
+EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"

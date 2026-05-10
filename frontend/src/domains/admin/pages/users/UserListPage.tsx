@@ -31,6 +31,8 @@ import { useUsers } from "../../hooks";
 import { ACCOUNT_STATUS_MAP, ROLE_MAP } from "../../model";
 import type { AccountStatus, UserListItem, UserRole } from "../../types";
 
+const PAGE_SIZE = 10;
+
 const BREADCRUMBS = [
   { label: "Admin", href: "/admin" },
   { label: "Usuários" },
@@ -155,12 +157,13 @@ export default function UserListPage() {
     role: (roleFilter || undefined) as UserRole | undefined,
     account_status: (statusFilter || undefined) as AccountStatus | undefined,
     page,
+    page_size: PAGE_SIZE,
   };
 
   const { data, isLoading, isError } = useUsers(params);
 
   const users = data?.results ?? [];
-  const totalPages = data ? Math.ceil(data.count / 10) : 1;
+  const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
   return (
     <>

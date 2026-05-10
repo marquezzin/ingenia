@@ -35,6 +35,8 @@ import { useModules } from "../../hooks";
 import { PUBLICATION_STATUS_MAP } from "../../model";
 import type { ModuleListItem, PublicationStatus } from "../../types";
 
+const PAGE_SIZE = 10;
+
 const BREADCRUMBS = [
   { label: "Admin", href: "/admin" },
   { label: "Módulos" },
@@ -159,13 +161,14 @@ export default function ModuleListPage() {
     search: search || undefined,
     publication_status: (statusFilter || undefined) as PublicationStatus | undefined,
     page,
+    page_size: PAGE_SIZE,
     ordering,
   };
 
   const { data, isLoading, isError } = useModules(params);
 
   const modules = data?.results ?? [];
-  const totalPages = data ? Math.ceil(data.count / 10) : 1;
+  const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
   return (
     <>

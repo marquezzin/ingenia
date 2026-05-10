@@ -22,6 +22,8 @@ import { useClassGroups } from "../../hooks";
 import { CLASS_STATUS_MAP } from "../../model";
 import type { ClassGroupListItem, ClassStatus } from "../../types";
 
+const PAGE_SIZE = 10;
+
 const BREADCRUMBS = [
   { label: "Admin", href: "/admin" },
   { label: "Turmas" },
@@ -109,12 +111,13 @@ export default function ClassListPage() {
     search: search || undefined,
     class_status: (statusFilter || undefined) as ClassStatus | undefined,
     page,
+    page_size: PAGE_SIZE,
   };
 
   const { data, isLoading, isError } = useClassGroups(params);
 
   const classGroups = data?.results ?? [];
-  const totalPages = data ? Math.ceil(data.count / 10) : 1;
+  const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
   return (
     <>

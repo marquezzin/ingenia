@@ -37,7 +37,7 @@ Autenticação, registro e gerenciamento de usuários. App **core** do sistema.
 - **`LoginUserUseCase`** — Autentica por email+password
 
 ## Services (`services/password_reset.py`)
-- **`ForgotPasswordUseCase`** — Gera token de reset e loga no console (MVP, sem envio de email real). Retorna silenciosamente se email não existe.
+- **`ForgotPasswordUseCase`** — Gera token de reset e dispara email HTML (`emails/reset_password.html`) via `core.services.email.SendEmailUseCase` com link `{CORS_ALLOWED_ORIGINS[0]}/reset-password?token=...`. Retorna silenciosamente se email não existe.
 - **`ResetPasswordUseCase`** — Valida token (existência, expiração, uso), atualiza senha e marca token como usado.
 
 ## Services (`services/user_admin.py`)
