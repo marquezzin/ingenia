@@ -39,6 +39,24 @@ Toda feature de produto neste projeto = **1 app Django + 1 domain frontend espel
 
 Quando o usuário pedir "criar feature X", siga ambos workflows na ordem (backend primeiro, depois domain frontend espelhando).
 
+## Mantendo os CLAUDE.md atualizados
+
+**Toda alteração que mude o contrato/estrutura de um app ou domain DEVE ser refletida no `CLAUDE.md` correspondente, no mesmo commit.** Os `CLAUDE.md` são auto-carregados em conversas futuras — se ficarem desatualizados, agentes futuros vão receber contexto errado e produzir trabalho incorreto.
+
+Atualize o `CLAUDE.md` do app/domain quando:
+- Adicionar/remover/renomear página, rota, view, endpoint, model, enum, hook, service/UseCase, selector, serializer, type/interface, schema OpenAPI, factory de teste
+- Mudar regra de negócio (BR-XXX), regra de validação, ou comportamento documentado
+- Adicionar/remover/mudar dependência entre apps/domains
+- Adicionar template, static file, management command, task Celery, ou template de email
+- Mudar contrato de API (payload, response, status code)
+
+**Não** atualize o `CLAUDE.md` para:
+- Refactors internos que não mudam a interface pública do módulo
+- Bug fixes que não mudam comportamento documentado
+- Mudanças puramente de estilo/formatação
+
+Se a mudança é grande o bastante pra precisar de documentação detalhada, atualize também `docs/backend/` ou `docs/frontend/` — o `CLAUDE.md` aponta pra eles.
+
 ## Package Managers
 
 **NUNCA** edite manualmente `pyproject.toml`, `uv.lock`, `package.json` ou `pnpm-lock.yaml` para adicionar/remover dependências.

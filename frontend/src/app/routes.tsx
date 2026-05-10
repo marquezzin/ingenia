@@ -15,6 +15,7 @@ const LandingPage = lazy(() => import("@/domains/landing/pages/LandingPage"));
 const LoginPage = lazy(() => import("@/domains/auth/pages/LoginPage"));
 const RegisterPage = lazy(() => import("@/domains/auth/pages/RegisterPage"));
 const ForgotPasswordPage = lazy(() => import("@/domains/auth/pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("@/domains/auth/pages/ResetPasswordPage"));
 const UnauthorizedPage = lazy(() => import("@/domains/auth/pages/UnauthorizedPage"));
 const NotFoundPage = lazy(() => import("@/domains/auth/pages/NotFoundPage"));
 
@@ -116,6 +117,16 @@ export const router = createBrowserRouter([
             <RequireGuest>
                 <Suspense fallback={<Spinner />}>
                     <ForgotPasswordPage />
+                </Suspense>
+            </RequireGuest>
+        ),
+    },
+    {
+        path: "/reset-password",
+        element: (
+            <RequireGuest>
+                <Suspense fallback={<Spinner />}>
+                    <ResetPasswordPage />
                 </Suspense>
             </RequireGuest>
         ),

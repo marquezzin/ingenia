@@ -38,3 +38,9 @@ export interface RegisterPayload {
 export interface ForgotPasswordPayload {
     email: string;
 }
+
+export interface ResetPasswordPayload {
+    token: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+}

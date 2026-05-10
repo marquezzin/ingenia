@@ -48,6 +48,10 @@ class ForgotPasswordUseCase:
         )[0]
         reset_link = f"{frontend_domain}/reset-password?token={token}"
 
+        logo_path = (
+            settings.BASE_DIR / "accounts" / "static" / "accounts" / "img" / "logo.png"
+        )
+
         from core.services.email import SendEmailInput, SendEmailUseCase
 
         SendEmailUseCase().execute(
@@ -59,6 +63,7 @@ class ForgotPasswordUseCase:
                     "reset_link": reset_link,
                 },
                 to=[user.email],
+                inline_images={"logo": str(logo_path)},
             )
         )
 

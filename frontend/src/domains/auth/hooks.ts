@@ -2,8 +2,19 @@
  * Auth Domain — React Query Hooks
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMeApi, loginApi, registerApi, forgotPasswordApi } from "./api";
-import type { LoginPayload, RegisterPayload, ForgotPasswordPayload } from "./types";
+import {
+    forgotPasswordApi,
+    getMeApi,
+    loginApi,
+    registerApi,
+    resetPasswordApi,
+} from "./api";
+import type {
+    ForgotPasswordPayload,
+    LoginPayload,
+    RegisterPayload,
+    ResetPasswordPayload,
+} from "./types";
 import { setTokens, clearTokens, isAuthenticated } from "@/shared/auth/storage";
 
 const AUTH_KEYS = {
@@ -43,6 +54,12 @@ export const useRegister = () => {
 export const useForgotPassword = () => {
     return useMutation({
         mutationFn: (payload: ForgotPasswordPayload) => forgotPasswordApi(payload),
+    });
+};
+
+export const useResetPassword = () => {
+    return useMutation({
+        mutationFn: (payload: ResetPasswordPayload) => resetPasswordApi(payload),
     });
 };
 
