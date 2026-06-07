@@ -1,0 +1,654 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Ingenia — Documento Final</title><style>
+@page { size: A4; margin: 22mm 18mm; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1f2933; line-height: 1.55; font-size: 11pt; max-width: 100%; margin: 0; }
+p[align="center"] { text-align: center; margin: 0 0 6px; }
+p[align="center"] img { display: inline-block; }
+h1 { font-size: 24pt; color: #0b5394; border-bottom: 3px solid #0b5394; padding-bottom: 8px; margin: 0 0 4px; }
+h2 { font-size: 16pt; color: #0b5394; margin-top: 26px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; page-break-after: avoid; }
+h3 { font-size: 12.5pt; color: #334e68; margin-top: 18px; page-break-after: avoid; }
+p { margin: 8px 0; }
+a { color: #1565c0; text-decoration: none; }
+code { background: #f0f3f6; padding: 1px 5px; border-radius: 4px; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; }
+pre { background: #0f2433; color: #e6edf3; padding: 12px 14px; border-radius: 8px; overflow-x: auto; font-size: 9pt; line-height: 1.4; page-break-inside: avoid; }
+pre code { background: none; color: inherit; padding: 0; }
+pre:has(> code.language-center) { width: fit-content; max-width: 100%; margin-left: auto; margin-right: auto; }
+pre:has(> code.language-center) code { text-align: left; }
+blockquote { border-left: 4px solid #0b5394; background: #f4f8fc; margin: 12px 0; padding: 8px 14px; color: #334e68; border-radius: 0 6px 6px 0; }
+blockquote p { margin: 4px 0; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 9.5pt; page-break-inside: avoid; }
+th, td { border: 1px solid #cfd8e3; padding: 6px 9px; text-align: left; vertical-align: top; }
+th { background: #0b5394; color: #fff; font-weight: 600; }
+tr:nth-child(even) td { background: #f6f9fc; }
+ul, ol { margin: 8px 0; padding-left: 22px; }
+li { margin: 3px 0; }
+hr { border: none; border-top: 1px solid #d0d7de; margin: 22px 0; }
+strong { color: #102a43; }
+h2, h3 { page-break-inside: avoid; }
+</style></head><body><p align="center"><img src="logo.png" alt="Ingenia" width="150" /></p>
+
+<h1>Ingenia — Documento Final do Sistema</h1>
+<h3>Artefato 4 — Documento Final (Entrega Final do Projeto)</h3>
+<p><strong>Projeto:</strong> Ingenia — Plataforma Digital de Ensino Introdutório de Programação
+<strong>Público-alvo:</strong> Estudantes do 8º e 9º ano do ensino fundamental
+<strong>Link de acesso à aplicação:</strong> <a href="https://ingenia.synaptha.com">https://ingenia.synaptha.com</a></p>
+<blockquote>
+<p><strong>Credenciais de demonstração</strong></p>
+<table>
+<thead>
+<tr>
+<th>Perfil</th>
+<th>E-mail</th>
+<th>Senha</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Administrador</td>
+<td><code>admin@hub.dev</code></td>
+<td><code>admin123</code></td>
+</tr>
+<tr>
+<td>Professor</td>
+<td><code>teacher1@hub.dev</code></td>
+<td><code>teacher123</code></td>
+</tr>
+<tr>
+<td>Aluno</td>
+<td><code>user@hub.dev</code></td>
+<td><code>user123</code></td>
+</tr>
+</tbody></table>
+</blockquote>
+<hr>
+<h2>Sumário</h2>
+<ol>
+<li><a href="#1-vis%C3%A3o-geral-do-sistema">Visão Geral do Sistema</a></li>
+<li><a href="#2-objetivos-e-problema-resolvido">Objetivos e Problema Resolvido</a></li>
+<li><a href="#3-escopo-entregue-coer%C3%AAncia-com-o-backlog">Escopo Entregue (coerência com o backlog)</a></li>
+<li><a href="#4-perfis-de-usu%C3%A1rio-personas">Perfis de Usuário (Personas)</a></li>
+<li><a href="#5-funcionalidades-desenvolvidas">Funcionalidades Desenvolvidas</a></li>
+<li><a href="#6-jornadas-de-usu%C3%A1rio-j-001-a-j-008">Jornadas de Usuário (J-001 a J-008)</a></li>
+<li><a href="#7-regras-de-neg%C3%B3cio-br-001-a-br-020">Regras de Negócio (BR-001 a BR-020)</a></li>
+<li><a href="#8-arquitetura-do-sistema">Arquitetura do Sistema</a></li>
+<li><a href="#9-modelo-de-dados">Modelo de Dados</a></li>
+<li><a href="#10-decis%C3%B5es-t%C3%A9cnicas-relevantes">Decisões Técnicas Relevantes</a></li>
+<li><a href="#11-seguran%C3%A7a-e-controle-de-acesso">Segurança e Controle de Acesso</a></li>
+<li><a href="#12-qualidade-e-testes">Qualidade e Testes</a></li>
+<li><a href="#13-implanta%C3%A7%C3%A3o-deploy">Implantação (Deploy)</a></li>
+<li><a href="#14-resultados-e-aprendizados">Resultados e Aprendizados</a></li>
+</ol>
+<hr>
+<h2>1. Visão Geral do Sistema</h2>
+<p>A <strong>Ingenia</strong> é uma plataforma web educacional que transforma o &quot;começar a programar&quot; em uma jornada clara e guiada. O aluno assiste a uma aula em vídeo, lê o conteúdo escrito, resolve exercícios em <strong>Python diretamente no navegador</strong>, recebe <strong>feedback imediato</strong> com correção automática e acompanha seu progresso módulo a módulo.</p>
+<p>A trilha é organizada em <strong>módulos progressivos</strong> que cobrem os fundamentos da programação em Python:</p>
+<ol>
+<li><strong>Primeiro contato e Pensamento Computacional</strong> — o que é programação e como os computadores pensam.</li>
+<li><strong>Variáveis e Tipos de Dados</strong> — variáveis, tipos numéricos, strings e conversão de tipos.</li>
+<li><strong>Coleções (Listas, Tuplas e Dicionários)</strong> — armazenar e organizar vários valores em uma única variável.</li>
+<li><strong>Estruturas Condicionais</strong> — controle de fluxo com <code>if</code>, <code>elif</code>, <code>else</code> e operadores de comparação.</li>
+<li><strong>Estruturas de Repetição</strong> — uso de <code>while</code> e <code>for</code> para repetir tarefas e iterar sobre sequências.</li>
+<li><strong>Funções</strong> — criar funções para organizar e reutilizar código, de definições básicas até recursão.</li>
+</ol>
+<p>O conteúdo não é fixo no código: módulos, aulas e exercícios são gerenciados pelo administrador via painel.</p>
+<p>A plataforma atende três perfis distintos:</p>
+<ul>
+<li><strong>Aluno</strong> — percorre a trilha, consome conteúdo, resolve exercícios e acompanha sua evolução.</li>
+<li><strong>Professor</strong> — organiza turmas e acompanha o desempenho coletivo e individual dos alunos.</li>
+<li><strong>Administrador</strong> — gerencia todo o conteúdo pedagógico e os usuários da plataforma.</li>
+</ul>
+<hr>
+<h2>2. Objetivos e Problema Resolvido</h2>
+<h3>Problema</h3>
+<p>Oferecer uma introdução <strong>prática, guiada e acessível</strong> à programação para estudantes sem experiência prévia é difícil: falta um ambiente único que combine teoria, prática e retorno imediato sobre o aprendizado.</p>
+<h3>Objetivo Principal</h3>
+<p>Oferecer uma plataforma estruturada e intuitiva para o ensino introdutório de programação a alunos do 8º e 9º ano, com foco em <strong>aprendizagem ativa</strong> por meio de conteúdo guiado, prática e feedback imediato.</p>
+<h3>Objetivos Secundários</h3>
+<ul>
+<li>Organizar o ensino em módulos progressivos sobre conceitos básicos de programação.</li>
+<li>Permitir assistir videoaulas, consultar material escrito e resolver exercícios em um único ambiente.</li>
+<li>Disponibilizar correção automática que executa testes internos e informa se a solução atende ao esperado.</li>
+<li>Oferecer ao professor um painel de acompanhamento de progresso e desempenho por turma.</li>
+<li>Disponibilizar ao administrador o controle sobre módulos, aulas, exercícios e usuários.</li>
+<li>Garantir autenticação, controle de permissões e proteção básica de dados e acessos.</li>
+</ul>
+<h3>Critérios de Sucesso (atingidos)</h3>
+<ul>
+<li>✅ O aluno percorre uma trilha visual e identifica seu progresso ao longo dos módulos.</li>
+<li>✅ O aluno submete código na plataforma e recebe retorno automático sobre o resultado.</li>
+<li>✅ O professor visualiza o andamento dos estudantes e o desempenho por turma.</li>
+<li>✅ O administrador cadastra e organiza conteúdos, exercícios e usuários sem depender de processos externos.</li>
+<li>✅ A navegação é simples e adequada ao público iniciante, com foco em desktop (conforme definido para a 1ª versão).</li>
+</ul>
+<hr>
+<h2>3. Escopo Entregue (coerência com o backlog)</h2>
+<p>O desenvolvimento foi organizado em <strong>6 fases incrementais</strong> (Fase 0 a Fase 5), rastreadas em um <em>issue tracker</em> com 18 issues-pai decompostas em 58 sub-issues (65 itens rastreáveis no total). As funcionalidades abaixo refletem o que foi <strong>efetivamente implementado</strong>, em coerência com os requisitos das entregas anteriores.</p>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Tema</th>
+<th>Entregas principais</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Fase 0</strong></td>
+<td>Fundação</td>
+<td>Modelagem de dados de todos os domínios (accounts, curriculum, classes, submissions, progress), Django Admin e <em>seed</em> de dados</td>
+<td>✅ Concluída</td>
+</tr>
+<tr>
+<td><strong>Fase 1</strong></td>
+<td>Autenticação &amp; Autorização</td>
+<td>JWT com <em>role</em> no payload, registro público, recuperação de senha, permissões por perfil, telas de login/registro/erro e guards de rota</td>
+<td>✅ Concluída</td>
+</tr>
+<tr>
+<td><strong>Fase 2</strong></td>
+<td>Administração de Conteúdo</td>
+<td>CRUD completo de módulos, aulas, vídeo-aulas, exercícios e casos de teste; CRUD de usuários; dashboard com métricas</td>
+<td>✅ Concluída</td>
+</tr>
+<tr>
+<td><strong>Fase 3</strong></td>
+<td>Experiência do Aluno</td>
+<td>Trilha, leitura de conteúdo, editor de código (Monaco), motor de correção Skulpt, submissão, feedback, progresso e histórico</td>
+<td>✅ Concluída</td>
+</tr>
+<tr>
+<td><strong>Fase 4</strong></td>
+<td>Experiência do Professor</td>
+<td>CRUD de turmas, matrícula de alunos, progresso coletivo e individual</td>
+<td>✅ Concluída</td>
+</tr>
+<tr>
+<td><strong>Fase 5</strong></td>
+<td>Segurança, Polish &amp; Validação</td>
+<td>Refinamentos de UX, revisão de autorização e validação E2E das jornadas</td>
+<td>✅ Concluída</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Cobertura do MVP:</strong> as 15 funcionalidades <em>Must-Have</em> definidas no documento de escopo foram entregues. Itens explicitamente <em>fora de escopo</em> (gamificação avançada, chat em tempo real, integração com sistemas escolares, app mobile nativo, certificação, aulas ao vivo e suporte a múltiplas linguagens) <strong>não</strong> foram desenvolvidos, conforme planejado.</p>
+</blockquote>
+<h3>Funcionalidades <em>Must-Have</em> (MVP) — todas entregues</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Funcionalidade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Autenticação de usuários (login seguro por perfil)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Gestão de perfis e permissões (aluno / professor / administrador)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Trilhas de aprendizagem por módulos progressivos</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Aulas com videoaula e material escrito</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Exercícios práticos de programação</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Editor de código no navegador</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Correção automática com testes internos</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Feedback automático ao aluno</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Visualização de progresso do aluno</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Interface simples e guiada</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Painel do professor</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Gestão de turmas</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Painel administrativo de conteúdo</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Gestão de usuários pelo administrador</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Medidas básicas de segurança</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Perfis de Usuário (Personas)</h2>
+<table>
+<thead>
+<tr>
+<th>Perfil</th>
+<th>Persona</th>
+<th>Capacidade principal</th>
+<th>Restrições de acesso</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Aluno</strong></td>
+<td>Estudante do 8º/9º ano, iniciante em programação</td>
+<td>Navegar a trilha, consumir aulas, submeter exercícios e ver o próprio progresso</td>
+<td>Vê apenas conteúdo publicado e somente os próprios dados</td>
+</tr>
+<tr>
+<td><strong>Professor</strong></td>
+<td>Professor do ensino fundamental</td>
+<td>Criar/gerenciar turmas, matricular alunos e monitorar progresso coletivo e individual</td>
+<td>Vê apenas as próprias turmas e alunos matriculados</td>
+</tr>
+<tr>
+<td><strong>Administrador</strong></td>
+<td>Administrador da plataforma</td>
+<td>Gerenciar módulos, aulas, exercícios e usuários; visualizar métricas</td>
+<td>Acesso completo a conteúdo e usuários, independente de vínculo com turma</td>
+</tr>
+</tbody></table>
+<p>Após o login, o usuário é <strong>redirecionado automaticamente</strong> para a área correta conforme seu perfil (<code>/student</code>, <code>/teacher</code> ou <code>/admin</code>).</p>
+<hr>
+<h2>5. Funcionalidades Desenvolvidas</h2>
+<h3>5.1 Autenticação e Conta (domínio <code>auth</code> / app <code>accounts</code>)</h3>
+<ul>
+<li><strong>Login</strong> com e-mail e senha, com redirecionamento por perfil.</li>
+<li><strong>Registro público</strong> de alunos (cria <code>User</code> + <code>StudentProfile</code>).</li>
+<li><strong>Recuperação de senha</strong> em duas etapas (solicitar link por e-mail → redefinir com token).</li>
+<li><strong>Bloqueio de contas inativas</strong> no login.</li>
+<li><strong>Sessão com JWT</strong> (access + refresh) e renovação automática transparente do token.</li>
+<li><strong>Telas de erro</strong> dedicadas: 403 (Não Autorizado) e 404 (Não Encontrado).</li>
+</ul>
+<h3>5.2 Área do Aluno (domínio <code>student</code>)</h3>
+<ul>
+<li><strong>Dashboard / Trilha</strong> com cartões de estatística e CTA <em>&quot;Continuar de onde parei&quot;</em>.</li>
+<li><strong>Lista de módulos</strong> com busca e filtro de progresso (todos / em andamento / concluídos).</li>
+<li><strong>Detalhe do módulo</strong> com barra de progresso e lista sequencial de aulas com indicadores de status.</li>
+<li><strong>Tela de aula</strong> com player de vídeo embutido (YouTube/Vimeo), conteúdo em Markdown, lista de exercícios e navegação anterior/próxima. A aula é marcada automaticamente como <em>iniciada</em> ao ser acessada.</li>
+<li><strong>Tela de exercício</strong> com:<ul>
+<li><strong>Editor de código Monaco</strong> (Python, tema escuro, numeração de linhas).</li>
+<li><strong>Execução de Python no navegador via Skulpt</strong> (sem servidor de execução).</li>
+<li><strong>Console de saída</strong> (stdout/stderr) estilo terminal.</li>
+<li><strong>Avaliação automática</strong> contra casos de teste visíveis e ocultos, com resultado PASSED / FAILED / ERROR.</li>
+<li><strong>Feedback pedagógico instantâneo</strong> que orienta sem expor a resposta completa (BR-013).</li>
+<li><strong>Botão de dica</strong> e <strong>histórico de tentativas</strong> por exercício.</li>
+</ul>
+</li>
+<li><strong>Tela de progresso</strong> consolidado com <em>ring progress</em>, cartões por módulo e contagens.</li>
+<li><strong>Histórico geral de submissões</strong> com filtro por status, paginação e modal de detalhe (feedback + código-fonte).</li>
+</ul>
+<h3>5.3 Área do Professor (domínio <code>teacher</code>)</h3>
+<ul>
+<li><strong>Dashboard</strong> com métricas (turmas, alunos, turmas ativas, média de alunos por turma).</li>
+<li><strong>CRUD de turmas</strong> (criar, listar, detalhar, editar; status ativo/arquivado).</li>
+<li><strong>Matrícula de alunos</strong> por busca, com seleção múltipla.</li>
+<li><strong>Progresso coletivo</strong> da turma (quantos iniciaram, módulos concluídos, exercícios resolvidos).</li>
+<li><strong>Progresso individual</strong> com <em>drill-down</em> por módulo → aula → exercício.</li>
+<li><strong>Lista de alunos</strong> entre turmas, com filtros.</li>
+</ul>
+<h3>5.4 Área do Administrador (domínio <code>admin</code>)</h3>
+<ul>
+<li><strong>Dashboard</strong> com métricas agregadas (módulos, aulas, exercícios, usuários).</li>
+<li><strong>CRUD completo de currículo</strong>: Módulos → Aulas → Exercícios → Casos de Teste (estrutura aninhada).</li>
+<li><strong>Fluxo de publicação</strong> (rascunho / publicado / arquivado) com alertas de validação:<ul>
+<li>aula só publica com material escrito <strong>e</strong> vídeo (BR-008);</li>
+<li>exercício só publica com <strong>ao menos um</strong> caso de teste (BR-010).</li>
+</ul>
+</li>
+<li><strong>CRUD de usuários</strong> por perfil (aluno, professor, admin), com criação do <em>profile</em> correspondente.</li>
+<li><strong>Visão read-only de turmas</strong> para acompanhamento.</li>
+</ul>
+<h3>5.5 Página Pública (domínio <code>landing</code>)</h3>
+<ul>
+<li><strong>Landing page</strong> com hero, apresentação do problema, abordagem de aprendizagem, jornada de módulos e CTAs para login/registro. Usuários autenticados são redirecionados automaticamente para sua área.</li>
+</ul>
+<hr>
+<h2>6. Jornadas de Usuário (J-001 a J-008)</h2>
+<p>As funcionalidades foram especificadas e validadas a partir de <strong>8 jornadas críticas</strong>, que orientaram também os testes ponta a ponta (E2E).</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Jornada</th>
+<th>Perfil</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>J-001</strong></td>
+<td>Fazer login e acessar a área correta conforme o perfil</td>
+<td>Todos</td>
+</tr>
+<tr>
+<td><strong>J-002</strong></td>
+<td>Aluno percorre a trilha de aprendizagem e acessa uma aula</td>
+<td>Aluno</td>
+</tr>
+<tr>
+<td><strong>J-003</strong></td>
+<td>Aluno consome o conteúdo e resolve exercício com correção automática</td>
+<td>Aluno</td>
+</tr>
+<tr>
+<td><strong>J-004</strong></td>
+<td>Aluno acompanha o próprio progresso na trilha</td>
+<td>Aluno</td>
+</tr>
+<tr>
+<td><strong>J-005</strong></td>
+<td>Professor cria/organiza uma turma e acompanha desempenho coletivo</td>
+<td>Professor</td>
+</tr>
+<tr>
+<td><strong>J-006</strong></td>
+<td>Professor consulta o progresso individual de um aluno</td>
+<td>Professor</td>
+</tr>
+<tr>
+<td><strong>J-007</strong></td>
+<td>Administrador cria e organiza um módulo com aula e exercício</td>
+<td>Administrador</td>
+</tr>
+<tr>
+<td><strong>J-008</strong></td>
+<td>Administrador gerencia usuários da plataforma</td>
+<td>Administrador</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Regras de Negócio (BR-001 a BR-020)</h2>
+<p>O comportamento do sistema é governado por 20 regras de negócio, aplicadas via <em>constraints</em> de banco, validações de serializer e lógica de domínio (UseCases).</p>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Regra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>BR-001</strong></td>
+<td>Todo usuário deve possuir exatamente um papel principal (aluno, professor ou administrador).</td>
+</tr>
+<tr>
+<td><strong>BR-002</strong></td>
+<td>Um perfil especializado existe apenas para o papel correspondente.</td>
+</tr>
+<tr>
+<td><strong>BR-003</strong></td>
+<td>O e-mail do usuário deve ser único na plataforma.</td>
+</tr>
+<tr>
+<td><strong>BR-004</strong></td>
+<td>Apenas professores podem ser responsáveis por turmas.</td>
+</tr>
+<tr>
+<td><strong>BR-005</strong></td>
+<td>Um aluno não pode ter mais de uma matrícula ativa na mesma turma.</td>
+</tr>
+<tr>
+<td><strong>BR-006</strong></td>
+<td>A trilha deve respeitar ordenação única de módulos por <code>sequence_order</code>.</td>
+</tr>
+<tr>
+<td><strong>BR-007</strong></td>
+<td>A ordem das aulas deve ser única dentro de cada módulo.</td>
+</tr>
+<tr>
+<td><strong>BR-008</strong></td>
+<td>Ao publicar, cada aula deve possuir material escrito <strong>e</strong> videoaula associada.</td>
+</tr>
+<tr>
+<td><strong>BR-009</strong></td>
+<td>Todo exercício deve estar vinculado a uma aula.</td>
+</tr>
+<tr>
+<td><strong>BR-010</strong></td>
+<td>Todo exercício deve possuir ao menos um caso de teste antes de ser publicado.</td>
+</tr>
+<tr>
+<td><strong>BR-011</strong></td>
+<td>A submissão só pode ser feita por aluno autenticado, em exercício publicado.</td>
+</tr>
+<tr>
+<td><strong>BR-012</strong></td>
+<td>Cada submissão gera exatamente um resultado consolidado de avaliação.</td>
+</tr>
+<tr>
+<td><strong>BR-013</strong></td>
+<td>O feedback automático orienta o aluno sem expor a resposta completa.</td>
+</tr>
+<tr>
+<td><strong>BR-014</strong></td>
+<td>O exercício é marcado como concluído apenas com submissão aprovada.</td>
+</tr>
+<tr>
+<td><strong>BR-015</strong></td>
+<td>O módulo concluído depende da conclusão das aulas e exercícios vinculados.</td>
+</tr>
+<tr>
+<td><strong>BR-016</strong></td>
+<td>Professores visualizam apenas dados de alunos de suas turmas.</td>
+</tr>
+<tr>
+<td><strong>BR-017</strong></td>
+<td>Alunos visualizam apenas o próprio progresso, submissões e resultados.</td>
+</tr>
+<tr>
+<td><strong>BR-018</strong></td>
+<td>Administradores gerenciam usuários e conteúdo independente de vínculo com turma.</td>
+</tr>
+<tr>
+<td><strong>BR-019</strong></td>
+<td>Conteúdos não publicados não aparecem para alunos na trilha.</td>
+</tr>
+<tr>
+<td><strong>BR-020</strong></td>
+<td>A quantidade de tentativas reflete o número de submissões do aluno no exercício.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Arquitetura do Sistema</h2>
+<p>O Ingenia é um <strong>monorepo full-stack</strong> com backend e frontend desacoplados, comunicando-se via API REST.</p>
+<pre><code class="language-center">┌────────────────────────────┐
+│ Navegador                  │
+│ React + Monaco + Skulpt    │
+│ (execução de Python        │
+│  client-side)              │
+└────────────────────────────┘
+              │  HTTP / JSON (REST)
+              ▼
+┌────────────────────────────┐
+│ API REST                   │
+│ Django + DRF               │
+└────────────────────────────┘
+       │                      │
+       ▼                      ▼
+┌──────────────┐  ┌──────────────────────┐
+│ PostgreSQL   │  │ Redis + Celery       │
+│ (dados)      │  │ (jobs assíncronos)   │
+└──────────────┘  └──────────────────────┘
+</code></pre>
+<h3>8.1 Backend — Arquitetura em Camadas</h3>
+<p>O fluxo de uma requisição segue camadas com responsabilidade única:</p>
+<pre><code>Request → View → UseCase (Service) → Selector / Model → Response
+</code></pre>
+<ul>
+<li><strong>Models</strong> — definição de dados e relacionamentos, sem lógica de negócio.</li>
+<li><strong>Selectors</strong> — <em>queries</em> read-only centralizadas.</li>
+<li><strong>Services / UseCases</strong> — <strong>toda a lógica de negócio</strong>; cada caso de uso é uma classe com método <code>execute()</code>, que lança exceções de domínio explícitas.</li>
+<li><strong>Serializers</strong> — validação e serialização HTTP (DRF), sem regra de negócio.</li>
+<li><strong>Views</strong> — orquestram: extraem dados do request, chamam o UseCase e tratam exceções.</li>
+</ul>
+<p>Cada <em>app</em> Django representa um domínio de negócio: <code>accounts</code>, <code>curriculum</code>, <code>submissions</code>, <code>progress</code>, <code>classes</code>, <code>ai</code> (opcional) e <code>core</code> (utilitários).</p>
+<h3>8.2 Frontend — Arquitetura por Domínios</h3>
+<p>O frontend espelha os <em>apps</em> do backend em <strong>domínios</strong>. Cada domínio (<code>auth</code>, <code>student</code>, <code>teacher</code>, <code>admin</code>, <code>landing</code>) é autocontido:</p>
+<ul>
+<li><code>api.ts</code> — contrato HTTP (espelha os endpoints do backend);</li>
+<li><code>types.ts</code> — tipos TypeScript;</li>
+<li><code>model.ts</code> — lógica pura e testável;</li>
+<li><code>hooks.ts</code> — <em>hooks</em> TanStack Query para <em>queries</em>/<em>mutations</em>;</li>
+<li><code>pages/</code> — componentes de rota;</li>
+<li><code>ui/</code> — componentes específicos do domínio;</li>
+<li><code>e2e/</code> — testes Playwright por jornada.</li>
+</ul>
+<p>Estado de servidor é gerenciado por <strong>TanStack Query</strong> (cache + invalidação); estado de UI local por <code>useState</code>/<code>useReducer</code>. Um <strong>Design System</strong> próprio (<code>shared/ui/</code>) garante consistência visual via <em>tokens</em> CSS + tema Mantine.</p>
+<h3>8.3 Stack Tecnológica</h3>
+<table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>Tecnologia</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Backend</td>
+<td>Django 5 + Django REST Framework, Python 3.14, PostgreSQL, Redis, Celery</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Vite 6 + React 19 + TypeScript, Mantine v8, TanStack Query v5</td>
+</tr>
+<tr>
+<td>Autenticação</td>
+<td>JWT (<code>djangorestframework-simplejwt</code>) com <em>refresh</em></td>
+</tr>
+<tr>
+<td>Editor de código</td>
+<td>Monaco Editor</td>
+</tr>
+<tr>
+<td>Execução de Python</td>
+<td>Skulpt (interpretador Python no navegador)</td>
+</tr>
+<tr>
+<td>Conteúdo</td>
+<td>react-markdown</td>
+</tr>
+<tr>
+<td>Infraestrutura</td>
+<td>Docker Compose, <code>uv</code> (backend), <code>pnpm</code> (frontend), Traefik + Let&#39;s Encrypt (prod)</td>
+</tr>
+<tr>
+<td>Testes</td>
+<td>pytest + factory_boy (backend), Vitest + Playwright (frontend)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Modelo de Dados</h2>
+<p>Resumo das principais entidades por domínio.</p>
+<h3><code>accounts</code></h3>
+<ul>
+<li><strong>User</strong> — usuário base (PK UUID, e-mail como login, <code>role</code>, <code>account_status</code>).</li>
+<li><strong>StudentProfile / TeacherProfile / AdminProfile</strong> — perfis 1:1 com o User, conforme o papel.</li>
+<li><strong>PasswordResetToken</strong> — tokens de recuperação de senha com expiração.</li>
+</ul>
+<h3><code>curriculum</code></h3>
+<ul>
+<li><strong>Module</strong> — unidade temática da trilha (<code>title</code>, <code>sequence_order</code> único, <code>publication_status</code>).</li>
+<li><strong>Lesson</strong> — aula dentro de um módulo (<code>written_content</code>, ordem única por módulo).</li>
+<li><strong>VideoLesson</strong> — videoaula 1:1 com a aula (<code>video_url</code>, <code>duration_seconds</code>).</li>
+<li><strong>Exercise</strong> — exercício vinculado à aula (<code>statement</code>, <code>support_message</code>).</li>
+<li><strong>ExerciseTestCase</strong> — caso de teste (<code>input_data</code>, <code>expected_output</code>, <code>is_hidden</code>).</li>
+</ul>
+<h3><code>classes</code></h3>
+<ul>
+<li><strong>ClassGroup</strong> — turma de um professor (<code>name</code>, <code>class_status</code>).</li>
+<li><strong>ClassEnrollment</strong> — matrícula aluno ↔ turma (sem duplicidade ativa).</li>
+</ul>
+<h3><code>submissions</code></h3>
+<ul>
+<li><strong>Submission</strong> — submissão de código do aluno (<code>source_code</code>, <code>evaluation_status</code>, <code>score_percentage</code>).</li>
+<li><strong>SubmissionResult</strong> — resultado 1:1 (<code>passed_tests_count</code>, <code>failed_tests_count</code>, <code>feedback_message</code>).</li>
+</ul>
+<h3><code>progress</code></h3>
+<ul>
+<li><strong>StudentModuleProgress / StudentLessonProgress / StudentExerciseProgress</strong> — progresso por módulo, aula e exercício (<code>progress_status</code>, <code>attempts_count</code>, datas de início/conclusão).</li>
+</ul>
+<hr>
+<h2>10. Decisões Técnicas Relevantes</h2>
+<ol>
+<li><p><strong>Correção automática no navegador (Skulpt).</strong> Em vez de um <em>sandbox</em> de execução no servidor — que traria risco de segurança e custo de infraestrutura —, o código Python do aluno é executado <strong>client-side</strong> com Skulpt, com limite de tempo de execução (<code>Sk.execLimit</code> + <em>timeout</em> de segurança). O backend recebe o resultado já avaliado e apenas o <strong>persiste</strong>. Isso eliminou a necessidade de um <em>sandbox</em> server-side (issues originais de sandbox foram canceladas) e tornou o feedback praticamente instantâneo.</p>
+</li>
+<li><p><strong>Editor Monaco.</strong> Mesmo editor do VS Code, com <em>syntax highlighting</em> e tema escuro, oferecendo experiência profissional ao aluno iniciante.</p>
+</li>
+<li><p><strong>Camada de UseCases/Services no backend.</strong> Toda regra de negócio fica isolada em casos de uso testáveis sem HTTP, o que facilitou a cobertura de testes das regras BR-XXX.</p>
+</li>
+<li><p><strong>JWT com refresh automático.</strong> Interceptores Axios detectam expiração (401), renovam o token em segundo plano e refazem a requisição original, com fila para requisições concorrentes — sessão fluida sem novos logins.</p>
+</li>
+<li><p><strong>Arquitetura por domínios espelhando o backend.</strong> Cada <em>app</em> Django tem um domínio frontend correspondente, mantendo um mapa mental único entre as duas pontas e facilitando a evolução.</p>
+</li>
+<li><p><strong>Conteúdo gerenciável (não fixo no código).</strong> Toda a trilha (módulos, aulas, exercícios) é cadastrada pelo administrador, permitindo evoluir o material pedagógico sem alterar o código.</p>
+</li>
+</ol>
+<hr>
+<h2>11. Segurança e Controle de Acesso</h2>
+<ul>
+<li><strong>Autenticação JWT</strong> com <em>access</em> e <em>refresh tokens</em>; o papel do usuário é incluído no payload do token.</li>
+<li><strong>Bloqueio de contas inativas</strong> (<code>account_status</code>) já no login.</li>
+<li><strong>Permissões por perfil</strong> no backend (<code>IsStudent</code>, <code>IsTeacher</code>, <code>IsAdmin</code>, <code>IsActiveAccount</code>, <code>IsOwner</code>).</li>
+<li><strong>Guards de rota no frontend</strong> (<code>RequireAuth</code>, <code>RequireGuest</code>, <code>StudentRoute</code>, <code>TeacherRoute</code>, <code>AdminRoute</code>) — dupla camada de proteção (cliente + servidor).</li>
+<li><strong>Isolamento de dados</strong> garantido pelas regras BR-016 (professor vê só suas turmas) e BR-017 (aluno vê só os próprios dados), aplicadas em <em>selectors</em> e permissões.</li>
+<li><strong>Recuperação de senha</strong> sem confirmar existência de e-mail (evita enumeração de usuários) e com token de expiração.</li>
+<li><strong>CORS</strong> configurado via <code>django-cors-headers</code>.</li>
+<li><strong>TLS</strong> em produção via Traefik + Let&#39;s Encrypt.</li>
+</ul>
+<blockquote>
+<p><strong>Hardening (Fase 5):</strong> <em>rate limiting</em> em login/submissões, auditoria de ações de admin e revisão final da matriz de autorização foram contemplados nesta fase, complementando as medidas de segurança do MVP.</p>
+</blockquote>
+<hr>
+<h2>12. Qualidade e Testes</h2>
+<p>O projeto adota testes em múltiplos níveis:</p>
+<ul>
+<li><strong>Backend — pytest + factory_boy:</strong> testes unitários dos UseCases e validação das regras de negócio (autenticação, CRUD admin, submissão, progresso, autorização), em banco de testes separado (<code>hub_test_db</code> em <em>tmpfs</em>).</li>
+<li><strong>Frontend — Vitest:</strong> testes unitários da lógica pura — motor de avaliação Skulpt, tratamento de erros (PT-BR), geração de feedback e <em>runner</em> de execução.</li>
+<li><strong>E2E — Playwright:</strong> testes de jornada por domínio (login/registro, navegação na trilha, resolução de exercício com Monaco + Skulpt, gestão de turmas, gestão de conteúdo e usuários), cobrindo as jornadas J-001 a J-008.</li>
+</ul>
+<p>Comandos unificados via <code>Makefile</code>: <code>make test</code>, <code>make test-backend</code>, <code>make test-frontend</code>, <code>make test-e2e</code>, <code>make lint</code>.</p>
+<hr>
+<h2>13. Implantação (Deploy)</h2>
+<p>A aplicação está disponível em produção em <strong><a href="https://ingenia.synaptha.com">https://ingenia.synaptha.com</a></strong>, hospedada em VPS com:</p>
+<ul>
+<li><strong>Docker Compose</strong> orquestrando os serviços (backend, frontend, PostgreSQL, Redis).</li>
+<li><strong>Traefik</strong> como reverse proxy, com <strong>TLS automático</strong> via Let&#39;s Encrypt.</li>
+<li>Frontend e API expostos em hosts distintos (<code>ingenia.synaptha.com</code> e <code>ingenia-api.synaptha.com</code>).</li>
+</ul>
+<p>O <em>seed</em> inicial popula o banco com módulos, aulas, exercícios e os usuários de demonstração listados no início deste documento.</p>
+<hr>
+<h2>14. Resultados e Aprendizados</h2>
+<h3>Resultados</h3>
+<ul>
+<li><strong>MVP completo entregue:</strong> as 15 funcionalidades <em>Must-Have</em> e as 8 jornadas críticas foram implementadas e a aplicação está <strong>no ar e funcional</strong>.</li>
+<li><strong>Três perfis integrados</strong> (aluno, professor, administrador) com isolamento de dados e controle de acesso por papel.</li>
+<li><strong>Correção automática funcional</strong> com execução de Python no próprio navegador e feedback pedagógico imediato.</li>
+<li><strong>Conteúdo 100% gerenciável</strong> pelo administrador, sem necessidade de alterar código.</li>
+</ul>
+<h3>Principais Aprendizados</h3>
+<ul>
+<li><strong>Arquitetura em camadas e por domínios</strong> trouxe clareza e testabilidade — a separação UseCase/Selector/View facilitou validar regras de negócio de forma isolada.</li>
+<li><strong>Executar código no cliente (Skulpt)</strong> foi uma decisão arquitetural de alto impacto: eliminou um <em>sandbox</em> server-side complexo e arriscado, reduzindo superfície de ataque e custo de infraestrutura.</li>
+<li><strong>Espelhar backend e frontend</strong> (app Django ↔ domínio frontend) manteve o projeto coeso mesmo crescendo em escopo.</li>
+<li><strong>Planejamento incremental por fases e issues</strong> permitiu entregar valor de ponta a ponta a cada etapa, mantendo o foco no MVP e barrando <em>scope creep</em>.</li>
+</ul>
+</body></html>
