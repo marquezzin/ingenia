@@ -1,0 +1,512 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Relatório Projeto Integrador II — Ingenia</title><style>
+@page { size: A4; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1a1a1a; line-height: 1.55; font-size: 11pt; margin: 0; }
+.doc-header { margin-bottom: 6px; }
+.report-title { text-align: center; color: #000; font-size: 22pt; font-weight: 700; margin: 4px 0 22px; border: none; }
+.header-fields { text-align: left; margin: 10px 0; font-size: 11.5pt; line-height: 1.7; }
+.header-fields strong { color: #000; }
+h1 { font-size: 20pt; color: #000; }
+h2 { font-size: 15pt; color: #000; font-weight: 700; margin-top: 22px; padding-bottom: 2px; page-break-after: avoid; }
+h3 { font-size: 12.5pt; color: #000; font-weight: 700; margin-top: 16px; page-break-after: avoid; }
+p { margin: 8px 0; }
+a { color: #1565c0; text-decoration: none; word-break: break-all; }
+code { background: #f0f0f0; padding: 1px 5px; border-radius: 4px; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt; color: #1a1a1a; }
+pre { background: #1f2937; color: #e6edf3; padding: 12px 14px; border-radius: 6px; overflow-x: auto; font-size: 9pt; line-height: 1.4; page-break-inside: avoid; }
+pre code { background: none; color: inherit; padding: 0; }
+pre:has(> code.language-center) { width: fit-content; max-width: 100%; margin-left: auto; margin-right: auto; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 9.5pt; page-break-inside: avoid; }
+th, td { border: 1px solid #bdbdbd; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #ececec; color: #000; font-weight: 700; }
+tr:nth-child(even) td { background: #f7f7f7; }
+ul, ol { margin: 8px 0; padding-left: 22px; }
+li { margin: 3px 0; }
+hr { border: none; border-top: 1px solid #cccccc; margin: 18px 0; }
+strong { color: #000; }
+</style></head><body><div class="doc-header">
+
+<h1 class="report-title">Relatório Projeto Integrador II</h1>
+
+<p class="header-fields">
+Curso: Ciência da Computação<br/>
+Semestre: 6º
+</p>
+
+<p class="header-fields">
+<strong>Título do Projeto:</strong> Ingenia — Plataforma Digital de Ensino Introdutório de Programação<br/>
+Integrantes: Gabriel Marques, Thales Rassi, Matheus Morais e Henrique Lessa<br/>
+Instituição: CEUB
+</p>
+
+</div>
+
+<hr>
+<h2>Introdução</h2>
+<p>Este projeto foi desenvolvido no contexto da disciplina <strong>Projeto Integrador II</strong>, com o objetivo de propor e implementar uma solução tecnológica para o ensino introdutório de programação. A organização atendida é o contexto educacional do ensino fundamental — <strong>escolas públicas e privadas e estudantes em uso individual em casa</strong> —, que carece de ferramentas acessíveis para iniciar adolescentes na programação.</p>
+<p>A <strong>Ingenia</strong> é uma plataforma web que transforma o &quot;começar a programar&quot; em uma jornada clara e guiada, voltada a estudantes do <strong>8º e 9º ano</strong>. Nela, o aluno assiste a videoaulas, lê o conteúdo escrito, resolve exercícios em Python diretamente no navegador, recebe feedback automático imediato e acompanha seu progresso ao longo de uma trilha de módulos. A plataforma também atende professores, com acompanhamento de turmas e desempenho, e administradores, com gestão de conteúdo e usuários.</p>
+<p><strong>Objetivo geral do sistema:</strong> oferecer uma plataforma estruturada e intuitiva para o ensino introdutório de programação, com foco em aprendizagem ativa por meio de conteúdo guiado, prática e feedback imediato.</p>
+<hr>
+<h2>Problema Identificado</h2>
+<p><strong>Descrição do problema.</strong> Oferecer uma introdução prática, guiada e acessível à programação para estudantes sem experiência prévia é difícil: não existe um ambiente único que combine teoria, prática e retorno imediato sobre o aprendizado, adequado à faixa etária do ensino fundamental.</p>
+<p><strong>Situação atual.</strong> O ensino introdutório de programação costuma depender de ferramentas fragmentadas — vídeos em uma plataforma, editores de código instalados localmente (com instalação e configuração complexas para iniciantes) e correção manual de exercícios pelo professor. Isso gera atrito, atrasa o feedback e dificulta o acompanhamento do progresso de cada aluno.</p>
+<p><strong>Impacto do problema.</strong> A barreira técnica e a ausência de feedback imediato desmotivam alunos iniciantes e sobrecarregam o professor com correções manuais. O resultado é evasão, baixa autonomia do estudante e pouca visibilidade do desempenho da turma.</p>
+<hr>
+<h2>Justificativa</h2>
+<p><strong>Por que o projeto é importante.</strong> A programação é uma competência cada vez mais central, e introduzi-la cedo, de forma acessível, amplia o repertório e a autonomia dos estudantes. Concentrar conteúdo, prática e correção automática em um único ambiente web — sem instalação — remove a principal barreira de entrada para iniciantes.</p>
+<p><strong>Impacto esperado.</strong> Reduzir o tempo entre escrever código e entender se ele está correto (feedback imediato), aumentar o engajamento por meio de uma trilha visual de progresso e liberar o professor das correções manuais, permitindo foco na intervenção pedagógica.</p>
+<p><strong>Benefícios para a organização (contexto escolar).</strong> Maior organização do conteúdo pedagógico, padronização da correção, acompanhamento objetivo do desempenho por turma e por aluno, e possibilidade de uso tanto em sala quanto em casa.</p>
+<hr>
+<h2>Público-Alvo</h2>
+<p>O sistema possui três perfis de usuário:</p>
+<ul>
+<li><strong>Aluno</strong> — estudante do 8º e 9º ano, iniciante em programação. Percorre a trilha, consome aulas, resolve exercícios e acompanha o próprio progresso.</li>
+<li><strong>Professor</strong> — docente do ensino fundamental. Organiza turmas, matricula alunos e acompanha o desempenho coletivo e individual.</li>
+<li><strong>Administrador</strong> — responsável pela plataforma. Gerencia módulos, aulas, exercícios e usuários, e visualiza métricas gerais.</li>
+</ul>
+<hr>
+<h2>Objetivos do Sistema</h2>
+<h3>Objetivo Geral</h3>
+<p>Desenvolver uma plataforma web para ensino introdutório de programação, com trilha de módulos, editor de código no navegador, correção automática e acompanhamento de progresso por alunos, professores e administradores.</p>
+<h3>Objetivos Específicos</h3>
+<ul>
+<li>Organizar o ensino em módulos progressivos (variáveis, condicionais, loops, funções, etc.).</li>
+<li>Permitir assistir videoaulas, ler material escrito e resolver exercícios em um único ambiente.</li>
+<li>Disponibilizar correção automática que executa testes internos e informa se a solução atende ao esperado.</li>
+<li>Fornecer feedback pedagógico imediato sem expor a resposta completa.</li>
+<li>Oferecer ao professor um painel de acompanhamento de progresso e desempenho por turma.</li>
+<li>Disponibilizar ao administrador o controle completo sobre conteúdo e usuários.</li>
+<li>Garantir autenticação, controle de permissões por perfil e proteção básica de dados.</li>
+</ul>
+<hr>
+<h2>Backlog do Produto</h2>
+<p>O backlog foi construído de forma coerente com os requisitos definidos, priorizado e distribuído em sprints.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Tipo</th>
+<th>User Story / Feature</th>
+<th>Prioridade</th>
+<th align="center">Sprint</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>US01</td>
+<td>Feature</td>
+<td>Modelar e implementar a estrutura inicial de dados (usuários, currículo, turmas, submissões, progresso) + Django Admin e seed</td>
+<td>Alta</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td>US02</td>
+<td>User Story</td>
+<td>Como usuário, quero fazer login seguro e ser direcionado à minha área conforme meu perfil</td>
+<td>Alta</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td>US03</td>
+<td>User Story</td>
+<td>Como aluno, quero me cadastrar na plataforma e recuperar minha senha por e-mail</td>
+<td>Alta</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td>US04</td>
+<td>Feature</td>
+<td>Implementar controle de permissões por perfil (aluno/professor/admin) e guards de rota</td>
+<td>Alta</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td>US05</td>
+<td>User Story</td>
+<td>Como administrador, quero criar e organizar módulos, aulas e videoaulas</td>
+<td>Alta</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td>US06</td>
+<td>User Story</td>
+<td>Como administrador, quero cadastrar exercícios com casos de teste e publicar o conteúdo</td>
+<td>Alta</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td>US07</td>
+<td>User Story</td>
+<td>Como administrador, quero gerenciar usuários por perfil</td>
+<td>Média</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td>US08</td>
+<td>User Story</td>
+<td>Como aluno, quero percorrer a trilha de módulos e acessar aulas com vídeo e conteúdo</td>
+<td>Alta</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td>US09</td>
+<td>User Story</td>
+<td>Como aluno, quero resolver exercícios em Python no navegador e receber correção automática</td>
+<td>Alta</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td>US10</td>
+<td>Feature</td>
+<td>Implementar o motor de correção client-side (Skulpt) com avaliação por casos de teste e feedback</td>
+<td>Alta</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td>US11</td>
+<td>User Story</td>
+<td>Como aluno, quero acompanhar meu progresso e o histórico das minhas submissões</td>
+<td>Média</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td>US12</td>
+<td>User Story</td>
+<td>Como professor, quero criar turmas e matricular/remover alunos</td>
+<td>Alta</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td>US13</td>
+<td>User Story</td>
+<td>Como professor, quero acompanhar o progresso coletivo e individual da turma</td>
+<td>Alta</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td>US14</td>
+<td>Feature</td>
+<td>Implementar medidas de segurança (rate limiting, validações, CORS, auditoria)</td>
+<td>Média</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td>US15</td>
+<td>Feature</td>
+<td>Validar as jornadas via testes E2E e ajustar UX/responsividade</td>
+<td>Média</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td>US16</td>
+<td>Feature</td>
+<td>Realizar o deploy em produção com Docker + Traefik (TLS)</td>
+<td>Alta</td>
+<td align="center">7</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Cronograma de Entrega</h2>
+<p>Cronograma planejado por sprint (cada &quot;X&quot; indica a sprint em que a atividade foi desenvolvida).</p>
+<table>
+<thead>
+<tr>
+<th>Entrega / Atividade</th>
+<th align="center">S1</th>
+<th align="center">S2</th>
+<th align="center">S3</th>
+<th align="center">S4</th>
+<th align="center">S5</th>
+<th align="center">S6</th>
+<th align="center">S7</th>
+<th align="center">S8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Levantamento de requisitos</td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Definição e priorização do backlog</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Modelagem do banco de dados</td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Configuração do ambiente (repo, Docker, deploy base)</td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Autenticação, perfis e permissões</td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Administração de conteúdo (CRUD de currículo e usuários)</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Experiência do aluno + correção automática (Skulpt)</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Progresso e histórico de submissões</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Experiência do professor (turmas e acompanhamento)</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Segurança, validações e ajustes</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Testes E2E e refinamento de UX</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center">X</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td>Deploy estável e documentação final</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">X</td>
+<td align="center">X</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Requisitos do Sistema</h2>
+<h3>Requisitos Funcionais</h3>
+<ul>
+<li><strong>RF01</strong> — O sistema deve permitir o cadastro de alunos e o login seguro de todos os perfis.</li>
+<li><strong>RF02</strong> — O sistema deve permitir a recuperação e redefinição de senha por e-mail.</li>
+<li><strong>RF03</strong> — O sistema deve redirecionar o usuário para a área correspondente ao seu perfil após o login.</li>
+<li><strong>RF04</strong> — O administrador deve poder criar, editar, publicar e remover módulos, aulas e videoaulas.</li>
+<li><strong>RF05</strong> — O administrador deve poder cadastrar exercícios e seus casos de teste (visíveis e ocultos).</li>
+<li><strong>RF06</strong> — O administrador deve poder gerenciar usuários por perfil.</li>
+<li><strong>RF07</strong> — O aluno deve poder navegar pela trilha de módulos e acessar aulas com vídeo e conteúdo escrito.</li>
+<li><strong>RF08</strong> — O aluno deve poder escrever e executar código Python diretamente no navegador.</li>
+<li><strong>RF09</strong> — O sistema deve corrigir automaticamente o código submetido contra os casos de teste e exibir resultado e feedback.</li>
+<li><strong>RF10</strong> — O sistema deve registrar as submissões e calcular o progresso (aula, exercício, módulo) automaticamente.</li>
+<li><strong>RF11</strong> — O aluno deve poder consultar seu progresso e o histórico de submissões.</li>
+<li><strong>RF12</strong> — O professor deve poder criar/editar turmas e matricular/remover alunos.</li>
+<li><strong>RF13</strong> — O professor deve poder visualizar o progresso coletivo e individual dos alunos de suas turmas.</li>
+<li><strong>RF14</strong> — O administrador deve visualizar métricas agregadas em um dashboard.</li>
+</ul>
+<h3>Requisitos Não Funcionais</h3>
+<ul>
+<li><strong>RNF01</strong> — O sistema deve ser acessível via navegador web, com foco em uso desktop.</li>
+<li><strong>RNF02</strong> — A autenticação deve usar JWT (token de acesso + refresh), com bloqueio de contas inativas.</li>
+<li><strong>RNF03</strong> — O controle de acesso deve ser baseado em perfis (RBAC), no backend e no frontend.</li>
+<li><strong>RNF04</strong> — O sistema deve garantir isolamento de dados (aluno vê apenas seus dados; professor, apenas suas turmas).</li>
+<li><strong>RNF05</strong> — A execução do código do aluno deve ocorrer de forma isolada no navegador, com limite de tempo, sem comprometer o servidor.</li>
+<li><strong>RNF06</strong> — O feedback da correção deve ser praticamente imediato.</li>
+<li><strong>RNF07</strong> — A comunicação cliente-servidor deve ocorrer via API REST sobre HTTPS (TLS).</li>
+<li><strong>RNF08</strong> — Os dados devem ser persistidos em PostgreSQL, com integridade referencial.</li>
+<li><strong>RNF09</strong> — O sistema deve possuir cobertura de testes (unitários, de integração e E2E).</li>
+<li><strong>RNF10</strong> — A interface deve ser simples e guiada, adequada a alunos iniciantes.</li>
+</ul>
+<hr>
+<h2>Modelagem do Banco de Dados</h2>
+<p>O modelo conceitual organiza as entidades em cinco domínios: <strong>contas/usuários, currículo, turmas, submissões e progresso</strong>.</p>
+<h3>Principais entidades</h3>
+<ul>
+<li><strong>User</strong> — usuário base da plataforma (e-mail único, papel/role e status da conta). Possui um perfil especializado conforme o papel: <strong>StudentProfile</strong>, <strong>TeacherProfile</strong> ou <strong>AdminProfile</strong>.</li>
+<li><strong>Module</strong> — módulo temático da trilha (título, ordem e status de publicação).</li>
+<li><strong>Lesson</strong> — aula dentro de um módulo (conteúdo escrito, ordem). Possui uma <strong>VideoLesson</strong> associada (URL e duração do vídeo).</li>
+<li><strong>Exercise</strong> — exercício vinculado a uma aula (enunciado, mensagem de apoio).</li>
+<li><strong>ExerciseTestCase</strong> — caso de teste de um exercício (entrada, saída esperada, oculto ou visível).</li>
+<li><strong>ClassGroup</strong> — turma de um professor; <strong>ClassEnrollment</strong> — matrícula que associa um aluno a uma turma.</li>
+<li><strong>Submission</strong> — submissão de código de um aluno para um exercício; <strong>SubmissionResult</strong> — resultado consolidado (acertos, erros, feedback).</li>
+<li><strong>StudentModuleProgress / StudentLessonProgress / StudentExerciseProgress</strong> — progresso do aluno por módulo, aula e exercício.</li>
+</ul>
+<hr>
+<h2>Arquitetura do Sistema</h2>
+<p>O sistema é um <strong>monorepo full-stack</strong> com front-end e back-end desacoplados, comunicando-se via <strong>API REST</strong>.</p>
+<pre><code class="language-center">┌────────────────────────────┐
+│ Front-end (Navegador)      │
+│ React + Monaco + Skulpt    │
+│ (execução de Python        │
+│  client-side)              │
+└────────────────────────────┘
+              │  HTTP / JSON (REST)
+              ▼
+┌────────────────────────────┐
+│ Back-end — API REST        │
+│ Django + DRF               │
+└────────────────────────────┘
+       │                      │
+       ▼                      ▼
+┌──────────────┐  ┌──────────────────────┐
+│ PostgreSQL   │  │ Redis + Celery       │
+│ (banco)      │  │ (jobs assíncronos)   │
+└──────────────┘  └──────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Front-end</strong> — desenvolvido em <strong>React + TypeScript</strong> (Vite), com a biblioteca de componentes <strong>Mantine</strong> e <strong>TanStack Query</strong> para o estado de servidor. O editor de código é o <strong>Monaco</strong> e a execução de Python ocorre no próprio navegador via <strong>Skulpt</strong>.</li>
+<li><strong>Back-end</strong> — <strong>Django + Django REST Framework</strong> (Python), organizado em camadas (Models → Selectors → Services/UseCases → Serializers → Views), com autenticação <strong>JWT</strong>.</li>
+<li><strong>Banco de dados</strong> — <strong>PostgreSQL</strong>. <strong>Redis + Celery</strong> dão suporte a tarefas assíncronas.</li>
+<li><strong>Infraestrutura</strong> — orquestração com <strong>Docker Compose</strong> e, em produção, <strong>Traefik</strong> com TLS automático (Let&#39;s Encrypt).</li>
+</ul>
+<p><strong>Decisão técnica de destaque:</strong> a correção automática é executada <strong>no navegador</strong> (Skulpt), e não em um servidor de execução. Isso elimina a complexidade e o risco de segurança de um <em>sandbox</em> server-side e torna o feedback praticamente instantâneo — o back-end apenas persiste o resultado já avaliado.</p>
+<hr>
+<h2>Funcionalidades Desenvolvidas</h2>
+<p>A seguir, as principais funcionalidades implementadas. <em>(As capturas de tela de cada funcionalidade serão inseridas neste tópico.)</em></p>
+<p><strong>Autenticação e Conta</strong></p>
+<ul>
+<li><strong>Login por perfil</strong> — autenticação com e-mail/senha e redirecionamento automático para a área do aluno, professor ou administrador.</li>
+<li><strong>Cadastro e recuperação de senha</strong> — registro público de alunos e fluxo de redefinição de senha por e-mail.</li>
+</ul>
+<p><strong>Área do Aluno</strong></p>
+<ul>
+<li><strong>Trilha de aprendizagem</strong> — dashboard com módulos, progresso visual e atalho &quot;Continuar de onde parei&quot;.</li>
+<li><strong>Aula</strong> — player de vídeo (YouTube/Vimeo), conteúdo em Markdown e lista de exercícios.</li>
+<li><strong>Exercício com correção automática</strong> — editor Monaco, execução de Python no navegador (Skulpt), avaliação contra casos de teste e feedback pedagógico imediato.</li>
+<li><strong>Progresso e histórico</strong> — visão consolidada do avanço e histórico de submissões com filtros.</li>
+</ul>
+<p><strong>Área do Professor</strong></p>
+<ul>
+<li><strong>Gestão de turmas</strong> — criação/edição de turmas e matrícula de alunos por busca.</li>
+<li><strong>Acompanhamento de desempenho</strong> — progresso coletivo da turma e progresso individual por módulo, aula e exercício.</li>
+</ul>
+<p><strong>Área do Administrador</strong></p>
+<ul>
+<li><strong>Gestão de conteúdo</strong> — CRUD completo de módulos, aulas, videoaulas, exercícios e casos de teste, com fluxo de publicação.</li>
+<li><strong>Gestão de usuários</strong> — criação e edição de usuários por perfil.</li>
+<li><strong>Dashboard</strong> — métricas agregadas da plataforma.</li>
+</ul>
+<hr>
+<h2>Demonstração do Sistema</h2>
+<h3>Link de Acesso</h3>
+<p>🔗 <strong><a href="https://ingenia.synaptha.com">https://ingenia.synaptha.com</a></strong></p>
+<h3>Logins de teste</h3>
+<table>
+<thead>
+<tr>
+<th>Perfil</th>
+<th>Usuário</th>
+<th>Senha</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Administrador</td>
+<td><code>admin@hub.dev</code></td>
+<td><code>admin123</code></td>
+</tr>
+<tr>
+<td>Professor</td>
+<td><code>teacher1@hub.dev</code></td>
+<td><code>teacher123</code></td>
+</tr>
+<tr>
+<td>Aluno</td>
+<td><code>user@hub.dev</code></td>
+<td><code>user123</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Resultados e Impactos</h2>
+<p><strong>Benefícios observados.</strong> O MVP foi entregue completo e está em funcionamento: uma trilha com módulos progressivos, correção automática de exercícios com feedback imediato e três perfis integrados (aluno, professor e administrador). O conteúdo é totalmente gerenciável pelo administrador, sem necessidade de alterar código.</p>
+<p><strong>Mudanças geradas.</strong> A plataforma reúne, em um único ambiente web sem instalação, o que antes estava fragmentado: teoria (vídeo + texto), prática (editor no navegador) e correção (automática). Isso reduz a barreira de entrada do aluno iniciante e dá ao professor visibilidade objetiva do desempenho da turma, eliminando a correção manual.</p>
+<p><strong>Possibilidades futuras.</strong> Evoluir itens fora do escopo do MVP conforme demanda — gamificação, responsividade para dispositivos móveis, certificação de conclusão e suporte a outras linguagens de programação —, além de aprofundar o <em>hardening</em> de segurança e a infraestrutura de produção.</p>
+<hr>
+<h2>Considerações Finais</h2>
+<p><strong>Síntese do projeto.</strong> A Ingenia cumpriu seu objetivo de oferecer um ambiente único, guiado e acessível para o ensino introdutório de programação, cobrindo as jornadas de aluno, professor e administrador, com correção automática e acompanhamento de progresso.</p>
+<p><strong>Avaliação do resultado.</strong> Todas as funcionalidades essenciais (MVP) planejadas foram implementadas e validadas, e a aplicação está disponível em produção. As decisões de arquitetura — camadas no back-end, domínios espelhados no front-end e execução de código no cliente — mostraram-se acertadas em termos de clareza, testabilidade e segurança.</p>
+<p><strong>Contribuição acadêmica.</strong> O projeto consolidou aprendizados em engenharia de software full-stack: modelagem de dados, arquitetura em camadas, API REST, autenticação e autorização, integração front-end/back-end, execução de código em ambiente controlado, testes automatizados (unitários e E2E) e implantação com contêineres. Também exercitou práticas ágeis de planejamento, com backlog priorizado e entregas incrementais por sprint.</p>
+<hr>
+<h2>Referências</h2>
+<ul>
+<li>Django — Documentação oficial. <a href="https://docs.djangoproject.com/">https://docs.djangoproject.com/</a></li>
+<li>Django REST Framework. <a href="https://www.django-rest-framework.org/">https://www.django-rest-framework.org/</a></li>
+<li>Simple JWT (autenticação JWT para DRF). <a href="https://django-rest-framework-simplejwt.readthedocs.io/">https://django-rest-framework-simplejwt.readthedocs.io/</a></li>
+<li>React. <a href="https://react.dev/">https://react.dev/</a></li>
+<li>Vite. <a href="https://vitejs.dev/">https://vitejs.dev/</a></li>
+<li>Mantine (biblioteca de componentes React). <a href="https://mantine.dev/">https://mantine.dev/</a></li>
+<li>TanStack Query. <a href="https://tanstack.com/query/">https://tanstack.com/query/</a></li>
+<li>Skulpt (interpretador Python em JavaScript). <a href="https://skulpt.org/">https://skulpt.org/</a></li>
+<li>Monaco Editor. <a href="https://microsoft.github.io/monaco-editor/">https://microsoft.github.io/monaco-editor/</a></li>
+<li>PostgreSQL. <a href="https://www.postgresql.org/docs/">https://www.postgresql.org/docs/</a></li>
+<li>Docker. <a href="https://docs.docker.com/">https://docs.docker.com/</a></li>
+<li>Playwright. <a href="https://playwright.dev/">https://playwright.dev/</a></li>
+</ul>
+</body></html>
